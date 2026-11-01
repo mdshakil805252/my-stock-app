@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stock Register</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1a1d21;--mut:#6b7280;--ac:#0f766e;--bd:#d9dde3;--bad:#b91c1c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111418;--card:#1b2026;--tx:#eef0f3;--mut:#9aa3af;--ac:#2dd4bf;--bd:#2f3640;--bad:#f87171}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;padding:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+label{font-size:13px;color:var(--mut);display:block;margin:8px 0 4px}
+select,input{width:100%;font-size:17px;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx)}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.nav{display:flex;gap:6px;margin-bottom:12px}
+button{font-size:15px;padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx)}
+.nav{overflow-x:auto}
+.nav button{flex:1 0 auto;padding:10px 12px;font-size:13px}
+button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.big{width:100%;background:var(--ac);color:#fff;border:0;font-size:17px;margin-top:12px}
+.sub{color:var(--mut);font-size:14px}
+.res{color:var(--ac);font-weight:700;font-size:20px;margin-top:8px}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--bd)}
+td:nth-child(n+3){text-align:right;white-space:nowrap}
+.x{color:var(--bad);border:0;background:none;padding:2px 8px}
+h2{font-size:16px;margin:0 0 6px}
+.dt{font-size:13px;padding:4px 10px;margin-top:4px}
+.v{display:none}.v.on{display:block}
+#ms{color:var(--ac);font-size:14px;min-height:18px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="nav"><button data-v="0" class="on">Entry</button><button data-v="1">Stock</button><button data-v="4">Market</button><button data-v="5">Calc</button><button data-v="2">Khata</button><button data-v="3">Product</button><button data-v="6">Hisab</button></div>
+
+<div class="v on" id="v0"><div class="card">
+<div style="display:none"><button data-t="open" class="on">Prothom stock +</button><button data-t="mk">Market e gelo −</button></div>
+<div class="sub" style="margin-top:6px">Ekhane shudhu stock jog hoy (Prothom stock), jekono tarikhe. Market er mal ber/ferot Market tab e.</div>
+<label>Tarikh</label><input id="dt" type="date">
+<label>Product</label><div style="display:flex;gap:6px"><button id="pv0" style="flex:0 0 44px;padding:0">◀</button><select id="pe" style="flex:1;min-width:0"></select><button id="nx0" style="flex:0 0 44px;padding:0">▶</button></div>
+<div class="row" style="margin-top:8px"><button id="de">Details</button><button id="se">Pcs/Ctn</button></div>
+<div class="row"><div><label>CTN</label><input id="c1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="c2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div></div>
+<label>Kroy dor (dealer price), 1 ctn = ___ tk</label><input id="ec" type="number" inputmode="decimal" step="any" min="0">
+<div id="rtw" style="display:none"><label>Ctn dor (tk), product er dam theke ashe, bodlate paro</label><input id="rt" type="number" inputmode="decimal" step="any" min="0"></div>
+<div class="sub" id="pv" style="margin-top:10px"></div>
+<label style="display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--tx)"><input type="checkbox" id="nx" style="width:auto"> Save korle porer product e jabe</label>
+<button class="big" id="sv">Save koro</button><div id="ms"></div>
+<button id="gb" style="display:none;width:100%;margin-top:10px">Ferot dao / Bikri hishab dekho →</button>
+</div>
+<details class="card" id="ad"><summary style="font-size:16px;font-weight:600">+ Notun product add</summary>
+<label>Nam</label><input id="nn" type="text">
+<div class="row"><div><label>1 ctn e pcs</label><input id="nk" type="number" inputmode="numeric" min="1"></div><div><label>1 ctn dam (tk)</label><input id="np" type="number" inputmode="decimal" min="0"></div></div>
+<button class="big" id="na">+ Add koro</button></details>
+</div>
+
+<div class="v" id="v1"><div class="card">
+<div class="row" id="sm3"><button data-m="0" class="on">Ekhon</button><button data-m="1">Tarikh obdhi</button><button data-m="2">Lenden</button></div>
+<div class="row" id="rg" style="display:none;margin-top:8px"><div id="d1w"><label>Theke</label><input id="d1" type="date"></div><div><label id="d2l">Tarikh porjonto</label><input id="d2" type="date"></div></div>
+<input id="q" placeholder="Product khujo" style="margin-top:10px">
+<div class="wrap" style="margin-top:10px"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+<div class="res" id="tv"></div>
+<button class="big" id="pdf">PDF download</button><div id="pm" class="sub" style="margin-top:8px"></div>
+</div></div>
+
+<div class="v" id="v4">
+<div class="card"><label>Market er tarikh</label><input id="mdt" type="date"></div>
+<div class="card"><h2>1. Bahir (mal gelo)</h2>
+<div style="display:flex;gap:6px"><button id="mbv" style="flex:0 0 44px;padding:0">◀</button><select id="mb" style="flex:1;min-width:0"></select><button id="mbx" style="flex:0 0 44px;padding:0">▶</button></div>
+<div class="row"><div><label>CTN</label><input id="mb1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="mb2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>Dor / ctn</label><input id="mbr" type="number" inputmode="decimal" step="any" min="0"></div></div>
+<label style="display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--tx)"><input type="checkbox" id="mbc" checked style="width:auto"> Add korle porer product e jabe</label>
+<button class="big" id="mba">+ Bahir e jog koro</button><div id="mbm" class="sub" style="min-height:18px;margin-top:6px"></div>
+<div id="mbl"></div></div>
+<div class="card"><h2>2. Ferot</h2>
+<div style="display:flex;gap:6px"><button id="mfv" style="flex:0 0 44px;padding:0">◀</button><select id="mf" style="flex:1;min-width:0"></select><button id="mfx" style="flex:0 0 44px;padding:0">▶</button></div>
+<div id="mfb"><div class="row"><div><label>Ferot CTN</label><input id="mf1" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Ferot PCS</label><input id="mf2" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Dor / ctn</label><input id="mfr" type="number" inputmode="decimal" step="any" min="0"></div></div></div>
+<div id="mfi" style="margin-top:10px;line-height:1.7"></div></div>
+<button class="big" id="mfin" style="margin-bottom:12px">Finish: pura Market Sheet dekho</button>
+<div id="msheet"></div>
+<div class="card"><h2>History (tarikh onujayi)</h2><div class="row"><div><label>Theke</label><input id="hy1" type="date"></div><div><label>Porjonto</label><input id="hy2" type="date"></div></div>
+<div class="sub" style="margin-top:6px">Tarikh na dile shob market ashbe.</div><div id="hys" style="margin-top:10px;line-height:1.8"></div>
+<button class="big" id="hypdf">History PDF</button><div id="hym" class="sub" style="margin-top:8px"></div></div>
+</div>
+
+<div class="v" id="v6"><div class="card"><button class="big" id="hadd" style="margin-top:0">+ Add</button>
+<div class="wrap" style="margin-top:12px"><table><thead><tr><th>Nam</th><th style="text-align:right">Joma</th><th style="text-align:right">Khoroch</th><th style="text-align:right">Baki</th><th></th></tr></thead><tbody id="hb"></tbody></table></div>
+<div id="ht" style="margin-top:12px;line-height:1.8"></div>
+<label style="display:flex;gap:8px;align-items:center;color:var(--tx);margin-top:12px"><input type="checkbox" id="hdet" style="width:auto"> PDF e protita entry-o dekhao</label>
+<button class="big" id="hpdf" style="margin-top:10px">PDF download</button><div id="hpm" class="sub" style="margin-top:8px"></div></div></div>
+
+<div class="v" id="v5"><div class="card"><label>Product</label><div style="display:flex;gap:6px"><button id="cpv" style="flex:0 0 44px;padding:0">◀</button><select id="cp" style="flex:1;min-width:0"></select><button id="cnx" style="flex:0 0 44px;padding:0">▶</button></div>
+<div class="sub" id="ci" style="margin-top:6px"></div>
+<h2 style="margin-top:12px">Prothom</h2>
+<div class="row"><div><label>CTN</label><input id="ca1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="ca2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
+<div class="row" style="margin-top:12px"><button id="cm0" class="on">− Biyog</button><button id="cp0">+ Jog</button></div>
+<div class="row"><div><label>CTN</label><input id="cb1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="cb2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
+<div class="res" id="cr">0 ctn 0 pcs</div><div class="sub" id="ct"></div><div class="res" id="cd" style="font-size:20px"></div></div></div>
+
+<div class="v" id="v2"><div class="card"><h2>Shesh 150 ta entry</h2><div class="wrap"><table><tbody id="kh"></tbody></table></div></div></div>
+
+<div class="v" id="v3">
+<div class="card"><h2>Product er pcs/ctn ar dam</h2>
+<div style="display:flex;gap:6px"><button id="ppv" style="flex:0 0 44px;padding:0">◀</button><select id="pp" style="flex:1;min-width:0"></select><button id="pnx" style="flex:0 0 44px;padding:0">▶</button></div>
+<div class="row"><div><label>1 ctn = ___ pcs</label><input id="pk" type="number" inputmode="numeric" min="1"></div><div><label>1 ctn dam (tk)</label><input id="pd" type="number" inputmode="decimal" min="0"></div></div>
+<label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="pcr" type="number" inputmode="decimal" min="0"></div>
+<div class="card"><h2>Backup (data nirapod rakhte)</h2><div class="row"><button id="bk">Backup download</button><button id="rs0">Restore</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:8px"></div></div>
+<details class="card" id="rsd"><summary class="sub" style="cursor:pointer">⚙ Reset</summary>
+<div class="sub" style="margin:8px 0">Reset korar age Backup nao. Protita button 2 bar chapte hobe.</div>
+<button id="r1" style="width:100%;margin-bottom:8px">Shob entry muche felo (product, pcs/ctn, dam thakbe)</button>
+<button id="r2" style="width:100%;margin-bottom:8px">Pura reset (product, pcs/ctn, dam shoho shob)</button>
+<button id="r3" style="width:100%">Reset undo (ager obosthay ferot)</button>
+<div class="sub" id="rm" style="margin-top:8px"></div></details>
+</div>
+
+<div id="dm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;padding:12px;padding-top:calc(12px + env(safe-area-inset-top,0px));overflow:auto"><div class="card" style="max-width:560px;margin:0 auto"><div class="row" style="align-items:center"><h2 id="dh" style="flex:1;margin:0"></h2><button id="dc" style="flex:0 0 auto">Bondho</button></div><div class="sub" id="dr" style="margin-top:6px"></div><div id="ds" style="margin:10px 0;line-height:1.7"></div><div class="wrap"><table><tbody id="dl"></tbody></table></div></div></div>
+<div id="hm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:35;padding:12px;padding-top:calc(12px + env(safe-area-inset-top,0px));overflow:auto"><div class="card" style="max-width:520px;margin:0 auto"><h2>Notun bekti add</h2><label>Bektir nam</label><input id="hmn" type="text"><div id="hmp" class="sub" style="margin-top:8px;min-height:20px"></div><div class="row" style="margin-top:14px"><button id="hmx">Bondho</button><button class="on" id="hms">Add</button></div></div></div>
+<div id="hd" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:36;padding:12px;padding-top:calc(12px + env(safe-area-inset-top,0px));overflow:auto"><div class="card" style="max-width:560px;margin:0 auto">
+<div class="row" style="align-items:center"><input id="hdn" type="text" style="flex:1;font-weight:700"><button id="hdc" style="flex:0 0 auto">Bondho</button></div>
+<div id="hds" style="margin:10px 0;line-height:1.7"></div>
+<div class="row"><button id="hdj" class="on">+ Joma</button><button id="hdk">− Khoroch</button></div>
+<div class="row"><div><label>Taka (200+300 likhte paro)</label><input id="hda" type="text"></div><div><label>Tarikh</label><input id="hdd" type="date"></div></div>
+<label>Note (na dileo hoy)</label><input id="hdt" type="text">
+<div id="hdp" style="margin:8px 0;min-height:20px"></div>
+<button class="big" id="hdv" style="margin-top:4px">Save</button>
+<div class="wrap" style="margin-top:12px"><table><tbody id="hdl"></tbody></table></div></div></div>
+<div id="cm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:40;padding:12px;overflow:auto"><div class="card" style="max-width:420px;margin:30vh auto 0"><h2 style="color:var(--bad)">Reset korben?</h2><div id="cmt" style="margin:10px 0 16px;line-height:1.6"></div><div class="sub" style="margin-bottom:12px">Vul hole pore "Reset undo" diye ferot ante parben.</div><div class="row"><button id="cn">Na, bondho</button><button id="cy" style="background:var(--bad);color:#fff;border-color:var(--bad)">Haa, reset koro</button></div></div></div>
+<div id="sm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:30;padding:12px;padding-top:calc(12px + env(safe-area-inset-top,0px));overflow:auto"><div class="card" style="max-width:560px;margin:0 auto"><h2 id="sh"></h2><label>Ei product 1 ctn e koto pcs?</label><input id="sk" type="number" inputmode="numeric" min="1"><label>1 ctn er dam (tk)</label><input id="sd" type="number" inputmode="decimal" min="0"><label>1 pcs er dam (tk), ctn dam theke auto ashe</label><input id="sp" type="number" inputmode="decimal" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="skc" type="number" inputmode="decimal" min="0"><div class="row" style="margin-top:14px"><button id="sx">Bondho</button><button class="on" id="ss">Save</button></div></div></div>
+<script>
+const BASE=[["মিল্ক কেক",72],["মাফিন কেক",48],["ডপস ১০",24],["লুপস ৫",48],["লেক্সাস ৫",48],["লেক্সাস ১০",24],["লেক্সাস ফ্যামিলি",1],["মেরি ফ্যামিলি",12],["মিল্ক ৫",48],["ঘি ৫",48],["ঘি ১০",24],["ঘি ফ্যামিলি",8],["চকোলেট ১০",48],["এনার্জি ৫",48],["এনার্জি ১০",24],["এনার্জি ফ্যামিলি",8],["৪ পিসের নুডলস",1],["৮ পিসের নুডলস",1],["পাতা নুডলস",12],["১৫ গ্রাম মরিচ গুড়া",1],["৫০ গ্রাম মরিচ গুড়া",1],["১৫ গ্রাম হলুদ গুড়া",1],["৫০ গ্রাম হলুদ গুড়া",1],["হলুদ গুড়া ৫ কেজি",1],["মরিচ গুড়া ৫ কেজি",1],["মাংসের মশলা",1],["মুরগির মশলা",1],["গরু মাংসের মশলা",1],["মাছের মশলা",1],["১৫ গ্রাম জিরার গুরা",1],["৫০ গ্রাম জিরার গুরা",1],["বিরিয়ানি মশলা ৪০ গ্রাম",1],["সরিষ তেল ৮০ গ্রাম",1],["সরিষ তেল ২০০ গ্রাম",1],["ঘি টোস্ট মিনি",96],["ড্রাই কেক মিনি",48],["কোকোনাট ২০ টাকা",8],["কোকোনাট ফ্যামিলি",24],["৫ টাকা চানাচুর",1],["৩০ টাকা চানাচুর",1],["৫০ টাকা চানাচুর",1],["লাচ্ছা সেমাই",1],["ভার্মিচিলি সেমাই",1],["বালিশ সেমাই",1],["এগ নুডলস্",24],["তেঁতুল চাটনী",1],["১৫ গ্রাম চা",1],["৫০০ গ্রাম চা",1],["রোস্টের মশলা",1]];
+const $=i=>document.getElementById(i);
+let S={custom:[],per:{},pr:{},log:[],mk:[]},T="open",SM=0;
+try{const x=JSON.parse(localStorage.getItem("stk1")||"null");if(x)S=Object.assign(S,x)}catch(e){}
+function mig(){if(!S.mk)S.mk=[];if(!S.hs)S.hs=[];if(!S.hp)S.hp=[];if(!S.cp)S.cp={};
+if(S.hs.length){S.hs.forEach(r=>{const key=(r.n||"").trim().toLowerCase();let p=key?S.hp.find(x=>(x.n||"").trim().toLowerCase()===key):null;if(!p){p={id:r.id,n:r.n,t:[]};S.hp.push(p)}if(r.j)p.t.push({id:r.id+1,ty:"j",a:r.j,d:r.d,nt:""});if(r.k)p.t.push({id:r.id+2,ty:"k",a:r.k,d:r.d,nt:""})});S.hs=[]}if(!S.fx2){[19,20,21,22,25,26,27,28,29,30,31,48].forEach(i=>{delete S.per[i]});S.fx2=1}S.log=S.log.filter(e=>{if(e.c===undefined){e.p=e.q||0;e.c=0;delete e.q}
+if(e.t==="out"||e.t==="bahir"||e.t==="ferot"){let r=S.mk.find(x=>x.d===e.d&&x.i===e.i);if(!r){r={id:e.id,d:e.d,i:e.i,gc:0,gp:0,fc:0,fp:0,r:S.pr[e.i]||0};S.mk.push(r)}
+if(e.t==="ferot"){r.fc+=e.c;r.fp+=e.p}else{r.gc+=e.c;r.gp+=e.p}return false}return true})}mig();
+const save=()=>{try{localStorage.setItem("stk1",JSON.stringify(S))}catch(e){alert("Save hocche na! Backup download koro.")}};
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+async function dlFile(fn,blob){const dl=window.claude&&claude.use?await claude.use("downloads").catch(()=>null):null;if(dl)await dl.save({filename:fn,data:blob});else{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}}
+const P=()=>BASE.concat(S.custom),K=i=>S.per[i]||P()[i][1]||1,PR=i=>S.pr[i]||0;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const n=id=>Math.max(0,parseFloat($(id).value)||0);
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const CP=i=>S.cp[i]||0;
+const acost=(i,d2)=>{let q=0,v=0;S.log.forEach(e=>{if(e.i!==i||e.t==="out"||(d2&&e.d>d2))return;const c=e.cp!==undefined?e.cp:CP(i),qq=qty(e);q+=qq;v+=qq*c});return q?v/q:CP(i)};
+const rcst=i=>acost(i,SM===1?$("d2").value:"");
+const rd=x=>Math.round(x*1000)/1000;
+const qty=e=>rd((e.c||0)*K(e.i)+(e.p||0));
+const gq=r=>rd(r.gc*K(r.i)+r.gp),fq=r=>rd(r.fc*K(r.i)+r.fp),nq=r=>rd(gq(r)-fq(r));
+
+const LB={open:"Prothom stock",in:"Mal ashlo +",bahir:"Market e gelo −",ferot:"Ferot +",out:"Bikri −"};
+const stock=i=>rd(S.log.reduce((s,e)=>e.i===i?s+qty(e):s,0)-S.mk.reduce((s,r)=>r.i===i?s+nq(r):s,0));
+const mm2=v=>(Math.round(v*100)/100).toLocaleString("en-IN"),m2=v=>String(Math.round(v*100)/100);
+const fmt=(q,k)=>{q=rd(q);const u=Math.abs(q),c=Math.floor(u/k+1e-9);return(q<0?"-":"")+c+" ctn "+rd(u-c*k)+" pcs"};
+const dq=(q,k)=>{q=rd(q);if(k>1&&q%k===0)return q/k+" ctn";const c=q/k;if(k>1&&Math.abs(c*100-Math.round(c*100))<1e-6)return Math.round(c*100)/100+" ctn";return fmt(q,k)};
+const money=v=>Math.round(v).toLocaleString("en-IN");
+function opts(){const h=P().map((p,i)=>`<option value="${i}">${i+1}. ${esc(p[0])}</option>`).join("");const a=$("pe").value,b=$("pp").value,c=$("cp").value;$("pe").innerHTML=h;$("pp").innerHTML=h;$("cp").innerHTML=h;if(a)$("pe").value=a;if(b)$("pp").value=b;if(c)$("cp").value=c}
+function prev(){const i=+$("pe").value,k=K(i),q=n("c1")*k+n("c2"),s=stock(i),a=s+(T==="mk"?-q:q);$("pv").textContent="Ekhon stock: "+fmt(s,k)+(q?"  →  Pore: "+fmt(a,k):"")+"  (1 ctn = "+k+" pcs)"}
+const heads=()=>SM<2?["Ctn-Pcs","Total pcs","Dam"]:["Joma","Bikri","Bikri dam"];
+function getData(all){const f=$("q").value.trim().toLowerCase(),d1=$("d1").value,d2=$("d2").value,R=[];let tv=0;
+P().forEach((p,i)=>{if(f&&!p[0].toLowerCase().includes(f))return;const k=K(i);
+const inR=e=>(SM===0||!d2||e.d<=d2)&&(SM!==2||!d1||e.d>=d1);
+const L=S.log.filter(e=>e.i===i&&inR(e)),M=S.mk.filter(r=>r.i===i&&inR(r));
+if(!L.length&&!M.length){if(all&&SM<2)R.push({i,k,red:1,c:["Stock nai","0",""]});return}
+const j=L.reduce((s,e)=>s+qty(e),0),net=M.reduce((s,r)=>s+nq(r),0);
+if(SM<2){const q=rd(j-net),ac=rcst(i),v=q/k*ac;tv+=v;R.push({i,k,red:q<=0,c:[q===0?"Stock nai":fmt(q,k),String(q),ac?money(v):""]})}
+else{const v=M.reduce((s,r)=>s+nq(r)/k*r.r,0);tv+=v;R.push({i,k,c:[fmt(j,k),fmt(net,k),v?mm2(v):""]})}});
+return{R,tv}}
+function rs(){const{R,tv}=getData();$("th").innerHTML="<tr><th>Product</th>"+heads().map(x=>"<th>"+x+"</th>").join("")+"</tr>";
+$("tb").innerHTML=R.map(r=>`<tr><td>${esc(P()[r.i][0])}<br><span class="sub">1 ctn = ${r.k} pcs<br>${rcst(r.i)?"Kroy dor: "+mm2(rcst(r.i))+" tk/ctn (pcs "+mm2(rcst(r.i)/r.k)+")":"<span style='color:var(--bad)'>kroy dor deya nai</span>"}<br>Bikri dam: ${PR(r.i)?mm2(PR(r.i))+" tk/ctn":"nai"}</span><br><button class="dt" data-i="${r.i}">Details</button> <button class="dt" data-s="${r.i}">Pcs/Ctn set</button></td>${r.c.map(c=>"<td>"+c+"</td>").join("")}</tr>`).join("")||'<tr><td colspan="4" class="sub">Kono entry nei</td></tr>';
+$("tv").textContent=R.length?(SM===2?"Total bikri dam: ":"Total stock dam (kroy dor): ")+money(tv)+" tk":""}
+function rk(){const A=S.log.map(e=>({k:"l",e})).concat(S.mk.map(r=>({k:"m",e:r}))).sort((a,b)=>b.e.d.localeCompare(a.e.d)||b.e.id-a.e.id).slice(0,150);
+$("kh").innerHTML=A.map(({k,e})=>{const p=P()[e.i],nm=p?esc(p[0]):"?";
+return k==="l"?`<tr><td>${e.d}<br><span class="sub">${LB[e.t]}</span></td><td>${nm}</td><td>${e.c} ctn ${e.p} pcs</td><td><button class="x" data-id="${e.id}">✕</button></td></tr>`
+:`<tr><td>${e.d}<br><span class="sub">Market e gelo</span></td><td>${nm}</td><td>Gelo ${e.gc} ctn ${e.gp} pcs<br><span class="sub">Ferot ${e.fc} ctn ${e.fp} pcs</span></td><td><button class="x" data-mk="${e.id}">✕</button></td></tr>`}).join("")||'<tr><td class="sub">Kono entry nei</td></tr>'}
+function rp(){const i=+$("pp").value;$("pk").value=K(i);$("pd").value=PR(i)||"";$("pcr").value=CP(i)||""}
+const mdate=()=>$("mdt").value||today();
+function sellData(){const d=mdate();const R=S.mk.filter(r=>r.d===d).sort((a,b)=>a.i-b.i).map(r=>{const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f);return{r,i:r.i,k,g,f,net,v:net/k*r.r}});return{R,tv:R.reduce((s,x)=>s+x.v,0)}}
+const stp=(id,d,fn)=>{const e=$(id);e.selectedIndex=Math.max(0,Math.min(e.options.length-1,e.selectedIndex+d));fn()};
+$("cpv").onclick=()=>stp("cp",-1,rcalc);$("cnx").onclick=()=>stp("cp",1,rcalc);
+$("ppv").onclick=()=>stp("pp",-1,rp);$("pnx").onclick=()=>stp("pp",1,rp);
+let FM=false;
+const rmb=()=>{$("mbr").value=PR(+$("mb").value)||""};
+function opts2(){const{R}=sellData();const a=$("mb").value,b=$("mf").value;
+$("mb").innerHTML=P().map((p,i)=>`<option value="${i}">${i+1}. ${esc(p[0])}</option>`).join("");if(a)$("mb").value=a;
+$("mf").innerHTML=R.map(x=>`<option value="${x.i}">${esc(P()[x.i][0])}</option>`).join("");if(b&&R.some(x=>String(x.i)===b))$("mf").value=b}
+function rlist(){const{R}=sellData();$("mbl").innerHTML=R.length?'<div class="sub" style="margin-top:10px">Ei tarikhe bahir:</div>'+R.map(x=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd)"><span>${esc(P()[x.i][0])} · <b>${dq(x.g,x.k)}</b></span><button class="x" data-mk="${x.r.id}">✕</button></div>`).join(""):""}
+$("mbl").onclick=e=>{const b=e.target.closest("[data-mk]");if(!b)return;ask(b,()=>{S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);save();rsell()})};
+function fshow(r){const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f),v=net/k*r.r;
+$("mfi").innerHTML=`Gelo ${dq(g,k)} − Ferot ${dq(f,k)} = <b>Bikri ${dq(net,k)}</b><br>${r.r?rd(net/k)+" ctn × "+mm2(r.r)+" = <b style='color:var(--ac)'>"+mm2(v)+" tk</b>":"<span class='sub'>dor deya nai</span>"}`;if(FM)rsheet()}
+function rferot(){const{R}=sellData();const x=R.find(y=>String(y.i)===$("mf").value);
+if(!x){$("mfb").style.display="none";$("mfi").innerHTML='<span class="sub">Age bahir e product jog koro</span>';return}
+$("mfb").style.display="";const r=x.r;$("mf1").value=r.fc||"";$("mf2").value=r.fp||"";$("mfr").value=r.r||"";fshow(r)}
+const ffe=()=>{const r=S.mk.find(y=>y.d===mdate()&&String(y.i)===$("mf").value);if(!r)return;const g=id=>Math.max(0,parseFloat($(id).value)||0);r.fc=g("mf1");r.fp=g("mf2");r.r=g("mfr");save();fshow(r)};
+function labOf(R,d){const lc=R.filter(x=>acost(x.i,d)>0);return{cost:lc.reduce((s,x)=>s+x.net/x.k*acost(x.i,d),0),lab:lc.reduce((s,x)=>s+x.v-x.net/x.k*acost(x.i,d),0),n:lc.length}}
+function LAB(R,d){const o=labOf(R,d);return o.n?`Kroy dam: ${mm2(o.cost)} tk · <b style="color:${sc(o.lab)}">Lab: ${sg(o.lab)} tk</b>`+(o.n<R.length?" (kichu product e kroy dor nai)":""):"Kroy dor deya nai, lab dekhano jachche na"}
+function rsheet(){if(!FM){$("msheet").innerHTML="";return}const{R,tv}=sellData();
+$("msheet").innerHTML=`<div class="card"><h2>Market Sheet · ${mdate()}</h2><div class="wrap"><table><thead><tr><th>Product</th><th>Gelo</th><th>Ferot</th><th>Bikri</th><th>Dam</th></tr></thead><tbody>${R.map(x=>`<tr><td>${esc(P()[x.i][0])}<br><span class="sub">dor ${x.r.r?mm2(x.r.r):"?"}</span></td><td>${dq(x.g,x.k)}</td><td>${dq(x.f,x.k)}</td><td><b>${dq(x.net,x.k)}</b></td><td>${x.r.r?mm2(x.v):""}</td></tr>`).join("")||'<tr><td colspan="5" class="sub">Kono bahir entry nei</td></tr>'}</tbody><tfoot><tr><td colspan="4"><b>Total dam</b></td><td style="text-align:right"><b>${mm2(tv)}</b></td></tr></tfoot></table></div><div class="res">Total: ${mm2(tv)} tk</div><div class="sub" style="margin-top:6px">${LAB(R,mdate())}</div><button class="big" id="spdf">PDF download</button><div id="spm" class="sub" style="margin-top:8px"></div></div>`;$("spdf").onclick=pdfSheet}
+function rsell(){opts2();if($("mbr").value==="")rmb();rlist();rferot();rsheet();hyRender()}
+$("mb").onchange=rmb;$("mf").onchange=rferot;
+$("mbv").onclick=()=>stp("mb",-1,rmb);$("mbx").onclick=()=>stp("mb",1,rmb);
+$("mfv").onclick=()=>stp("mf",-1,rferot);$("mfx").onclick=()=>stp("mf",1,rferot);
+["mf1","mf2","mfr"].forEach(i=>$(i).oninput=ffe);
+$("mdt").oninput=()=>{FM=false;rsell()};
+$("mfin").onclick=()=>{FM=true;rsheet();try{$("msheet").scrollIntoView({behavior:"smooth"})}catch(e){}};
+$("mba").onclick=()=>{const i=+$("mb").value,c=n("mb1"),p=n("mb2");if(!c&&!p){$("mbm").textContent="Ctn ba pcs dao";return}
+const d=mdate();let r=S.mk.find(x=>x.d===d&&x.i===i);if(!r){r={id:Date.now()*1000+Math.floor(Math.random()*1000),d,i,gc:0,gp:0,fc:0,fp:0,r:0};S.mk.push(r)}
+r.gc=rd(r.gc+c);r.gp=rd(r.gp+p);r.r=$("mbr").value!==""?Math.max(0,parseFloat($("mbr").value)||0):PR(i);save();$("mb1").value=$("mb2").value="";
+$("mbm").textContent="Jog hoyeche ✓";setTimeout(()=>$("mbm").textContent="",2000);if($("mbc").checked)stp("mb",1,rmb);rsell()};
+let CM=-1;
+function rcalc(){const i=+$("cp").value||0,k=K(i),a=(+$("ca1").value||0)*k+(+$("ca2").value||0),b=(+$("cb1").value||0)*k+(+$("cb2").value||0),t=a+CM*b;
+$("ci").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  ctn dam "+mm2(PR(i))+" tk  |  pcs dam "+mm2(PR(i)/k)+" tk":"");
+$("cr").textContent=fmt(t,k);$("cr").style.color=t<0?"var(--bad)":"";$("ct").textContent="Total "+t+" pcs";$("cd").textContent=PR(i)?"Dam: "+mm2(t/k*PR(i))+" tk":""}
+function all(){opts();prev();rs();rk();rp();rsell();rcalc();hrender()}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.className="");b.className="on";document.querySelectorAll(".v").forEach(v=>v.className="v");$("v"+b.dataset.v).className="v on";all()});
+document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{T=b.dataset.t;document.querySelectorAll("[data-t]").forEach(x=>x.className="");b.className="on";prev()});
+["pe","c1","c2"].forEach(i=>$(i).oninput=prev);$("q").oninput=rs;$("pp").onchange=rp;
+$("sv").onclick=()=>{const i=+$("pe").value,c=n("c1"),p=n("c2");if(!c&&!p){$("ms").textContent="Ctn ba pcs dao";return}
+const id=Date.now()*1000+Math.floor(Math.random()*1000),d=$("dt").value||today();
+if(T==="mk"){let r=S.mk.find(x=>x.d===d&&x.i===i);if(!r){r={id,d,i,gc:0,gp:0,fc:0,fp:0,r:0};S.mk.push(r)}r.gc=rd(r.gc+c);r.gp=rd(r.gp+p);r.r=$("rt").value!==""?Math.max(0,parseFloat($("rt").value)||0):PR(i)}
+else{const cpv=$("ec").value!==""?Math.max(0,parseFloat($("ec").value)||0):CP(i);S.log.push({id,d,t:T,i,c,p,cp:cpv});if(cpv)S.cp[i]=cpv}
+save();$("c1").value="";$("c2").value="";prev();if($("nx").checked)go(1,1);$("ms").textContent="Save hoyeche ✓";$("gb").style.display=T==="mk"?"block":"none";setTimeout(()=>$("ms").textContent="",2000)};
+$("kh").onclick=e=>{const b=e.target.closest("[data-id],[data-mk]");if(!b)return;ask(b,()=>{if(b.dataset.mk)S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);else S.log=S.log.filter(x=>String(x.id)!==b.dataset.id);save();rk();rs();prev();rsell()})};
+$("pk").oninput=()=>{const v=parseInt($("pk").value);if(v>0){S.per[+$("pp").value]=v;save()}};
+$("pcr").oninput=()=>{S.cp[+$("pp").value]=parseFloat($("pcr").value)||0;save()};
+$("pd").oninput=()=>{S.pr[+$("pp").value]=parseFloat($("pd").value)||0;save()};
+$("na").onclick=()=>{const nm=$("nn").value.trim(),k=parseInt($("nk").value);if(!nm||!(k>0)){$("ms").textContent="Nam ar 1 ctn e pcs dao";return}S.custom.push([nm,k]);const i=P().length-1;S.pr[i]=parseFloat($("np").value)||0;save();$("nn").value=$("nk").value=$("np").value="";opts();$("pp").value=i;$("pe").value=i;$("ad").open=false;rp();prev()};
+$("pdf").onclick=async()=>{
+const{R,tv}=getData(true);if(!R.length){$("pm").textContent="Kono entry nei";return}
+const h=heads(),title=SM===0?"Final Stock Report":SM===1?"Stock Report":"Lenden Report",d1=$("d1").value||"?",d2=$("d2").value||today();
+const sub=SM===0?"Tarikh: "+today():SM===1?"Stock "+d2+" tarikh porjonto":"Lenden "+d1+" theke "+d2;
+const W=1190,H=1684,top=210,RH=Math.max(24,Math.min(40,Math.floor((H-top-100)/R.length))),pp=Math.floor((H-top-100)/RH),pg=Math.ceil(R.length/pp),fs=Math.min(25,RH-8);
+const doc=new window.jspdf.jsPDF({unit:"pt",format:"a4"});
+const fit=(x,t,w)=>{while(t.length>1&&x.measureText(t).width>w)t=t.slice(0,-1);return t};
+for(let p=0;p<pg;p++){
+const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+x.fillStyle="#fff";x.fillRect(0,0,W,H);x.fillStyle="#000";
+x.font="bold 46px sans-serif";x.fillText(title,60,85);
+x.font="26px sans-serif";x.fillText(sub+"     Page "+(p+1)+"/"+pg,60,130);
+if(SM<2){x.fillStyle="#b91c1c";x.textAlign="right";x.font="bold 26px sans-serif";x.fillText("Red = stock nai: "+R.filter(r=>r.red).length+" ta",1140,85);x.fillStyle="#000";x.textAlign="left";x.font="26px sans-serif"}
+x.fillStyle="#e5e7eb";x.fillRect(50,160,W-100,44);x.fillStyle="#000";x.font="bold 24px sans-serif";
+x.textAlign="left";x.fillText("No",60,192);x.fillText("Product",120,192);x.fillText("1 ctn =",410,192);x.fillText(h[0],680,192);
+x.textAlign="right";x.fillText(SM<2?"Kroy dor":"Bikri dor",650,192);x.fillText(h[1],1020,192);x.fillText(h[2],1140,192);
+x.font=fs+"px sans-serif";
+R.slice(p*pp,(p+1)*pp).forEach((r,j)=>{const y=top+j*RH+Math.round(RH*0.72);
+if(r.red){x.fillStyle="#fee2e2";x.fillRect(50,top+j*RH,W-100,RH);x.fillStyle="#b91c1c"}
+x.textAlign="left";x.fillText(String(p*pp+j+1),60,y);x.fillText(fit(x,P()[r.i][0],280),120,y);x.fillText(r.k+" pcs",410,y);x.fillText(r.c[0],680,y);
+x.textAlign="right";const kd=SM<2?rcst(r.i):PR(r.i);x.fillText(kd?mm2(kd):"",650,y);x.fillText(r.c[1],1020,y);x.fillText(r.c[2],1140,y);
+x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1);x.fillStyle="#000"});
+if(p===pg-1){x.font="bold 32px sans-serif";x.textAlign="right";x.fillText((SM===2?"Total bikri dam: ":"Total stock dam (kroy dor): ")+money(tv)+" tk",1140,H-55)}
+if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
+try{await dlFile((SM===2?"lenden-":"stock-")+today()+".pdf",doc.output("blob"));$("pm").textContent="PDF hoyeche ✓"}catch(e){$("pm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}};
+$("bk").onclick=async()=>{try{await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));$("bm").textContent="Backup hoyeche ✓"}catch(e){}};
+$("rs0").onclick=()=>$("rf").click();
+$("rf").onchange=async()=>{const f=$("rf").files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.log)||!Array.isArray(x.custom))throw 0;try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}S=Object.assign({custom:[],per:{},pr:{},log:[]},x);mig();save();all();$("bm").textContent="Restore hoyeche ✓"}catch(e){$("bm").textContent="File ta thik na"}$("rf").value=""};
+$("dt").value=$("d1").value=$("d2").value=today();$("mdt").value=today();
+["cp","ca1","ca2","cb1","cb2"].forEach(i=>$(i).oninput=rcalc);$("cp").onchange=rcalc;
+$("cm0").onclick=()=>{CM=-1;$("cm0").className="on";$("cp0").className="";rcalc()};
+$("cp0").onclick=()=>{CM=1;$("cp0").className="on";$("cm0").className="";rcalc()};
+function hyData(){const a=$("hy1").value,b=$("hy2").value,D={};
+S.mk.filter(r=>(!a||r.d>=a)&&(!b||r.d<=b)).forEach(r=>{(D[r.d]=D[r.d]||[]).push(r)});
+const days=Object.keys(D).sort().map(d=>{const L=D[d].sort((x,y)=>x.i-y.i).map(r=>{const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f);return{r,i:r.i,k,g,f,net,v:net/k*r.r}});return{d,L,t:L.reduce((s,x)=>s+x.v,0)}});
+return{days,tv:days.reduce((s,x)=>s+x.t,0)}}
+function hyRender(){const{days,tv}=hyData();$("hys").innerHTML=days.length?days.map(x=>`${x.d} · ${x.L.length} ta product · <b>${mm2(x.t)} tk</b>`).join("<br>")+`<br><b style="color:var(--ac)">Total: ${mm2(tv)} tk</b>`:'<span class="sub">Kono market nai</span>'}
+$("hy1").oninput=$("hy2").oninput=hyRender;
+async function hyPdf(){const{days,tv}=hyData();if(!days.length){$("hym").textContent="Kono market nai";return}
+const rows=[];days.forEach(d=>{rows.push({h:d});d.L.forEach(x=>rows.push({x}))});
+const a=$("hy1").value,b=$("hy2").value,W=1190,H=1684,top=210,RH=32,pp=Math.floor((H-top-110)/RH),pg=Math.ceil(rows.length/pp),fs=21;
+const doc=new window.jspdf.jsPDF({unit:"pt",format:"a4"});
+const fit=(x,t,w)=>{while(t.length>1&&x.measureText(t).width>w)t=t.slice(0,-1);return t};
+for(let p=0;p<pg;p++){
+const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+x.fillStyle="#fff";x.fillRect(0,0,W,H);x.fillStyle="#000";
+x.font="bold 46px sans-serif";x.fillText("Market History",60,85);
+x.font="26px sans-serif";x.fillText((a||b?(a||"shuru")+" theke "+(b||"ekhon porjonto"):"Shob market")+"     Page "+(p+1)+"/"+pg,60,130);
+x.fillStyle="#e5e7eb";x.fillRect(50,160,W-100,44);x.fillStyle="#000";x.font="bold 22px sans-serif";
+x.textAlign="left";x.fillText("Product",105,192);x.fillText("Gelo",390,192);x.fillText("Ferot",560,192);x.fillText("Bikri",730,192);
+x.textAlign="right";x.fillText("Dor/ctn",960,192);x.fillText("Dam",1140,192);
+rows.slice(p*pp,(p+1)*pp).forEach((e,j)=>{const y=top+j*RH+Math.round(RH*0.72);
+if(e.h){x.fillStyle="#dbeafe";x.fillRect(50,top+j*RH,W-100,RH);x.fillStyle="#000";x.font="bold 23px sans-serif";x.textAlign="left";x.fillText("Tarikh: "+e.h.d,60,y);x.textAlign="right";x.fillText("Total: "+mm2(e.h.t)+" tk",1140,y);return}
+const r=e.x;x.font=fs+"px sans-serif";x.fillStyle="#000";
+x.textAlign="left";x.fillText(fit(x,P()[r.i][0],270),105,y);x.fillText(dq(r.g,r.k),390,y);x.fillText(dq(r.f,r.k),560,y);x.fillText(dq(r.net,r.k),730,y);
+x.textAlign="right";x.fillText(r.r.r?mm2(r.r.r):"",960,y);x.fillText(r.r.r?mm2(r.v):"",1140,y);
+x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1)});
+if(p===pg-1){x.fillStyle="#000";x.fillRect(50,H-100,W-100,2);x.font="bold 32px sans-serif";x.textAlign="left";x.fillText(days.length+" ta market",60,H-55);x.textAlign="right";x.fillText("History total: "+mm2(tv)+" tk",1140,H-55)}
+if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
+try{await dlFile("market-history-"+today()+".pdf",doc.output("blob"));$("hym").textContent="PDF hoyeche ✓"}catch(e){$("hym").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}}
+$("hypdf").onclick=hyPdf;
+async function pdfSheet(){const{R,tv}=sellData();if(!R.length){$("spm").textContent="Kono entry nei";return}
+const d=mdate(),lo=labOf(R,d);
+const W=1190,H=1684,top=210,RH=Math.max(24,Math.min(40,Math.floor((H-top-150)/R.length))),pp=Math.floor((H-top-150)/RH),pg=Math.ceil(R.length/pp),fs=Math.min(22,RH-8);
+const doc=new window.jspdf.jsPDF({unit:"pt",format:"a4"});
+const fit=(x,t,w)=>{while(t.length>1&&x.measureText(t).width>w)t=t.slice(0,-1);return t};
+for(let p=0;p<pg;p++){
+const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+x.fillStyle="#fff";x.fillRect(0,0,W,H);x.fillStyle="#000";
+x.font="bold 46px sans-serif";x.fillText("Market Sheet",60,85);
+x.font="26px sans-serif";x.fillText("Tarikh: "+d+"     Page "+(p+1)+"/"+pg,60,130);
+x.fillStyle="#e5e7eb";x.fillRect(50,160,W-100,44);x.fillStyle="#000";x.font="bold 22px sans-serif";
+x.textAlign="left";x.fillText("No",60,192);x.fillText("Product",105,192);x.fillText("Gelo",390,192);x.fillText("Ferot",560,192);x.fillText("Bikri",730,192);
+x.textAlign="right";x.fillText("Dor/ctn",960,192);x.fillText("Dam",1140,192);
+x.font=fs+"px sans-serif";
+R.slice(p*pp,(p+1)*pp).forEach((r,j)=>{const y=top+j*RH+Math.round(RH*0.72);
+x.textAlign="left";x.fillText(String(p*pp+j+1),60,y);x.fillText(fit(x,P()[r.i][0],270),105,y);x.fillText(dq(r.g,r.k),390,y);x.fillText(dq(r.f,r.k),560,y);x.fillText(dq(r.net,r.k),730,y);
+x.textAlign="right";x.fillText(r.r.r?mm2(r.r.r):"",960,y);x.fillText(r.r.r?mm2(r.v):"",1140,y);
+x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1);x.fillStyle="#000"});
+if(p===pg-1){x.fillStyle="#000";x.fillRect(50,H-100,W-100,2);x.font="bold 32px sans-serif";x.textAlign="left";x.fillText("Total ("+R.length+" ta product)",60,H-55);x.textAlign="right";x.fillText("Total dam: "+mm2(tv)+" tk",1140,H-55);if(lo.n){x.font="24px sans-serif";x.textAlign="left";x.fillText("Kroy dam: "+mm2(lo.cost)+" tk",60,H-115);x.textAlign="right";x.fillStyle=lo.lab>=0?"#15803d":"#b91c1c";x.fillText("Lab: "+sg(lo.lab)+" tk",1140,H-115)}}
+if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
+try{await dlFile("market-sheet-"+d+".pdf",doc.output("blob"));$("spm").textContent="PDF hoyeche ✓"}catch(e){$("spm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}}
+let DI=-1,SI=-1;
+const am=v=>String(v||"").split("+").reduce((s,x)=>s+(parseFloat(x.replace(/,/g,""))||0),0);
+const sg=v=>(v>0?"+":v<0?"−":"")+mm2(Math.abs(v)),sc=v=>v>0?"var(--ac)":v<0?"var(--bad)":"inherit";
+let HT="j",HP=null;
+const pj=p=>p.t.filter(e=>e.ty==="j").reduce((s,e)=>s+e.a,0),pk=p=>p.t.filter(e=>e.ty==="k").reduce((s,e)=>s+e.a,0);
+const gp=()=>S.hp.find(x=>x.id===HP);
+function hrender(){let tj=0,tk=0;
+$("hb").innerHTML=S.hp.map(p=>{const j=pj(p),k=pk(p),b=j-k;tj+=j;tk+=k;return`<tr><td data-hp="${p.id}">${esc(p.n)||"(nam nai)"}<br><span class="sub">${p.t.length} ta entry · tap koro</span></td><td style="text-align:right">${j?mm2(j):""}</td><td>${k?mm2(k):""}</td><td style="color:${sc(b)};font-weight:600">${sg(b)}</td><td><button class="x" data-hd="${p.id}">✕</button></td></tr>`}).join("")||'<tr><td colspan="5" class="sub">Kono bekti nai. + Add chapo.</td></tr>';
+const n=tj-tk;$("ht").innerHTML=S.hp.length?`Total joma: <b>${mm2(tj)}</b><br>Total khoroch: <b>${mm2(tk)}</b><br><span style="font-size:22px;font-weight:700;color:${sc(n)}">Baki: ${sg(n)} tk</span>`:""}
+function hdrender(){const p=gp();if(!p)return;const j=pj(p),k=pk(p),b=j-k;
+$("hds").innerHTML=`Joma: <b>${mm2(j)}</b> · Khoroch: <b>${mm2(k)}</b><br><span style="font-size:22px;font-weight:700;color:${sc(b)}">Baki: ${sg(b)} tk</span>`;
+$("hdl").innerHTML=p.t.slice().sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(e=>`<tr><td>${e.d}<br><span class="sub">${esc(e.nt||"")}</span></td><td style="color:${e.ty==="j"?"var(--ac)":"var(--bad)"}">${e.ty==="j"?"Joma +":"Khoroch −"}</td><td style="text-align:right">${mm2(e.a)}</td><td><button class="x" data-ed="${e.id}">✕</button></td></tr>`).join("")||'<tr><td class="sub">Kono entry nai</td></tr>';hdprev()}
+function hdprev(){const p=gp();if(!p)return;const a=am($("hda").value),b=pj(p)-pk(p);$("hdp").innerHTML=a?"Save korle Baki hobe: <b style='color:"+sc(b+(HT==="j"?a:-a))+"'>"+sg(b+(HT==="j"?a:-a))+" tk</b>":""}
+function hdopen(id){HP=id;const p=gp();$("hdn").value=p.n;$("hda").value=$("hdt").value="";$("hdd").value=today();hdrender();$("hd").style.display="block"}
+$("hadd").onclick=()=>{$("hmn").value="";$("hmp").textContent="";$("hm").style.display="block";$("hmn").focus()};
+$("hmx").onclick=()=>{$("hm").style.display="none"};
+$("hms").onclick=()=>{const n=$("hmn").value.trim();if(!n){$("hmp").textContent="Nam dao";return}const p={id:Date.now()*1000+Math.floor(Math.random()*1000),n,t:[]};S.hp.push(p);save();$("hm").style.display="none";hrender();hdopen(p.id)};
+$("hb").onclick=e=>{const d=e.target.closest("[data-hd]");if(d){ask(d,()=>{S.hp=S.hp.filter(x=>String(x.id)!==d.dataset.hd);save();hrender()});return}const t=e.target.closest("[data-hp]");if(t)hdopen(+t.dataset.hp)};
+$("hdc").onclick=()=>{$("hd").style.display="none";HP=null;hrender()};
+$("hdn").oninput=()=>{const p=gp();if(p){p.n=$("hdn").value;save()}};
+$("hdj").onclick=()=>{HT="j";$("hdj").className="on";$("hdk").className="";hdprev()};
+$("hdk").onclick=()=>{HT="k";$("hdk").className="on";$("hdj").className="";hdprev()};
+$("hda").oninput=hdprev;
+$("hdv").onclick=()=>{const p=gp(),a=am($("hda").value);if(!p)return;if(!a){$("hdp").textContent="Taka dao";return}
+p.t.push({id:Date.now()*1000+Math.floor(Math.random()*1000),ty:HT,a,d:$("hdd").value||today(),nt:$("hdt").value.trim()});save();$("hda").value=$("hdt").value="";hdrender();hrender()};
+$("hdl").onclick=e=>{const b=e.target.closest("[data-ed]");if(!b)return;ask(b,()=>{const p=gp();if(!p)return;p.t=p.t.filter(x=>String(x.id)!==b.dataset.ed);save();hdrender();hrender()})};
+$("hpdf").onclick=async()=>{const A=S.hp;if(!A.length){$("hpm").textContent="Kono bekti nai";return}
+let tj=0,tk=0;A.forEach(p=>{tj+=pj(p);tk+=pk(p)});const net=tj-tk,det=$("hdet").checked;
+const rows=[];A.forEach((p,i)=>{rows.push({p,no:i+1});if(det)p.t.slice().sort((x,y)=>x.d.localeCompare(y.d)||x.id-y.id).forEach(e=>rows.push({e}))});
+const W=1190,H=1684,top=210,RH=det?30:Math.max(24,Math.min(40,Math.floor((H-top-210)/rows.length))),pp=Math.floor((H-top-210)/RH),pg=Math.ceil(rows.length/pp),fs=Math.min(22,RH-8);
+const col=v=>v>0?"#15803d":v<0?"#b91c1c":"#000";
+const doc=new window.jspdf.jsPDF({unit:"pt",format:"a4"});
+const fit=(x,t,w)=>{while(t.length>1&&x.measureText(t).width>w)t=t.slice(0,-1);return t};
+for(let p=0;p<pg;p++){
+const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+x.fillStyle="#fff";x.fillRect(0,0,W,H);x.fillStyle="#000";
+x.font="bold 46px sans-serif";x.fillText("Hisab Khata",60,85);
+x.font="26px sans-serif";x.fillText("Tarikh: "+today()+"     Page "+(p+1)+"/"+pg,60,130);
+x.fillStyle="#e5e7eb";x.fillRect(50,160,W-100,44);x.fillStyle="#000";x.font="bold 22px sans-serif";
+x.textAlign="left";x.fillText("No",60,192);x.fillText("Nam",105,192);
+x.textAlign="right";x.fillText("Joma",720,192);x.fillText("Khoroch",900,192);x.fillText("Baki",1140,192);
+rows.slice(p*pp,(p+1)*pp).forEach((r,j)=>{const y=top+j*RH+Math.round(RH*0.72);
+if(r.p){const j2=pj(r.p),k2=pk(r.p),b=j2-k2;x.font=(det?"bold ":"")+fs+"px sans-serif";x.fillStyle=det?"#000":"#000";if(det){x.fillStyle="#eef2ff";x.fillRect(50,top+j*RH,W-100,RH);x.fillStyle="#000"}
+x.textAlign="left";x.fillText(String(r.no),60,y);x.fillText(fit(x,r.p.n||"-",450),105,y);
+x.textAlign="right";x.fillText(j2?mm2(j2):"",720,y);x.fillText(k2?mm2(k2):"",900,y);x.fillStyle=col(b);x.fillText(sg(b),1140,y)}
+else{const e=r.e;x.font=(fs-2)+"px sans-serif";x.fillStyle="#374151";x.textAlign="left";x.fillText(e.d,125,y);x.fillText(e.ty==="j"?"Joma":"Khoroch",290,y);x.fillText(fit(x,e.nt||"",330),400,y);x.textAlign="right";x.fillText(mm2(e.a),e.ty==="j"?720:900,y)}
+x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1)});
+if(p===pg-1){x.fillStyle="#000";x.fillRect(50,H-190,W-100,2);x.font="bold 30px sans-serif";
+x.textAlign="left";x.fillText("Total joma",60,H-150);x.fillText("Total khoroch",60,H-105);x.fillText("Baki (joma − khoroch)",60,H-55);
+x.textAlign="right";x.fillText(mm2(tj)+" tk",1140,H-150);x.fillText(mm2(tk)+" tk",1140,H-105);x.fillStyle=col(net);x.font="bold 36px sans-serif";x.fillText(sg(net)+" tk",1140,H-55)}
+if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
+try{await dlFile("hisab-"+today()+".pdf",doc.output("blob"));$("hpm").textContent="PDF hoyeche ✓"}catch(e){$("hpm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}};
+function arm(b,t,fn){if(b.dataset.arm){fn();return}b.dataset.arm="1";b.dataset.o=b.textContent;b.textContent=t;b.style.fontWeight="700";setTimeout(()=>{if(b.dataset.arm){delete b.dataset.arm;b.textContent=b.dataset.o;b.style.fontWeight=""}},4000)}
+function done(b){delete b.dataset.arm;b.textContent=b.dataset.o;b.style.fontWeight=""}
+const keep=()=>{try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}};
+let CF=null;
+function cbox(msg,fn){$("cmt").textContent=msg;CF=fn;$("cm").style.display="block"}
+$("cn").onclick=()=>{CF=null;$("cm").style.display="none"};
+$("cy").onclick=()=>{const f=CF;CF=null;$("cm").style.display="none";if(f)f()};
+$("r1").onclick=()=>cbox("Apni ki nishchit shob entry (prothom stock, joma, bikri) muche felben? Product, pcs/ctn ar dam thakbe.",()=>{keep();S.log=[];S.mk=[];save();all();$("rm").textContent="Shob entry muche gechhe ✓"});
+$("r2").onclick=()=>cbox("Apni ki nishchit PURA reset korben? Shob entry, notun product, pcs/ctn ar dam muche jabe.",()=>{keep();const nx=S.nx;S={custom:[],per:{},pr:{},cp:{},log:[],mk:[],hs:[],hp:[],nx};save();all();$("rm").textContent="Pura reset hoyeche ✓"});
+$("r3").onclick=()=>{try{const x=JSON.parse(localStorage.getItem("stk1_prev")||"null");if(!x){$("rm").textContent="Ager kichu nei";return}S=Object.assign({custom:[],per:{},pr:{},log:[]},x);mig();save();all();$("rm").textContent="Ager obosthay ferot ashche ✓"}catch(e){$("rm").textContent="Ferot ana gelo na"}};
+document.querySelectorAll("#sm3 button").forEach(b=>b.onclick=()=>{SM=+b.dataset.m;document.querySelectorAll("#sm3 button").forEach(x=>x.className="");b.className="on";$("rg").style.display=SM?"flex":"none";$("d1w").style.display=SM===2?"":"none";$("d2l").textContent=SM===2?"Porjonto":"Tarikh porjonto";rs()});
+$("d1").oninput=$("d2").oninput=rs;
+function go(d,f){const n=P().length;let i=+$("pe").value+d;i=Math.max(0,Math.min(n-1,i));$("pe").value=i;prev();rrt();if(f)$("c1").focus()}
+function rrt(){$("ec").value=CP(+$("pe").value)||"";$("rtw").style.display=T==="mk"?"block":"none";if(T==="mk")$("rt").value=PR(+$("pe").value)||""}
+document.querySelectorAll("[data-t]").forEach(b=>b.addEventListener("click",rrt));$("pe").addEventListener("change",rrt);
+$("pv0").onclick=()=>go(-1);$("nx0").onclick=()=>go(1);
+$("nx").checked=S.nx!==false;$("nx").onchange=()=>{S.nx=$("nx").checked;save()};
+function ask(b,fn){if(b.dataset.arm){fn();return}b.dataset.arm="1";b.textContent="Delete?";b.style.fontWeight="700";setTimeout(()=>{if(b.isConnected){delete b.dataset.arm;b.textContent="✕";b.style.fontWeight=""}},3500)}
+function setm(i){SI=i;$("sh").textContent=P()[i][0];$("sk").value=K(i);$("sd").value=PR(i)||"";$("sp").value=PR(i)?m2(PR(i)/K(i)):"";$("skc").value=CP(i)||"";$("sm").style.display="block"}
+const syncP=()=>{const k=parseFloat($("sk").value)||0,d=parseFloat($("sd").value)||0;$("sp").value=k&&d?m2(d/k):""};
+$("sd").oninput=syncP;$("sk").oninput=syncP;
+$("sp").oninput=()=>{const k=parseFloat($("sk").value)||0,p=parseFloat($("sp").value)||0;$("sd").value=k&&p?m2(p*k):""};
+$("ss").onclick=()=>{const k=parseInt($("sk").value);if(!(k>0)){$("sk").focus();return}S.per[SI]=k;S.pr[SI]=parseFloat($("sd").value)||0;S.cp[SI]=parseFloat($("skc").value)||0;save();$("sm").style.display="none";all();if($("dm").style.display==="block")det(DI)};
+$("sx").onclick=()=>{$("sm").style.display="none"};
+$("se").onclick=()=>setm(+$("pe").value);
+function det(i){DI=i;const k=K(i),L=S.log.filter(e=>e.i===i),M=S.mk.filter(r=>r.i===i);let o=0;L.forEach(e=>{o+=qty(e)});
+const g=M.reduce((s,r)=>s+gq(r),0),f=M.reduce((s,r)=>s+fq(r),0),sv=M.reduce((s,r)=>s+nq(r)/k*r.r,0);
+$("dh").textContent=P()[i][0];$("dr").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  1 ctn dam: "+mm2(PR(i))+" tk  |  1 pcs dam: "+mm2(PR(i)/k)+" tk":"");
+$("ds").innerHTML="Stock jog (prothom): <b>"+fmt(o,k)+"</b><br>Market e gelo: <b>"+dq(g,k)+"</b><br>Ferot: <b>"+dq(f,k)+"</b><br>Sell (gelo − ferot): <b>"+dq(g-f,k)+"</b>"+(sv?" = <b>"+mm2(sv)+" tk</b>":"")+"<br>Ekhon ache: <b>"+fmt(o-(g-f),k)+"</b> ("+rd(o-(g-f))+" pcs)";
+const A=L.map(e=>({d:e.d,id:e.id,h:`<td>${e.d}<br><span class="sub">${LB[e.t]}</span></td><td>${e.c} ctn ${e.p} pcs<br><span class="sub">${qty(e)} pcs</span></td><td><button class="x" data-id="${e.id}">✕</button></td>`})).concat(M.map(r=>({d:r.d,id:r.id,h:`<td>${r.d}<br><span class="sub">Market e gelo</span></td><td>Gelo ${dq(gq(r),k)}<br><span class="sub">Ferot ${dq(fq(r),k)}${r.r?" · dor "+mm2(r.r):""}</span></td><td><button class="x" data-mk="${r.id}">✕</button></td>`})));
+$("dl").innerHTML=A.sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(a=>"<tr>"+a.h+"</tr>").join("")||'<tr><td class="sub">Kono entry nei</td></tr>';
+$("dm").style.display="block"}
+$("de").onclick=()=>det(+$("pe").value);
+$("tb").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.i!==undefined)det(+b.dataset.i);else if(b.dataset.s!==undefined)setm(+b.dataset.s)};
+$("dc").onclick=()=>{$("dm").style.display="none";DI=-1;all()};
+$("dl").onclick=e=>{const b=e.target.closest("[data-id],[data-mk]");if(!b)return;ask(b,()=>{if(b.dataset.mk)S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);else S.log=S.log.filter(x=>String(x.id)!==b.dataset.id);save();det(DI);rs();rk();prev();rsell()})};
+all();rrt();
+</script>
