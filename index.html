@@ -189,27 +189,11 @@ details[open] summary::after{content:'−'}
 <div id="sm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><h2 id="sh"></h2><label>Ei product 1 ctn e koto pcs?</label><input id="sk" type="number" inputmode="numeric" min="1"><label>1 ctn er dam (tk)</label><input id="sd" type="number" inputmode="decimal" min="0"><label>1 pcs er dam (tk), ctn dam theke auto ashe</label><input id="sp" type="number" inputmode="decimal" min="0"><label>Lav % (bikri dam theke koto % lav pao). Kroy dor = dam − dam × lav%</label><input id="slv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="skc" type="number" inputmode="decimal" min="0"><div class="row" style="margin-top:14px"><button id="sx">Bondho</button><button class="on" id="ss">Save</button></div></div></div>
 
 <script>
-const $=i=>document.getElementById(i);
-
-// Online/Offline Detection
-function updateNetStatus(){
-  const d=$("netDot"),t=$("netTx");
-  if(!d||!t)return;
-  if(navigator.onLine){d.className="dot";t.textContent="Online"}
-  else{d.className="dot off";t.textContent="Offline"}
-}
-window.addEventListener("online",updateNetStatus);
-window.addEventListener("offline",updateNetStatus);
-updateNetStatus();
-
-// PWA Service Worker Registration
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-}
-
 const BASE=[["মিল্ক কেক",72],["মাফিন কেক",48],["ডপস ১০",24],["লুপস ৫",48],["লেক্সাস ৫",48],["লেক্সাস ১০",24],["লেক্সাস ফ্যামিলি",1],["মেরি ফ্যামিলি",12],["মিল্ক ৫",48],["ঘি ৫",48],["ঘি ১০",24],["ঘি ফ্যামিলি",8],["চকোলেট ১০",48],["এনার্জি ৫",48],["এনার্জি ১০",24],["এনার্জি ফ্যামিলি",8],["৪ পিসের নুডলস",1],["৮ পিসের নুডলস",1],["পাতা নুডলস",12],["১৫ গ্রাম মরিচ গুড়া",1],["৫০ গ্রাম মরিচ গুড়া",1],["১৫ গ্রাম হলুদ গুড়া",1],["৫০ গ্রাম হলুদ গুড়া",1],["হলুদ গুড়া ৫ কেজি",1],["মরিচ গুড়া ৫ কেজি",1],["মাংসের মশলা",1],["মুরগির মশলা",1],["গরু মাংসের মশলা",1],["মাছের মশলা",1],["১৫ গ্রাম জিরার গুরা",1],["৫০ গ্রাম জিরার গুরা",1],["বিরিয়ানি মশলা ৪০ গ্রাম",1],["সরিষ তেল ৮০ গ্রাম",1],["সরিষ তেল ২০০ গ্রাম",1],["ঘি টোস্ট মিনি",96],["ড্রাই কেক মিনি",48],["কোকোনাট ২০ টাকা",8],["কোকোনাট ফ্যামিলি",24],["৫ টাকা চানাচুর",1],["৩০ টাকা চানাচুর",1],["৫০ টাকা চানাচুর",1],["লাচ্ছা সেমাই",1],["ভার্মিচিলি সেমাই",1],["বালিশ সেমাই",1],["এগ নুডলস্",24],["তেঁতুল চাটনী",1],["১৫ গ্রাম চা",1],["৫০০ গ্রাম চা",1],["রোস্টের মশলা",1],["পটাটা-১০",24]];
+const $=i=>document.getElementById(i);
 let S={custom:[],per:{},pr:{},log:[],mk:[]},T="open",SM=0;
 try{const x=JSON.parse(localStorage.getItem("stk1")||"null");if(x)S=Object.assign(S,x)}catch(e){}
+
 function mig(){
   if(!S.mk)S.mk=[];if(!S.hs)S.hs=[];if(!S.hp)S.hp=[];if(!S.cp)S.cp={};if(!S.lv)S.lv={};
   if(S.hs.length){
@@ -234,6 +218,7 @@ function mig(){
   })
 }
 mig();
+
 const save=()=>{try{localStorage.setItem("stk1",JSON.stringify(S))}catch(e){alert("Save hocche na! Backup download koro.")}};
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 async function dlFile(fn,blob){const dl=window.claude&&claude.use?await claude.use("downloads").catch(()=>null):null;if(dl)await dl.save({filename:fn,data:blob});else{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}}
@@ -254,9 +239,11 @@ const mm2=v=>(Math.round(v*100)/100).toLocaleString("en-IN"),m2=v=>String(Math.r
 const fmt=(q,k)=>{q=rd(q);const u=Math.abs(q),c=Math.floor(u/k+1e-9);return(q<0?"-":"")+c+" ctn "+rd(u-c*k)+" pcs"};
 const dq=(q,k)=>{q=rd(q);if(k>1&&q%k===0)return q/k+" ctn";const c=q/k;if(k>1&&Math.abs(c*100-Math.round(c*100))<1e-6)return Math.round(c*100)/100+" ctn";return fmt(q,k)};
 const money=v=>Math.round(v).toLocaleString("en-IN");
+
 function opts(){const h=P().map((p,i)=>`<option value="${i}">${i+1}. ${esc(p[0])}</option>`).join("");const a=$("pe").value,b=$("pp").value,c=$("cp").value;$("pe").innerHTML=h;$("pp").innerHTML=h;$("cp").innerHTML=h;if(a)$("pe").value=a;if(b)$("pp").value=b;if(c)$("cp").value=c}
 function prev(){const i=+$("pe").value,k=K(i),q=n("c1")*k+n("c2"),s=stock(i),a=s+(T==="mk"?-q:q);$("pv").textContent="Ekhon stock: "+fmt(s,k)+(q?"  →  Pore: "+fmt(a,k):"")+"  (1 ctn = "+k+" pcs)"}
 const heads=()=>SM<2?["Ctn-Pcs","Total pcs","Dam"]:["Joma","Bikri","Bikri dam"];
+
 function getData(all){const f=$("q").value.trim().toLowerCase(),d1=$("d1").value,d2=$("d2").value,R=[];let tv=0;
 P().forEach((p,i)=>{if(f&&!p[0].toLowerCase().includes(f))return;const k=K(i);
 const inR=e=>(SM===0||!d2||e.d<=d2)&&(SM!==2||!d1||e.d>=d1);
@@ -266,13 +253,16 @@ const j=L.reduce((s,e)=>s+qty(e),0),net=M.reduce((s,r)=>s+nq(r),0);
 if(SM<2){const q=rd(j-net),ac=rcst(i),v=q/k*ac;tv+=v;R.push({i,k,red:q<=0,c:[q===0?"Stock nai":fmt(q,k),String(q),ac?money(v):""]})}
 else{const v=M.reduce((s,r)=>s+nq(r)/k*r.r,0);tv+=v;R.push({i,k,c:[fmt(j,k),fmt(net,k),v?mm2(v):""]})}});
 return{R,tv}}
+
 function rs(){const{R,tv}=getData();$("th").innerHTML="<tr><th>Product</th>"+heads().map(x=>"<th>"+x+"</th>").join("")+"</tr>";
 $("tb").innerHTML=R.map(r=>`<tr><td>${esc(P()[r.i][0])}<br><span class="sub">1 ctn = ${r.k} pcs<br>${rcst(r.i)?"Kroy dor: "+mm2(rcst(r.i))+" tk/ctn (pcs "+mm2(rcst(r.i)/r.k)+")":"<span style='color:var(--bad)'>kroy dor deya nai</span>"}<br>Bikri dam: ${PR(r.i)?mm2(PR(r.i))+" tk/ctn":"nai"}${S.lv[r.i]?" · Lav "+S.lv[r.i]+"%":""}</span><br><button class="dt" data-i="${r.i}">Details</button> <button class="dt" data-s="${r.i}">Pcs/Ctn set</button></td>${r.c.map(c=>"<td>"+c+"</td>").join("")}</tr>`).join("")||'<tr><td colspan="4" class="sub" style="text-align:center;padding:16px">Kono entry nei</td></tr>';
 $("tv").textContent=R.length?(SM===2?"Total bikri dam: ":"Total stock dam (kroy dor): ")+money(tv)+" tk":""}
+
 function rk(){const A=S.log.map(e=>({k:"l",e})).concat(S.mk.map(r=>({k:"m",e:r}))).sort((a,b)=>b.e.d.localeCompare(a.e.d)||b.e.id-a.e.id).slice(0,150);
 $("kh").innerHTML=A.map(({k,e})=>{const p=P()[e.i],nm=p?esc(p[0]):"?";
 return k==="l"?`<tr><td>${e.d}<br><span class="sub">${LB[e.t]}</span></td><td>${nm}</td><td>${e.c} ctn ${e.p} pcs</td><td><button class="x" data-id="${e.id}">✕</button></td></tr>`
 :`<tr><td>${e.d}<br><span class="sub">Market e gelo</span></td><td>${nm}</td><td>Gelo ${e.gc} ctn ${e.gp} pcs<br><span class="sub">Ferot ${e.fc} ctn ${e.fp} pcs</span></td><td><button class="x" data-mk="${e.id}">✕</button></td></tr>`}).join("")||'<tr><td class="sub" style="text-align:center;padding:16px">Kono entry nei</td></tr>'}
+
 function rp(){const i=+$("pp").value;$("pk").value=K(i);$("pd").value=PR(i)||"";$("pcr").value=CP(i)||"";$("plv").value=S.lv[i]||""}
 const mdate=()=>$("mdt").value||today();
 function sellData(){const d=mdate();const R=S.mk.filter(r=>r.d===d).sort((a,b)=>a.i-b.i).map(r=>{const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f);return{r,i:r.i,k,g,f,net,v:net/k*r.r}});return{R,tv:R.reduce((s,x)=>s+x.v,0)}}
@@ -311,22 +301,27 @@ let CM=-1;
 function rcalc(){const i=+$("cp").value||0,k=K(i),a=(+$("ca1").value||0)*k+(+$("ca2").value||0),b=(+$("cb1").value||0)*k+(+$("cb2").value||0),t=a+CM*b;
 $("ci").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  ctn dam "+mm2(PR(i))+" tk  |  pcs dam "+mm2(PR(i)/k)+" tk":"");
 $("cr").textContent=fmt(t,k);$("cr").style.color=t<0?"var(--bad)":"";$("ct").textContent="Total "+t+" pcs";$("cd").textContent=PR(i)?"Dam: "+mm2(t/k*PR(i))+" tk":""}
+
 function all(){opts();prev();rs();rk();rp();rsell();rcalc();hrender();zrender()}
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.className="");b.className="on";document.querySelectorAll(".v").forEach(v=>v.className="v");$("v"+b.dataset.v).className="v on";all()});
 document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{T=b.dataset.t;document.querySelectorAll("[data-t]").forEach(x=>x.className="");b.className="on";prev()});
 ["pe","c1","c2"].forEach(i=>$(i).oninput=prev);$("q").oninput=rs;$("pp").onchange=rp;
+
 $("sv").onclick=()=>{const i=+$("pe").value,c=n("c1"),p=n("c2");if(!c&&!p){$("ms").textContent="Ctn ba pcs dao";return}
 const id=Date.now()*1000+Math.floor(Math.random()*1000),d=$("dt").value||today();
 if(T==="mk"){let r=S.mk.find(x=>x.d===d&&x.i===i);if(!r){r={id,d,i,gc:0,gp:0,fc:0,fp:0,r:0};S.mk.push(r)}r.gc=rd(r.gc+c);r.gp=rd(r.gp+p);r.r=$("rt").value!==""?Math.max(0,parseFloat($("rt").value)||0):PR(i)}
 else{const cpv=$("ec").value!==""?Math.max(0,parseFloat($("ec").value)||0):CP(i);S.log.push({id,d,t:T,i,c,p,cp:cpv});if(cpv)S.cp[i]=cpv}
 save();$("c1").value="";$("c2").value="";prev();if($("nx").checked)go(1,1);$("ms").textContent="Save hoyeche ✓";$("gb").style.display=T==="mk"?"block":"none";setTimeout(()=>$("ms").textContent="",2000)};
+
 $("kh").onclick=e=>{const b=e.target.closest("[data-id],[data-mk]");if(!b)return;ask(b,()=>{if(b.dataset.mk)S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);else S.log=S.log.filter(x=>String(x.id)!==b.dataset.id);save();rk();rs();prev();rsell()})};
 $("pk").oninput=()=>{const v=parseInt($("pk").value);if(v>0){S.per[+$("pp").value]=v;save()}};
 function plsync(){const i=+$("pp").value,l=S.lv[i];if(l>0&&PR(i)){S.cp[i]=Math.round(PR(i)*(1-l/100)*100)/100;$("pcr").value=S.cp[i]}}
 $("pd").oninput=()=>{S.pr[+$("pp").value]=parseFloat($("pd").value)||0;plsync();save()};
 $("plv").oninput=()=>{const i=+$("pp").value;S.lv[i]=parseFloat($("plv").value)||0;plsync();save()};
 $("pcr").oninput=()=>{const i=+$("pp").value;S.cp[i]=parseFloat($("pcr").value)||0;S.lv[i]=PR(i)&&S.cp[i]?Math.round((PR(i)-S.cp[i])/PR(i)*10000)/100:0;$("plv").value=S.lv[i]||"";save()};
+
 $("na").onclick=()=>{const nm=$("nn").value.trim(),k=parseInt($("nk").value);if(!nm||!(k>0)){$("ms").textContent="Nam ar 1 ctn e pcs dao";return}S.custom.push([nm,k]);const i=P().length-1;S.pr[i]=parseFloat($("np").value)||0;save();$("nn").value=$("nk").value=$("np").value="";opts();$("pp").value=i;$("pe").value=i;$("ad").open=false;rp();prev()};
+
 $("pdf").onclick=async()=>{
 const{R,tv}=getData(true);if(!R.length){$("pm").textContent="Kono entry nei";return}
 const h=heads(),title=SM===0?"Final Stock Report":SM===1?"Stock Report":"Lenden Report",d1=$("d1").value||"?",d2=$("d2").value||today();
@@ -352,6 +347,7 @@ x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1);x.fillStyle="#000"});
 if(p===pg-1){x.font="bold 32px sans-serif";x.textAlign="right";x.fillText((SM===2?"Total bikri dam: ":"Total stock dam (kroy dor): ")+money(tv)+" tk",1140,H-55)}
 if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
 try{await dlFile((SM===2?"lenden-":"stock-")+today()+".pdf",doc.output("blob"));$("pm").textContent="PDF hoyeche ✓"}catch(e){$("pm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}};
+
 $("bk").onclick=async()=>{try{await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));$("bm").textContent="Backup hoyeche ✓"}catch(e){}};
 $("rs0").onclick=()=>$("rf").click();
 $("rf").onchange=async()=>{const f=$("rf").files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.log)||!Array.isArray(x.custom))throw 0;try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}S=Object.assign({custom:[],per:{},pr:{},log:[]},x);mig();save();all();$("bm").textContent="Restore hoyeche ✓"}catch(e){$("bm").textContent="File ta thik na"}$("rf").value=""};
@@ -359,12 +355,14 @@ $("dt").value=$("d1").value=$("d2").value=today();$("mdt").value=today();
 ["cp","ca1","ca2","cb1","cb2"].forEach(i=>$(i).oninput=rcalc);$("cp").onchange=rcalc;
 $("cm0").onclick=()=>{CM=-1;$("cm0").className="on";$("cp0").className="";rcalc()};
 $("cp0").onclick=()=>{CM=1;$("cp0").className="on";$("cm0").className="";rcalc()};
+
 function hyData(){const a=$("hy1").value,b=$("hy2").value,D={};
 S.mk.filter(r=>(!a||r.d>=a)&&(!b||r.d<=b)).forEach(r=>{(D[r.d]=D[r.d]||[]).push(r)});
 const days=Object.keys(D).sort().map(d=>{const L=D[d].sort((x,y)=>x.i-y.i).map(r=>{const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f);return{r,i:r.i,k,g,f,net,v:net/k*r.r}});return{d,L,t:L.reduce((s,x)=>s+x.v,0)}});
 return{days,tv:days.reduce((s,x)=>s+x.t,0)}}
 function hyRender(){const{days,tv}=hyData();$("hys").innerHTML=days.length?days.map(x=>`${x.d} · ${x.L.length} ta product · <b>${mm2(x.t)} tk</b>`).join("<br>")+`<br><b style="color:var(--ac)">Total: ${mm2(tv)} tk</b>`:'<span class="sub">Kono market nai</span>'}
 $("hy1").oninput=$("hy2").oninput=hyRender;
+
 async function hyPdf(){const{days,tv}=hyData();if(!days.length){$("hym").textContent="Kono market nai";return}
 const rows=[];days.forEach(d=>{rows.push({h:d});d.L.forEach(x=>rows.push({x}))});
 const a=$("hy1").value,b=$("hy2").value,W=1190,H=1684,top=210,RH=32,pp=Math.floor((H-top-110)/RH),pg=Math.ceil(rows.length/pp),fs=21;
@@ -388,6 +386,7 @@ if(p===pg-1){x.fillStyle="#000";x.fillRect(50,H-100,W-100,2);x.font="bold 32px s
 if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
 try{await dlFile("market-history-"+today()+".pdf",doc.output("blob"));$("hym").textContent="PDF hoyeche ✓"}catch(e){$("hym").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}}
 $("hypdf").onclick=hyPdf;
+
 async function pdfSheet(){const{R,tv}=sellData();if(!R.length){$("spm").textContent="Kono entry nei";return}
 const d=mdate(),lo=labOf(R,d);
 const W=1190,H=1684,top=210,RH=Math.max(24,Math.min(40,Math.floor((H-top-150)/R.length))),pp=Math.floor((H-top-150)/RH),pg=Math.ceil(R.length/pp),fs=Math.min(22,RH-8);
@@ -409,18 +408,22 @@ x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1);x.fillStyle="#000"});
 if(p===pg-1){x.fillStyle="#000";x.fillRect(50,H-100,W-100,2);x.font="bold 32px sans-serif";x.textAlign="left";x.fillText("Total ("+R.length+" ta product)",60,H-55);x.textAlign="right";x.fillText("Total dam: "+mm2(tv)+" tk",1140,H-55);if(lo.n){x.font="24px sans-serif";x.textAlign="left";x.fillText("Kroy dam: "+mm2(lo.cost)+" tk",60,H-115);x.textAlign="right";x.fillStyle=lo.lab>=0?"#15803d":"#b91c1c";x.fillText("Lab: "+sg(lo.lab)+" tk",1140,H-115)}}
 if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
 try{await dlFile("market-sheet-"+d+".pdf",doc.output("blob"));$("spm").textContent="PDF hoyeche ✓"}catch(e){$("spm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}}
+
 let DI=-1,SI=-1;
 const am=v=>String(v||"").split("+").reduce((s,x)=>s+(parseFloat(x.replace(/,/g,""))||0),0);
 const sg=v=>(v>0?"+":v<0?"−":"")+mm2(Math.abs(v)),sc=v=>v>0?"var(--ac)":v<0?"var(--bad)":"inherit";
 let HT="j",HP=null;
 const pj=p=>p.t.filter(e=>e.ty==="j").reduce((s,e)=>s+e.a,0),pk=p=>p.t.filter(e=>e.ty==="k").reduce((s,e)=>s+e.a,0);
 const gp=()=>S.hp.find(x=>x.id===HP);
+
 function hrender(){let tj=0,tk=0;
 $("hb").innerHTML=S.hp.map(p=>{const j=pj(p),k=pk(p),b=j-k;tj+=j;tk+=k;return`<tr><td data-hp="${p.id}" style="cursor:pointer">${esc(p.n)||"(nam nai)"}<br><span class="sub">${p.t.length} ta entry · tap koro</span></td><td style="text-align:right">${j?mm2(j):""}</td><td>${k?mm2(k):""}</td><td style="color:${sc(b)};font-weight:700">${sg(b)}</td><td><button class="x" data-hd="${p.id}">✕</button></td></tr>`}).join("")||'<tr><td colspan="5" class="sub" style="text-align:center;padding:14px">Kono bekti nai. + Add chapo.</td></tr>';
 const n=tj-tk;$("ht").innerHTML=S.hp.length?`Total joma: <b>${mm2(tj)}</b><br>Total khoroch: <b>${mm2(tk)}</b><br><span style="font-size:22px;font-weight:800;color:${sc(n)}">Baki: ${sg(n)} tk</span>`:""}
+
 function hdrender(){const p=gp();if(!p)return;const j=pj(p),k=pk(p),b=j-k;
 $("hds").innerHTML=`Joma: <b>${mm2(j)}</b> · Khoroch: <b>${mm2(k)}</b><br><span style="font-size:22px;font-weight:800;color:${sc(b)}">Baki: ${sg(b)} tk</span>`;
 $("hdl").innerHTML=p.t.slice().sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(e=>`<tr><td>${e.d}<br><span class="sub">${esc(e.nt||"")}</span></td><td style="color:${e.ty==="j"?"var(--ac)":"var(--bad)"};font-weight:600">${e.ty==="j"?"Joma +":"Khoroch −"}</td><td style="text-align:right">${mm2(e.a)}</td><td><button class="x" data-ed="${e.id}">✕</button></td></tr>`).join("")||'<tr><td class="sub" style="text-align:center;padding:14px">Kono entry nei</td></tr>';hdprev()}
+
 function hdprev(){const p=gp();if(!p)return;const a=am($("hda").value),b=pj(p)-pk(p);$("hdp").innerHTML=a?"Save korle Baki hobe: <b style='color:"+sc(b+(HT==="j"?a:-a))+"'>"+sg(b+(HT==="j"?a:-a))+" tk</b>":""}
 function hdopen(id){HP=id;const p=gp();$("hdn").value=p.n;$("hda").value=$("hdt").value="";$("hdd").value=today();hdrender();$("hd").style.display="flex"}
 $("hadd").onclick=()=>{$("hmn").value="";$("hmp").textContent="";$("hm").style.display="flex";$("hmn").focus()};
@@ -435,6 +438,7 @@ $("hda").oninput=hdprev;
 $("hdv").onclick=()=>{const p=gp(),a=am($("hda").value);if(!p)return;if(!a){$("hdp").textContent="Taka dao";return}
 p.t.push({id:Date.now()*1000+Math.floor(Math.random()*1000),ty:HT,a,d:$("hdd").value||today(),nt:$("hdt").value.trim()});save();$("hda").value=$("hdt").value="";hdrender();hrender()};
 $("hdl").onclick=e=>{const b=e.target.closest("[data-ed]");if(!b)return;ask(b,()=>{const p=gp();if(!p)return;p.t=p.t.filter(x=>String(x.id)!==b.dataset.ed);save();hdrender();hrender()})};
+
 $("hpdf").onclick=async()=>{const A=S.hp;if(!A.length){$("hpm").textContent="Kono bekti nai";return}
 let tj=0,tk=0;A.forEach(p=>{tj+=pj(p);tk+=pk(p)});const net=tj-tk,det=$("hdet").checked;
 const rows=[];A.forEach((p,i)=>{rows.push({p,no:i+1});if(det)p.t.slice().sort((x,y)=>x.d.localeCompare(y.d)||x.id-y.id).forEach(e=>rows.push({e}))});
@@ -461,6 +465,7 @@ x.textAlign="left";x.fillText("Total joma",60,H-150);x.fillText("Total khoroch",
 x.textAlign="right";x.fillText(mm2(tj)+" tk",1140,H-150);x.fillText(mm2(tk)+" tk",1140,H-105);x.fillStyle=col(net);x.font="bold 36px sans-serif";x.fillText(sg(net)+" tk",1140,H-55)}
 if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
 try{await dlFile("hisab-"+today()+".pdf",doc.output("blob"));$("hpm").textContent="PDF hoyeche ✓"}catch(e){$("hpm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}};
+
 function arm(b,t,fn){if(b.dataset.arm){fn();return}b.dataset.arm="1";b.dataset.o=b.textContent;b.textContent=t;b.style.fontWeight="700";setTimeout(()=>{if(b.dataset.arm){delete b.dataset.arm;b.textContent=b.dataset.o;b.style.fontWeight=""}},4000)}
 function done(b){delete b.dataset.arm;b.textContent=b.dataset.o;b.style.fontWeight=""}
 const keep=()=>{try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}};
@@ -471,14 +476,18 @@ $("cy").onclick=()=>{const f=CF;CF=null;$("cm").style.display="none";if(f)f()};
 $("r1").onclick=()=>cbox("Apni ki nishchit shob entry (prothom stock, joma, bikri) muche felben? Product, pcs/ctn ar dam thakbe.",()=>{keep();S.log=[];S.mk=[];save();all();$("rm").textContent="Shob entry muche gechhe ✓"});
 $("r2").onclick=()=>cbox("Apni ki nishchit PURA reset korben? Shob entry, notun product, pcs/ctn ar dam muche jabe.",()=>{keep();const nx=S.nx;S={custom:[],per:{},pr:{},cp:{},lv:{},log:[],mk:[],hs:[],hp:[],nx};save();all();$("rm").textContent="Pura reset hoyeche ✓"});
 $("r3").onclick=()=>{try{const x=JSON.parse(localStorage.getItem("stk1_prev")||"null");if(!x){$("rm").textContent="Ager kichu nei";return}S=Object.assign({custom:[],per:{},pr:{},log:[]},x);mig();save();all();$("rm").textContent="Ager obosthay ferot ashche ✓"}catch(e){$("rm").textContent="Ferot ana gelo na"}};
+
 document.querySelectorAll("#sm3 button").forEach(b=>b.onclick=()=>{SM=+b.dataset.m;document.querySelectorAll("#sm3 button").forEach(x=>x.className="");b.className="on";$("rg").style.display=SM?"flex":"none";$("d1w").style.display=SM===2?"":"none";$("d2l").textContent=SM===2?"Porjonto":"Tarikh porjonto";rs()});
 $("d1").oninput=$("d2").oninput=rs;
+
 function go(d,f){const n=P().length;let i=+$("pe").value+d;i=Math.max(0,Math.min(n-1,i));$("pe").value=i;prev();rrt();if(f)$("c1").focus()}
 function rrt(){$("ec").value=CP(+$("pe").value)||"";$("rtw").style.display=T==="mk"?"block":"none";if(T==="mk")$("rt").value=PR(+$("pe").value)||""}
 document.querySelectorAll("[data-t]").forEach(b=>b.addEventListener("click",rrt));$("pe").addEventListener("change",rrt);
 $("pv0").onclick=()=>go(-1);$("nx0").onclick=()=>go(1);
 $("nx").checked=S.nx!==false;$("nx").onchange=()=>{S.nx=$("nx").checked;save()};
+
 function ask(b,fn){if(b.dataset.arm){fn();return}b.dataset.arm="1";b.textContent="Delete?";b.style.fontWeight="700";setTimeout(()=>{if(b.isConnected){delete b.dataset.arm;b.textContent="✕";b.style.fontWeight=""}},3500)}
+
 function setm(i){SI=i;$("sh").textContent=P()[i][0];$("sk").value=K(i);$("sd").value=PR(i)||"";$("sp").value=PR(i)?m2(PR(i)/K(i)):"";$("skc").value=CP(i)||"";$("slv").value=S.lv[i]||"";$("sm").style.display="flex"}
 const syncP=()=>{const k=parseFloat($("sk").value)||0,d=parseFloat($("sd").value)||0;$("sp").value=k&&d?m2(d/k):""};
 const lvc=()=>{const d=parseFloat($("sd").value)||0,l=parseFloat($("slv").value);if(d&&$("slv").value!==""&&l>=0)$("skc").value=m2(d*(1-l/100))};
@@ -488,6 +497,7 @@ $("sp").oninput=()=>{const k=parseFloat($("sk").value)||0,p=parseFloat($("sp").v
 $("ss").onclick=()=>{const k=parseInt($("sk").value);if(!(k>0)){$("sk").focus();return}S.per[SI]=k;S.pr[SI]=parseFloat($("sd").value)||0;S.cp[SI]=parseFloat($("skc").value)||0;S.lv[SI]=parseFloat($("slv").value)||0;save();$("sm").style.display="none";all();if($("dm").style.display==="flex")det(DI)};
 $("sx").onclick=()=>{$("sm").style.display="none"};
 $("se").onclick=()=>setm(+$("pe").value);
+
 function det(i){DI=i;const k=K(i),L=S.log.filter(e=>e.i===i),M=S.mk.filter(r=>r.i===i);let o=0;L.forEach(e=>{o+=qty(e)});
 const g=M.reduce((s,r)=>s+gq(r),0),f=M.reduce((s,r)=>s+fq(r),0),sv=M.reduce((s,r)=>s+nq(r)/k*r.r,0);
 $("dh").textContent=P()[i][0];$("dr").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  1 ctn dam: "+mm2(PR(i))+" tk  |  1 pcs dam: "+mm2(PR(i)/k)+" tk":"");
@@ -515,6 +525,22 @@ function zrender(){const{L,G}=zdays(),bc=v=>v<0?"var(--bad)":"var(--ac)";
 $("zg").innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:8px 0">`+zc("Total Sell",G.sell,"var(--ac)",104)+zc("Total Joma",G.j,"var(--jm)",104)+zc("Total Khoroch",G.k,"var(--bad)",104)+zc("Baki",G.b,bc(G.b),104)+`</div><div class="sub" style="margin-top:14px;text-align:center;font-weight:500">${L.length} din${zlab(G)?" · "+zlab(G):""}</div>`;
 $("zl").innerHTML=L.slice().reverse().map(o=>`<div class="card"><div style="font-weight:700;margin-bottom:10px;font-size:15px">${o.d}</div><div style="display:flex;justify-content:space-between;gap:6px">${zc("Sell",o.sell,"var(--ac)",68)}${zc("Joma",o.j,"var(--jm)",68)}${zc("Khoroch",o.k,"var(--bad)",68)}${zc("Baki",o.b,bc(o.b),68)}</div>${zlab(o)?`<div class="sub" style="margin-top:10px">${zlab(o)}</div>`:""}</div>`).join("")||'<div class="sub" style="text-align:center;padding:16px">Kono din nai</div>'}
 $("zs1").oninput=$("zs2").oninput=zrender;
+
+// Online/Offline Detection
+function updateNetStatus(){
+  const d=$("netDot"),t=$("netTx");
+  if(!d||!t)return;
+  if(navigator.onLine){d.className="dot";t.textContent="Online"}
+  else{d.className="dot off";t.textContent="Offline"}
+}
+window.addEventListener("online",updateNetStatus);
+window.addEventListener("offline",updateNetStatus);
+updateNetStatus();
+
+// PWA Service Worker Registration
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
 
 all();
 rrt();
