@@ -70,6 +70,8 @@ details summary::after{content:'+';font-size:18px;font-weight:700;color:var(--ac
 details[open] summary::after{content:'−'}
 .modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:40;padding:14px;padding-top:calc(14px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center}
 .modal-wrap>.card{width:100%}
+.prod-pick-item{padding:12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s,border-color 0.15s;user-select:none;-webkit-user-select:none}
+.prod-pick-item:active{background:var(--ac-light);border-color:var(--ac)}
 </style>
 </head>
 <body>
@@ -85,7 +87,16 @@ details[open] summary::after{content:'−'}
 <div style="display:none"><button data-t="open" class="on">Prothom stock +</button><button data-t="mk">Market e gelo −</button></div>
 <div class="sub" style="margin-top:2px">Ekhane shudhu stock jog hoy (Prothom stock), jekono tarikhe. Market er mal ber/ferot Market tab e.</div>
 <label>Tarikh</label><input id="dt" type="date">
-<label>Product</label><div style="display:flex;gap:6px"><button id="pv0" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="pe" style="flex:1;min-width:0"></select><button id="nx0" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
+<label>Product</label>
+<div style="display:flex;gap:6px">
+  <button id="pv0" style="flex:0 0 44px;padding:0;font-size:16px">◀</button>
+  <select id="pe" style="display:none"></select>
+  <button id="pe_btn" type="button" style="flex:1;min-width:0;text-align:left;font-size:15px;font-weight:600;padding:11px 13px;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer">
+    <span id="pe_name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Product baachun</span>
+    <span style="font-size:12px;color:var(--mut);flex:0 0 auto;margin-left:6px">▼</span>
+  </button>
+  <button id="nx0" style="flex:0 0 44px;padding:0;font-size:16px">▶</button>
+</div>
 <div class="row" style="margin-top:8px"><button id="de">Details</button><button id="se">Pcs/Ctn</button></div>
 <div class="row"><div><label>CTN</label><input id="c1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="c2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div></div>
 <label>Kroy dor (dealer price), 1 ctn = ___ tk</label><input id="ec" type="number" inputmode="decimal" step="any" min="0">
@@ -170,6 +181,19 @@ details[open] summary::after{content:'−'}
 </div></details>
 </div>
 
+<!-- Product Picker Modal with Long Press Delete -->
+<div id="ppm" class="modal-wrap" style="display:none">
+  <div class="card" style="max-width:540px;max-height:85vh;display:flex;flex-direction:column;padding:16px;">
+    <div class="row" style="align-items:center;margin-bottom:8px">
+      <h2 style="flex:1;margin:0">Product List</h2>
+      <button id="ppmc" style="flex:0 0 auto;padding:6px 14px">Bondho</button>
+    </div>
+    <div class="sub" style="margin-bottom:10px;font-size:12.5px;">💡 <b>Tap</b> korle select hobe · <b>Chepe dhore rakhle (1s)</b> Delete option ashbe</div>
+    <input id="ppq" placeholder="🔍 Product khujo..." style="margin-bottom:10px">
+    <div id="ppl" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:8px;max-height:55vh;padding-right:2px;"></div>
+  </div>
+</div>
+
 <div id="dm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><div class="row" style="align-items:center"><h2 id="dh" style="flex:1;margin:0"></h2><button id="dc" style="flex:0 0 auto">Bondho</button></div><div class="sub" id="dr" style="margin-top:6px"></div><div id="ds" style="margin:10px 0;line-height:1.7"></div><div class="wrap"><table><tbody id="dl"></tbody></table></div></div></div>
 
 <div id="hm" class="modal-wrap" style="display:none"><div class="card" style="max-width:520px;margin:0 auto"><h2>Notun bekti add</h2><label>Bektir nam</label><input id="hmn" type="text" placeholder="Nam likhun"><div id="hmp" class="sub" style="margin-top:8px;min-height:20px"></div><div class="row" style="margin-top:14px"><button id="hmx">Bondho</button><button class="on" id="hms">Add</button></div></div></div>
@@ -184,18 +208,18 @@ details[open] summary::after{content:'−'}
 <button class="big" id="hdv" style="margin-top:4px">Save</button>
 <div class="wrap" style="margin-top:12px"><table><tbody id="hdl"></tbody></table></div></div></div>
 
-<div id="cm" class="modal-wrap" style="display:none"><div class="card" style="max-width:420px;margin:0 auto"><h2 style="color:var(--bad)">Reset korben?</h2><div id="cmt" style="margin:10px 0 16px;line-height:1.6"></div><div class="sub" style="margin-bottom:12px">Vul hole pore "Reset undo" diye ferot ante parben.</div><div class="row"><button id="cn">Na, bondho</button><button id="cy" style="background:var(--bad);color:#fff;border-color:var(--bad)">Haa, reset koro</button></div></div></div>
+<div id="cm" class="modal-wrap" style="display:none"><div class="card" style="max-width:420px;margin:0 auto"><h2 style="color:var(--bad)">Delete korben?</h2><div id="cmt" style="margin:10px 0 16px;line-height:1.6"></div><div class="sub" style="margin-bottom:12px">Vul hole pore "Reset undo" diye ferot ante parben.</div><div class="row"><button id="cn">Na, bondho</button><button id="cy" style="background:var(--bad);color:#fff;border-color:var(--bad)">Haa, delete koro</button></div></div></div>
 
 <div id="sm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><h2 id="sh"></h2><label>Ei product 1 ctn e koto pcs?</label><input id="sk" type="number" inputmode="numeric" min="1"><label>1 ctn er dam (tk)</label><input id="sd" type="number" inputmode="decimal" min="0"><label>1 pcs er dam (tk), ctn dam theke auto ashe</label><input id="sp" type="number" inputmode="decimal" min="0"><label>Lav % (bikri dam theke koto % lav pao). Kroy dor = dam − dam × lav%</label><input id="slv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="skc" type="number" inputmode="decimal" min="0"><div class="row" style="margin-top:14px"><button id="sx">Bondho</button><button class="on" id="ss">Save</button></div></div></div>
 
 <script>
-const BASE=[["মিল্ক কেক",72],["মাফিন কেক",48],["ডপস ১০",24],["লুপস ৫",48],["লেক্সাস ৫",48],["লেক্সাস ১০",24],["লেক্সাস ফ্যামিলি",1],["মেরি ফ্যামিলি",12],["মিল্ক ৫",48],["ঘি ৫",48],["ঘি ১০",24],["ঘি ফ্যামিলি",8],["চকোলেট ১০",48],["এনার্জি ৫",48],["এনার্জি ১০",24],["এনার্জি ফ্যামিলি",8],["৪ পিসের নুডলস",1],["৮ পিসের নুডলস",1],["পাতা নুডলস",12],["১৫ গ্রাম মরিচ গুড়া",1],["৫০ গ্রাম মরিচ গুড়া",1],["১৫ গ্রাম হলুদ গুড়া",1],["৫০ গ্রাম হলুদ গুড়া",1],["হলুদ গুড়া ৫ কেজি",1],["মরিচ গুড়া ৫ কেজি",1],["মাংসের মশলা",1],["মুরগির মশলা",1],["গরু মাংসের মশলা",1],["মাছের মশলা",1],["১৫ গ্রাম জিরার গুরা",1],["৫০ গ্রাম জিরার গুরা",1],["বিরিয়ানি মশলা ৪০ গ্রাম",1],["সরিষ তেল ৮০ গ্রাম",1],["সরিষ তেল ২০০ গ্রাম",1],["ঘি টোস্ট মিনি",96],["ড্রাই কেক মিনি",48],["কোকোনাট ২০ টাকা",8],["কোকোনাট ফ্যামিলি",24],["৫ টাকা চানাচুর",1],["৩০ টাকা চানাচুর",1],["৫০ টাকা চানাচুর",1],["লাচ্ছা সেমাই",1],["ভার্মিচিলি সেমাই",1],["বালিশ সেমাই",1],["এগ নুডলস্",24],["তেঁতুল চাটনী",1],["১৫ গ্রাম চা",1],["৫০০ গ্রাম চা",1],["রোস্টের মশলা",1],["পটাটা-১০",24]];
+const BASE=[["মিল্ক কেক",72],["মাফিন কেক",48],["ডপস ১০",24],["লুপস ৫",48],["লেক্সাস ৫",48],["লেক্সাস ১০",24],["লেক্সাস ফ্যামিলি",1],["মেরি ফ্যামিলি",12],["মিল্ক ৫",48],["ঘি ৫",48],["ঘি ১০",24],["ঘি ফ্যামিলি",8],["চকোলেট ১০",48],["এনার্জি ৫",48],["এনার্জি ১০",24],["এনার্জি ফ্যামিলি",8],["৪ পিসের নুডলস",1],["৮ পিসের নুডলস",1],["পাতা নুডলস",12],["১৫ গ্রাম মরিচ গুড়া",1],["৫০ গ্রাম মরিচ গুড়া",1],["১৫ গ্রাম হলুদ গুড়া",1],["৫০ গ্রাম হলুদ গুড়া",1],["হলুদ গুড়া ৫ কেজি",1],["মরিচ গুড়া ৫ কেজি",1],["মাংসের মশলা",1],["মুরগির মশলা",1],["গরু মাংসের মশলা",1],["মাছের মশলা",1],["১৫ গ্রাম জিরার গুরা",1],["৫০ গ্রাম জিরার গুরা",1],["বিরিয়ানি মশলা ৪০ গ্রাম",1],["সরিষ তেল ৮০ গ্রাম",1],["সরিষ তেল ২০০ গ্রাম",1],["ঘি টোস্ট মিনি",96],["ড্রাই কেক মিনি",48],["কোকোনাট ২০ টাকা",8],["কোকোনাট ফ্যামিলি",24],["৫ টাকা চানাচুর",1],["৩০ টাকা চানাচুর",1],["৫০ টাকা চানাচুর",1],["লাচ্ছা সেমাই",1],["ভার্মিচিলি সেমাই",1],["বালিশ সেমাই",1],["এগ নুডলস্",24],["তেঁতুল চাটনী",1],["১৫ গ্রাম চা",1],["৫০০ গ্রাম চা",1],["রোস্টের মশলা",1]];
 const $=i=>document.getElementById(i);
-let S={custom:[],per:{},pr:{},log:[],mk:[]},T="open",SM=0;
+let S={custom:[],per:{},pr:{},log:[],mk:[],del:{}},T="open",SM=0;
 try{const x=JSON.parse(localStorage.getItem("stk1")||"null");if(x)S=Object.assign(S,x)}catch(e){}
 
 function mig(){
-  if(!S.mk)S.mk=[];if(!S.hs)S.hs=[];if(!S.hp)S.hp=[];if(!S.cp)S.cp={};if(!S.lv)S.lv={};
+  if(!S.mk)S.mk=[];if(!S.hs)S.hs=[];if(!S.hp)S.hp=[];if(!S.cp)S.cp={};if(!S.lv)S.lv={};if(!S.del)S.del={};
   if(S.hs.length){
     S.hs.forEach(r=>{
       const key=(r.n||"").trim().toLowerCase();let p=key?S.hp.find(x=>(x.n||"").trim().toLowerCase()===key):null;
@@ -223,6 +247,7 @@ const save=()=>{try{localStorage.setItem("stk1",JSON.stringify(S))}catch(e){aler
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 async function dlFile(fn,blob){const dl=window.claude&&claude.use?await claude.use("downloads").catch(()=>null):null;if(dl)await dl.save({filename:fn,data:blob});else{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}}
 const P=()=>BASE.concat(S.custom),K=i=>S.per[i]||P()[i][1]||1,PR=i=>S.pr[i]||0;
+const isDel=i=>!!(S.del&&S.del[i]);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const n=id=>Math.max(0,parseFloat($(id).value)||0);
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
@@ -240,12 +265,28 @@ const fmt=(q,k)=>{q=rd(q);const u=Math.abs(q),c=Math.floor(u/k+1e-9);return(q<0?
 const dq=(q,k)=>{q=rd(q);if(k>1&&q%k===0)return q/k+" ctn";const c=q/k;if(k>1&&Math.abs(c*100-Math.round(c*100))<1e-6)return Math.round(c*100)/100+" ctn";return fmt(q,k)};
 const money=v=>Math.round(v).toLocaleString("en-IN");
 
-function opts(){const h=P().map((p,i)=>`<option value="${i}">${i+1}. ${esc(p[0])}</option>`).join("");const a=$("pe").value,b=$("pp").value,c=$("cp").value;$("pe").innerHTML=h;$("pp").innerHTML=h;$("cp").innerHTML=h;if(a)$("pe").value=a;if(b)$("pp").value=b;if(c)$("cp").value=c}
+function updatePeBtn(){
+  const i=+$("pe").value;
+  const p=P()[i];
+  $("pe_name").textContent=p?(i+1)+'. '+p[0]:'Product baachun';
+}
+
+function opts(){
+  const list=P().map((p,i)=>({p,i})).filter(x=>!isDel(x.i));
+  const h=list.map(x=>`<option value="${x.i}">${x.i+1}. ${esc(x.p[0])}</option>`).join("");
+  const a=$("pe").value,b=$("pp").value,c=$("cp").value;
+  $("pe").innerHTML=h;$("pp").innerHTML=h;$("cp").innerHTML=h;
+  if(a&&list.some(x=>String(x.i)===a))$("pe").value=a; else if(list[0])$("pe").value=list[0].i;
+  if(b&&list.some(x=>String(x.i)===b))$("pp").value=b; else if(list[0])$("pp").value=list[0].i;
+  if(c&&list.some(x=>String(x.i)===c))$("cp").value=c; else if(list[0])$("cp").value=list[0].i;
+  updatePeBtn();
+}
+
 function prev(){const i=+$("pe").value,k=K(i),q=n("c1")*k+n("c2"),s=stock(i),a=s+(T==="mk"?-q:q);$("pv").textContent="Ekhon stock: "+fmt(s,k)+(q?"  →  Pore: "+fmt(a,k):"")+"  (1 ctn = "+k+" pcs)"}
 const heads=()=>SM<2?["Ctn-Pcs","Total pcs","Dam"]:["Joma","Bikri","Bikri dam"];
 
 function getData(all){const f=$("q").value.trim().toLowerCase(),d1=$("d1").value,d2=$("d2").value,R=[];let tv=0;
-P().forEach((p,i)=>{if(f&&!p[0].toLowerCase().includes(f))return;const k=K(i);
+P().forEach((p,i)=>{if(isDel(i))return;if(f&&!p[0].toLowerCase().includes(f))return;const k=K(i);
 const inR=e=>(SM===0||!d2||e.d<=d2)&&(SM!==2||!d1||e.d>=d1);
 const L=S.log.filter(e=>e.i===i&&inR(e)),M=S.mk.filter(r=>r.i===i&&inR(r));
 if(!L.length&&!M.length){if(all&&SM<2)R.push({i,k,red:1,c:["Stock nai","0",""]});return}
@@ -265,14 +306,15 @@ return k==="l"?`<tr><td>${e.d}<br><span class="sub">${LB[e.t]}</span></td><td>${
 
 function rp(){const i=+$("pp").value;$("pk").value=K(i);$("pd").value=PR(i)||"";$("pcr").value=CP(i)||"";$("plv").value=S.lv[i]||""}
 const mdate=()=>$("mdt").value||today();
-function sellData(){const d=mdate();const R=S.mk.filter(r=>r.d===d).sort((a,b)=>a.i-b.i).map(r=>{const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f);return{r,i:r.i,k,g,f,net,v:net/k*r.r}});return{R,tv:R.reduce((s,x)=>s+x.v,0)}}
+function sellData(){const d=mdate();const R=S.mk.filter(r=>r.d===d&&!isDel(r.i)).sort((a,b)=>a.i-b.i).map(r=>{const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f);return{r,i:r.i,k,g,f,net,v:net/k*r.r}});return{R,tv:R.reduce((s,x)=>s+x.v,0)}}
 const stp=(id,d,fn)=>{const e=$(id);e.selectedIndex=Math.max(0,Math.min(e.options.length-1,e.selectedIndex+d));fn()};
 $("cpv").onclick=()=>stp("cp",-1,rcalc);$("cnx").onclick=()=>stp("cp",1,rcalc);
 $("ppv").onclick=()=>stp("pp",-1,rp);$("pnx").onclick=()=>stp("pp",1,rp);
 let FM=false;
 const rmb=()=>{$("mbr").value=PR(+$("mb").value)||""};
 function opts2(){const{R}=sellData();const a=$("mb").value,b=$("mf").value;
-$("mb").innerHTML=P().map((p,i)=>`<option value="${i}">${i+1}. ${esc(p[0])}</option>`).join("");if(a)$("mb").value=a;
+const valid=P().map((p,i)=>({p,i})).filter(x=>!isDel(x.i));
+$("mb").innerHTML=valid.map(x=>`<option value="${x.i}">${x.i+1}. ${esc(x.p[0])}</option>`).join("");if(a)$("mb").value=a;
 $("mf").innerHTML=R.map(x=>`<option value="${x.i}">${esc(P()[x.i][0])}</option>`).join("");if(b&&R.some(x=>String(x.i)===b))$("mf").value=b}
 function rlist(){const{R}=sellData();$("mbl").innerHTML=R.length?'<div class="sub" style="margin-top:10px">Ei tarikhe bahir:</div>'+R.map(x=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd)"><span>${esc(P()[x.i][0])} · <b>${dq(x.g,x.k)}</b></span><button class="x" data-mk="${x.r.id}">✕</button></div>`).join(""):""}
 $("mbl").onclick=e=>{const b=e.target.closest("[data-mk]");if(!b)return;ask(b,()=>{S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);save();rsell()})};
@@ -305,7 +347,7 @@ $("cr").textContent=fmt(t,k);$("cr").style.color=t<0?"var(--bad)":"";$("ct").tex
 function all(){opts();prev();rs();rk();rp();rsell();rcalc();hrender();zrender()}
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.className="");b.className="on";document.querySelectorAll(".v").forEach(v=>v.className="v");$("v"+b.dataset.v).className="v on";all()});
 document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{T=b.dataset.t;document.querySelectorAll("[data-t]").forEach(x=>x.className="");b.className="on";prev()});
-["pe","c1","c2"].forEach(i=>$(i).oninput=prev);$("q").oninput=rs;$("pp").onchange=rp;
+["c1","c2"].forEach(i=>$(i).oninput=prev);$("q").oninput=rs;$("pp").onchange=rp;
 
 $("sv").onclick=()=>{const i=+$("pe").value,c=n("c1"),p=n("c2");if(!c&&!p){$("ms").textContent="Ctn ba pcs dao";return}
 const id=Date.now()*1000+Math.floor(Math.random()*1000),d=$("dt").value||today();
@@ -320,7 +362,7 @@ $("pd").oninput=()=>{S.pr[+$("pp").value]=parseFloat($("pd").value)||0;plsync();
 $("plv").oninput=()=>{const i=+$("pp").value;S.lv[i]=parseFloat($("plv").value)||0;plsync();save()};
 $("pcr").oninput=()=>{const i=+$("pp").value;S.cp[i]=parseFloat($("pcr").value)||0;S.lv[i]=PR(i)&&S.cp[i]?Math.round((PR(i)-S.cp[i])/PR(i)*10000)/100:0;$("plv").value=S.lv[i]||"";save()};
 
-$("na").onclick=()=>{const nm=$("nn").value.trim(),k=parseInt($("nk").value);if(!nm||!(k>0)){$("ms").textContent="Nam ar 1 ctn e pcs dao";return}S.custom.push([nm,k]);const i=P().length-1;S.pr[i]=parseFloat($("np").value)||0;save();$("nn").value=$("nk").value=$("np").value="";opts();$("pp").value=i;$("pe").value=i;$("ad").open=false;rp();prev()};
+$("na").onclick=()=>{const nm=$("nn").value.trim(),k=parseInt($("nk").value);if(!nm||!(k>0)){$("ms").textContent="Nam ar 1 ctn e pcs dao";return}S.custom.push([nm,k]);const i=P().length-1;S.pr[i]=parseFloat($("np").value)||0;save();$("nn").value=$("nk").value=$("np").value="";opts();$("pp").value=i;$("pe").value=i;$("ad").open=false;updatePeBtn();rp();prev()};
 
 $("pdf").onclick=async()=>{
 const{R,tv}=getData(true);if(!R.length){$("pm").textContent="Kono entry nei";return}
@@ -350,14 +392,14 @@ try{await dlFile((SM===2?"lenden-":"stock-")+today()+".pdf",doc.output("blob"));
 
 $("bk").onclick=async()=>{try{await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));$("bm").textContent="Backup hoyeche ✓"}catch(e){}};
 $("rs0").onclick=()=>$("rf").click();
-$("rf").onchange=async()=>{const f=$("rf").files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.log)||!Array.isArray(x.custom))throw 0;try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}S=Object.assign({custom:[],per:{},pr:{},log:[]},x);mig();save();all();$("bm").textContent="Restore hoyeche ✓"}catch(e){$("bm").textContent="File ta thik na"}$("rf").value=""};
+$("rf").onchange=async()=>{const f=$("rf").files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.log)||!Array.isArray(x.custom))throw 0;try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}S=Object.assign({custom:[],per:{},pr:{},log:[],del:{}},x);mig();save();all();$("bm").textContent="Restore hoyeche ✓"}catch(e){$("bm").textContent="File ta thik na"}$("rf").value=""};
 $("dt").value=$("d1").value=$("d2").value=today();$("mdt").value=today();
 ["cp","ca1","ca2","cb1","cb2"].forEach(i=>$(i).oninput=rcalc);$("cp").onchange=rcalc;
 $("cm0").onclick=()=>{CM=-1;$("cm0").className="on";$("cp0").className="";rcalc()};
 $("cp0").onclick=()=>{CM=1;$("cp0").className="on";$("cm0").className="";rcalc()};
 
 function hyData(){const a=$("hy1").value,b=$("hy2").value,D={};
-S.mk.filter(r=>(!a||r.d>=a)&&(!b||r.d<=b)).forEach(r=>{(D[r.d]=D[r.d]||[]).push(r)});
+S.mk.filter(r=>(!a||r.d>=a)&&(!b||r.d<=b)&&!isDel(r.i)).forEach(r=>{(D[r.d]=D[r.d]||[]).push(r)});
 const days=Object.keys(D).sort().map(d=>{const L=D[d].sort((x,y)=>x.i-y.i).map(r=>{const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f);return{r,i:r.i,k,g,f,net,v:net/k*r.r}});return{d,L,t:L.reduce((s,x)=>s+x.v,0)}});
 return{days,tv:days.reduce((s,x)=>s+x.t,0)}}
 function hyRender(){const{days,tv}=hyData();$("hys").innerHTML=days.length?days.map(x=>`${x.d} · ${x.L.length} ta product · <b>${mm2(x.t)} tk</b>`).join("<br>")+`<br><b style="color:var(--ac)">Total: ${mm2(tv)} tk</b>`:'<span class="sub">Kono market nai</span>'}
@@ -442,7 +484,7 @@ $("hdl").onclick=e=>{const b=e.target.closest("[data-ed]");if(!b)return;ask(b,()
 $("hpdf").onclick=async()=>{const A=S.hp;if(!A.length){$("hpm").textContent="Kono bekti nai";return}
 let tj=0,tk=0;A.forEach(p=>{tj+=pj(p);tk+=pk(p)});const net=tj-tk,det=$("hdet").checked;
 const rows=[];A.forEach((p,i)=>{rows.push({p,no:i+1});if(det)p.t.slice().sort((x,y)=>x.d.localeCompare(y.d)||x.id-y.id).forEach(e=>rows.push({e}))});
-const W=1190,H=1684,top=210,RH=det?30:Math.max(24,Math.min(40,Math.floor((H-top-210)/rows.length))),pp=Math.floor((H-top-210)/RH),pg=Math.ceil(rows.length/pp),fs=Math.min(22,RH-8);
+const W=1190,H=1684,top=210,RH=det?30:Math.max(24,Math.min(40,Math.floor((H-top-210)/rows.length))),pp=Math.floor((H-top-210)/RH),pg=Math.ceil(rows.length/pp),fs=21;
 const col=v=>v>0?"#15803d":v<0?"#b91c1c":"#000";
 const doc=new window.jspdf.jsPDF({unit:"pt",format:"a4"});
 const fit=(x,t,w)=>{while(t.length>1&&x.measureText(t).width>w)t=t.slice(0,-1);return t};
@@ -474,15 +516,28 @@ function cbox(msg,fn){$("cmt").textContent=msg;CF=fn;$("cm").style.display="flex
 $("cn").onclick=()=>{CF=null;$("cm").style.display="none"};
 $("cy").onclick=()=>{const f=CF;CF=null;$("cm").style.display="none";if(f)f()};
 $("r1").onclick=()=>cbox("Apni ki nishchit shob entry (prothom stock, joma, bikri) muche felben? Product, pcs/ctn ar dam thakbe.",()=>{keep();S.log=[];S.mk=[];save();all();$("rm").textContent="Shob entry muche gechhe ✓"});
-$("r2").onclick=()=>cbox("Apni ki nishchit PURA reset korben? Shob entry, notun product, pcs/ctn ar dam muche jabe.",()=>{keep();const nx=S.nx;S={custom:[],per:{},pr:{},cp:{},lv:{},log:[],mk:[],hs:[],hp:[],nx};save();all();$("rm").textContent="Pura reset hoyeche ✓"});
-$("r3").onclick=()=>{try{const x=JSON.parse(localStorage.getItem("stk1_prev")||"null");if(!x){$("rm").textContent="Ager kichu nei";return}S=Object.assign({custom:[],per:{},pr:{},log:[]},x);mig();save();all();$("rm").textContent="Ager obosthay ferot ashche ✓"}catch(e){$("rm").textContent="Ferot ana gelo na"}};
+$("r2").onclick=()=>cbox("Apni ki nishchit PURA reset korben? Shob entry, notun product, pcs/ctn ar dam muche jabe.",()=>{keep();const nx=S.nx;S={custom:[],per:{},pr:{},cp:{},lv:{},log:[],mk:[],hs:[],hp:[],del:{},nx};save();all();$("rm").textContent="Pura reset hoyeche ✓"});
+$("r3").onclick=()=>{try{const x=JSON.parse(localStorage.getItem("stk1_prev")||"null");if(!x){$("rm").textContent="Ager kichu nei";return}S=Object.assign({custom:[],per:{},pr:{},log:[],del:{}},x);mig();save();all();$("rm").textContent="Ager obosthay ferot ashche ✓"}catch(e){$("rm").textContent="Ferot ana gelo na"}};
 
 document.querySelectorAll("#sm3 button").forEach(b=>b.onclick=()=>{SM=+b.dataset.m;document.querySelectorAll("#sm3 button").forEach(x=>x.className="");b.className="on";$("rg").style.display=SM?"flex":"none";$("d1w").style.display=SM===2?"":"none";$("d2l").textContent=SM===2?"Porjonto":"Tarikh porjonto";rs()});
 $("d1").oninput=$("d2").oninput=rs;
 
-function go(d,f){const n=P().length;let i=+$("pe").value+d;i=Math.max(0,Math.min(n-1,i));$("pe").value=i;prev();rrt();if(f)$("c1").focus()}
+function go(d,f){
+  const valid=P().map((p,i)=>i).filter(i=>!isDel(i));
+  if(!valid.length)return;
+  const cur=+$("pe").value;
+  let idx=valid.indexOf(cur);
+  if(idx===-1)idx=0;
+  idx=Math.max(0,Math.min(valid.length-1,idx+d));
+  $("pe").value=valid[idx];
+  updatePeBtn();
+  prev();
+  rrt();
+  if(f)$("c1").focus();
+}
+
 function rrt(){$("ec").value=CP(+$("pe").value)||"";$("rtw").style.display=T==="mk"?"block":"none";if(T==="mk")$("rt").value=PR(+$("pe").value)||""}
-document.querySelectorAll("[data-t]").forEach(b=>b.addEventListener("click",rrt));$("pe").addEventListener("change",rrt);
+document.querySelectorAll("[data-t]").forEach(b=>b.addEventListener("click",rrt));
 $("pv0").onclick=()=>go(-1);$("nx0").onclick=()=>go(1);
 $("nx").checked=S.nx!==false;$("nx").onchange=()=>{S.nx=$("nx").checked;save()};
 
@@ -516,7 +571,7 @@ function zc(lab,v,col,sz){const t=money(v),big=sz>90,f=big?(t.length>9?14:t.leng
 const bgTint = col.includes('bad') ? 'var(--bad-light)' : (col.includes('jm') ? 'var(--jm-light)' : 'var(--ac-light)');
 return`<div style="text-align:center"><div class="sub" style="font-size:${big?13:11.5}px;margin-bottom:6px;font-weight:600">${lab}</div><div style="width:${sz}px;height:${sz}px;border-radius:50%;border:2.5px solid ${col};background:${bgTint};color:${col};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${f}px;margin:0 auto;padding:4px;text-align:center;line-height:1.1;box-shadow:var(--sh-sm)">${t}</div></div>`}
 function zdays(){const D={},get=d=>D[d]=D[d]||{d,sell:0,cost:0,lab:0,ln:0,j:0,k:0,R:[]};
-S.mk.forEach(r=>{if(!zin(r.d))return;const o=get(r.d),k=K(r.i),net=nq(r);o.sell+=net/k*r.r;o.R.push({i:r.i,k,net,v:net/k*r.r})});
+S.mk.forEach(r=>{if(!zin(r.d)||isDel(r.i))return;const o=get(r.d),k=K(r.i),net=nq(r);o.sell+=net/k*r.r;o.R.push({i:r.i,k,net,v:net/k*r.r})});
 S.hp.forEach(p=>p.t.forEach(e=>{if(!zin(e.d))return;const o=get(e.d);if(e.ty==="j")o.j+=e.a;else o.k+=e.a}));
 const L=Object.keys(D).sort().map(d=>{const o=D[d],l=labOf(o.R,d);o.cost=l.cost;o.lab=l.lab;o.ln=l.n;o.b=o.j-o.k;return o});
 const G={sell:0,cost:0,lab:0,j:0,k:0,b:0,ln:0};L.forEach(o=>{G.sell+=o.sell;G.cost+=o.cost;G.lab+=o.lab;G.ln+=o.ln;G.j+=o.j;G.k+=o.k;G.b+=o.b});return{L,G}}
@@ -541,6 +596,81 @@ updateNetStatus();
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 }
+
+/* ===== Product Picker Modal with Long Press Delete ===== */
+function renderProductPicker(){
+  const q=$("ppq").value.trim().toLowerCase();
+  const list=P().map((p,i)=>({p,i})).filter(x=>!isDel(x.i));
+  const filtered=list.filter(x=>!q||x.p[0].toLowerCase().includes(q));
+  
+  $("ppl").innerHTML=filtered.map(x=>`
+    <div class="prod-pick-item" data-idx="${x.i}">
+      <div>
+        <div style="font-weight:600;font-size:15px">${x.i+1}. ${esc(x.p[0])}</div>
+        <div class="sub" style="font-size:12px">1 ctn = ${K(x.i)} pcs ${PR(x.i)?'· '+mm2(PR(x.i))+' tk':''}</div>
+      </div>
+      <span style="color:var(--ac);font-size:12px;font-weight:600">Select ➜</span>
+    </div>
+  `).join("")||'<div class="sub" style="text-align:center;padding:16px">Kono product pawa jayni</div>';
+
+  document.querySelectorAll(".prod-pick-item").forEach(el=>{
+    const i=+el.dataset.idx;
+    let timer=null, isLong=false, startX=0, startY=0;
+
+    const start=e=>{
+      isLong=false;
+      const t=e.touches?e.touches[0]:e;
+      startX=t.clientX; startY=t.clientY;
+      timer=setTimeout(()=>{
+        isLong=true;
+        try{navigator.vibrate&&navigator.vibrate(60)}catch(err){}
+        cbox(`Apni ki '${P()[i][0]}' product-ti list theke DELETE korte chan?`, ()=>{
+          if(!S.del)S.del={};
+          S.del[i]=true;
+          save();
+          all();
+          renderProductPicker();
+          $("ms").textContent=P()[i][0]+" delete hoyeche ✓";
+          setTimeout(()=>{$("ms").textContent=""},2500);
+        });
+      },650);
+    };
+
+    const move=e=>{
+      const t=e.touches?e.touches[0]:e;
+      if(Math.abs(t.clientX-startX)>12||Math.abs(t.clientY-startY)>12){
+        clearTimeout(timer);
+      }
+    };
+
+    const end=()=>{
+      clearTimeout(timer);
+      if(!isLong){
+        $("pe").value=i;
+        updatePeBtn();
+        prev();
+        rrt();
+        $("ppm").style.display="none";
+      }
+    };
+
+    el.addEventListener("touchstart",start,{passive:true});
+    el.addEventListener("touchmove",move,{passive:true});
+    el.addEventListener("touchend",end);
+    el.addEventListener("mousedown",start);
+    el.addEventListener("mousemove",move);
+    el.addEventListener("mouseup",end);
+  });
+}
+
+$("pe_btn").onclick=()=>{
+  $("ppq").value="";
+  renderProductPicker();
+  $("ppm").style.display="flex";
+  setTimeout(()=>{$("ppq").focus()},100);
+};
+$("ppmc").onclick=()=>{$("ppm").style.display="none"};
+$("ppq").oninput=renderProductPicker;
 
 all();
 rrt();
