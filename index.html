@@ -171,13 +171,14 @@ details[open] summary::after{content:'−'}
 <div style="display:flex;gap:6px"><button id="ppv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="pp" style="flex:1;min-width:0"></select><button id="pnx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
 <div class="row"><div><label>1 ctn = ___ pcs</label><input id="pk" type="number" inputmode="numeric" min="1"></div><div><label>1 ctn dam (tk)</label><input id="pd" type="number" inputmode="decimal" min="0"></div></div>
 <label>Lav % (bikri dam theke koto % lav pao). Kroy dor = dam − dam × lav%</label><input id="plv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="pcr" type="number" inputmode="decimal" min="0"></div>
-<div class="card"><h2>Backup (data nirapod rakhte)</h2><div class="row"><button id="bk">Backup download</button><button id="rs0">Restore</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:8px"></div>
+<details class="card" id="bkd"><summary class="sub" style="cursor:pointer;font-weight:600">💾 Backup (data nirapod rakhte)</summary>
+<div style="margin-top:8px"><div class="row"><button id="bk">Backup download</button><button id="rs0">Restore</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:8px"></div>
 <div id="bkset" style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0">
 <div class="sub" id="bklast" style="margin-bottom:8px"></div>
 <div class="row" style="align-items:center;gap:8px"><span class="sub">Remainder:</span>
 <select id="bkfreq"><option value="1">Protidin</option><option value="3">3 din por por</option><option value="7">7 din por por</option><option value="0">Bondho</option></select></div>
 <label class="sub" style="display:flex;align-items:center;gap:8px;margin-top:8px"><input type="checkbox" id="bkauto"> Auto backup (app khulle nijei download hobe)</label>
-</div></div>
+</div></div></details>
 <details class="card" id="rsd"><summary class="sub" style="cursor:pointer;font-weight:600">⚙ Reset</summary>
 <div style="margin-top:8px">
 <div class="sub" style="margin:8px 0">Reset korar age Backup nao. Protita button 2 bar chapte hobe.</div>
