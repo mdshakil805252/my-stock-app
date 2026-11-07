@@ -171,7 +171,13 @@ details[open] summary::after{content:'−'}
 <div style="display:flex;gap:6px"><button id="ppv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="pp" style="flex:1;min-width:0"></select><button id="pnx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
 <div class="row"><div><label>1 ctn = ___ pcs</label><input id="pk" type="number" inputmode="numeric" min="1"></div><div><label>1 ctn dam (tk)</label><input id="pd" type="number" inputmode="decimal" min="0"></div></div>
 <label>Lav % (bikri dam theke koto % lav pao). Kroy dor = dam − dam × lav%</label><input id="plv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="pcr" type="number" inputmode="decimal" min="0"></div>
-<div class="card"><h2>Backup (data nirapod rakhte)</h2><div class="row"><button id="bk">Backup download</button><button id="rs0">Restore</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:8px"></div></div>
+<div class="card"><h2>Backup (data nirapod rakhte)</h2><div class="row"><button id="bk">Backup download</button><button id="rs0">Restore</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:8px"></div>
+<div id="bkset" style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0">
+<div class="sub" id="bklast" style="margin-bottom:8px"></div>
+<div class="row" style="align-items:center;gap:8px"><span class="sub">Remainder:</span>
+<select id="bkfreq"><option value="1">Protidin</option><option value="3">3 din por por</option><option value="7">7 din por por</option><option value="0">Bondho</option></select></div>
+<label class="sub" style="display:flex;align-items:center;gap:8px;margin-top:8px"><input type="checkbox" id="bkauto"> Auto backup (app khulle nijei download hobe)</label>
+</div></div>
 <details class="card" id="rsd"><summary class="sub" style="cursor:pointer;font-weight:600">⚙ Reset</summary>
 <div style="margin-top:8px">
 <div class="sub" style="margin:8px 0">Reset korar age Backup nao. Protita button 2 bar chapte hobe.</div>
@@ -816,6 +822,57 @@ $("ppq").oninput=renderProductPicker;
 
 all();
 rrt();
+
+/* ===== Backup reminder + auto backup (alada block, ager code ke chhoy ni) ===== */
+(function(){
+  const K_LAST="stk1_lastbk",K_FREQ="stk1_bkfreq",K_AUTO="stk1_bkauto",K_SNZ="stk1_bksnz";
+  const g=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}};
+  const s=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+  const freq=()=>parseInt(g(K_FREQ,"1"),10)||0;
+  const last=()=>parseInt(g(K_LAST,"0"),10)||0;
+  const DAY=86400000;
+  const isDue=()=>{const f=freq();if(!f)return false;if(Date.now()<parseInt(g(K_SNZ,"0"),10))return false;return Date.now()-last()>=f*DAY-3600000};
+  function lastTxt(){const l=last();if(!l){$("bklast").textContent="Ekhono kono backup neya hoy ni";return}
+    const d=Math.floor((Date.now()-l)/DAY);$("bklast").textContent="Shesh backup: "+new Date(l).toLocaleString()+(d>0?" ("+d+" din age)":" (aj)")}
+  const mark=()=>{s(K_LAST,String(Date.now()));lastTxt()};
+  async function doBackup(){await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));mark()}
+
+  // manual Backup button chaple-o shesh backup somoy save hobe
+  $("bk").addEventListener("click",()=>setTimeout(mark,400));
+
+  // settings
+  $("bkfreq").value=String(freq());$("bkauto").checked=g(K_AUTO,"0")==="1";lastTxt();
+  $("bkfreq").onchange=()=>{s(K_FREQ,$("bkfreq").value);s(K_SNZ,"0")};
+  $("bkauto").onchange=()=>{s(K_AUTO,$("bkauto").checked?"1":"0");if($("bkauto").checked&&!freq()){$("bkfreq").value="1";s(K_FREQ,"1")}};
+
+  // popup
+  let pop=null;
+  function showPop(){
+    if(pop)return;
+    const l=last(),d=l?Math.floor((Date.now()-l)/DAY):null;
+    pop=document.createElement("div");pop.className="modal-wrap";pop.style.zIndex=99;
+    pop.innerHTML='<div style="background:#fff;border-radius:16px;padding:20px;max-width:340px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.25);text-align:center">'+
+      '<div style="font-size:34px">💾</div>'+
+      '<div style="font-size:18px;font-weight:700;margin:6px 0;color:#0f172a">Backup nibar somoy hoyeche</div>'+
+      '<div style="font-size:14px;color:#475569;margin-bottom:14px">'+(l?"Shesh backup "+(d>0?d+" din age":"aj")+" neya hoyechilo.":"Ekhono kono backup neya hoy ni.")+' Data harale ferot ana jabe na.</div>'+
+      '<button id="bkp_now" class="big" style="margin-top:0">Ekhoni Backup nao</button>'+
+      '<button id="bkp_later" style="width:100%;margin-top:8px;padding:11px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:14px">Pore (4 ghonta pore janabo)</button></div>';
+    document.body.appendChild(pop);
+    const close=()=>{pop&&pop.remove();pop=null};
+    pop.querySelector("#bkp_now").onclick=async()=>{try{await doBackup();$("bm").textContent="Backup hoyeche ✓"}catch(e){}close()};
+    pop.querySelector("#bkp_later").onclick=()=>{s(K_SNZ,String(Date.now()+4*3600000));close()};
+  }
+
+  async function check(){
+    if(!isDue())return;
+    if(g(K_AUTO,"0")==="1"){
+      try{await doBackup();$("bm").textContent="Auto backup hoyeche ✓";return}catch(e){}
+    }
+    showPop();
+  }
+  setTimeout(check,1500);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)setTimeout(check,500)});
+})();
 </script>
 </body>
 </html>
