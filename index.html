@@ -15,8 +15,7 @@
   --bg:#f4f6fa;--card:#ffffff;--card-sub:#f8fafc;--tx:#0f172a;--mut:#64748b;
   --ac:#0d9488;--ac-light:rgba(13,148,136,0.1);--ac-hover:#0f766e;--bd:#e2e8f0;
   --bad:#ef4444;--bad-light:rgba(239,68,68,0.1);--jm:#2563eb;--jm-light:rgba(37,99,235,0.1);
-  --sh:0 10px 25px -5px rgba(15,23,42,0.05),0 8px 10px -6px rgba(15,23,42,0.03);
-  --sh-sm:0 2px 8px rgba(15,23,42,0.04);--radius:16px;
+  --sh:0 10px 25px -5px rgba(15,23,42,0.05);--sh-sm:0 2px 8px rgba(15,23,42,0.04);--radius:16px;
   box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
 }
 @media (prefers-color-scheme:dark){
@@ -24,11 +23,10 @@
     --bg:#0b0f17;--card:#141b26;--card-sub:#1a2332;--tx:#f1f5f9;--mut:#94a3b8;
     --ac:#2dd4bf;--ac-light:rgba(45,212,191,0.12);--ac-hover:#14b8a6;--bd:#222f3e;
     --bad:#f87171;--bad-light:rgba(248,113,113,0.15);--jm:#60a5fa;--jm-light:rgba(96,165,250,0.15);
-    --sh:0 10px 25px -5px rgba(0,0,0,0.5);--sh-sm:0 2px 8px rgba(0,0,0,0.3)
   }
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:'Hind Siliguri','Plus Jakarta Sans',system-ui,-apple-system,sans-serif;padding:12px;max-width:620px;margin:0 auto;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Hind Siliguri','Plus Jakarta Sans',system-ui,sans-serif;padding:12px;max-width:620px;margin:0 auto;-webkit-font-smoothing:antialiased;touch-action:pan-y}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
 label{font-size:13px;font-weight:600;color:var(--mut);display:block;margin:10px 0 5px}
 select,input{width:100%;font-size:15.5px;font-family:inherit;padding:11px 13px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);outline:none;transition:all 0.2s}
@@ -36,9 +34,8 @@ select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shado
 .row{display:flex;gap:10px}.row>*{flex:1}
 .top-bar{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 8px;font-size:12.5px;font-weight:600}
 .net-status{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:20px;background:var(--card);border:1px solid var(--bd)}
-.dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
-.dot.off{background:#eab308}
-.nav{position:sticky;top:0;z-index:15;background:rgba(244,246,250,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:6px 0 10px;margin-bottom:8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.dot{width:8px;height:8px;border-radius:50%;background:#22c55e}.dot.off{background:#eab308}
+.nav{position:sticky;top:0;z-index:15;background:rgba(244,246,250,0.85);backdrop-filter:blur(12px);padding:6px 0 10px;margin-bottom:8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .nav{background:rgba(11,15,23,0.85)}}
 .nav::-webkit-scrollbar{display:none}
 .nav button{flex:0 0 auto;padding:9px 15px;font-size:13.5px;font-weight:600;border-radius:30px;border:1px solid var(--bd);background:var(--card);color:var(--mut);box-shadow:var(--sh-sm);transition:all 0.2s}
@@ -57,7 +54,6 @@ td:nth-child(n+3){text-align:right;white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
 tbody tr:hover{background:rgba(13,148,136,0.03)}
 .x{color:var(--bad);background:var(--bad-light);border:none;border-radius:8px;padding:4px 10px;font-weight:700;font-size:13px}
-.x:hover{background:var(--bad);color:#fff}
 h2{font-size:17px;font-weight:700;margin:0 0 8px}
 .dt{font-size:12.5px;padding:5px 10px;margin-top:6px;border-radius:8px;background:var(--card-sub)}
 .v{display:none;opacity:0;transform:translateY(6px);transition:opacity 0.2s,transform 0.2s}
@@ -65,12 +61,11 @@ h2{font-size:17px;font-weight:700;margin:0 0 8px}
 #ms{color:var(--ac);font-weight:600;font-size:14px;min-height:20px;margin-top:8px;text-align:center}
 details{border:1px solid var(--bd);border-radius:var(--radius);padding:14px;background:var(--card);box-shadow:var(--sh-sm)}
 details summary{font-size:15.5px;font-weight:600;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between}
-details summary::-webkit-details-marker{display:none}
 details summary::after{content:'+';font-size:18px;font-weight:700;color:var(--ac)}
 details[open] summary::after{content:'−'}
-.modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:40;padding:14px;padding-top:calc(14px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center}
+.modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.6);backdrop-filter:blur(6px);z-index:40;padding:14px;padding-top:calc(14px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center}
 .modal-wrap>.card{width:100%}
-.prod-pick-item{padding:12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s,border-color 0.15s;user-select:none;-webkit-user-select:none}
+.prod-pick-item{padding:12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
 .prod-pick-item:active{background:var(--ac-light);border-color:var(--ac)}
 </style>
 </head>
@@ -81,8 +76,14 @@ details[open] summary::after{content:'−'}
   <div class="net-status"><span id="netDot" class="dot"></span><span id="netTx">Online</span></div>
 </div>
 
-<div class="nav"><button data-v="0" class="on">Entry</button><button data-v="1">Stock</button><button data-v="4">Market</button><button data-v="5">Calc</button><button data-v="2">Khata</button><button data-v="3">Product</button><button data-v="6">Hisab</button><button data-v="7">Summary</button></div>
+<div class="nav" id="navBar">
+  <button data-v="0" class="on">Entry</button><button data-v="1">Stock</button>
+  <button data-v="4">Market</button><button data-v="5">Calc</button>
+  <button data-v="2">Khata</button><button data-v="3">Product</button>
+  <button data-v="6">Hisab</button><button data-v="7">Summary</button>
+</div>
 
+<div id="swipeArea">
 <div class="v on" id="v0"><div class="card">
 <div style="display:none"><button data-t="open" class="on">Prothom stock +</button><button data-t="mk">Market e gelo −</button></div>
 <div class="sub" style="margin-top:2px">Ekhane shudhu stock jog hoy (Prothom stock), jekono tarikhe. Market er mal ber/ferot Market tab e.</div>
@@ -91,7 +92,7 @@ details[open] summary::after{content:'−'}
 <div style="display:flex;gap:6px">
   <button id="pv0" style="flex:0 0 44px;padding:0;font-size:16px">◀</button>
   <select id="pe" style="display:none"></select>
-  <button id="pe_btn" type="button" style="flex:1;min-width:0;text-align:left;font-size:15px;font-weight:600;padding:11px 13px;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer">
+  <button id="pe_btn" type="button" style="flex:1;min-width:0;text-align:left;font-size:15px;font-weight:600;padding:11px 13px;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;display:flex;justify-content:space-between;align-items:center">
     <span id="pe_name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Product baachun</span>
     <span style="font-size:12px;color:var(--mut);flex:0 0 auto;margin-left:6px">▼</span>
   </button>
@@ -179,6 +180,7 @@ details[open] summary::after{content:'−'}
 <button id="r3" style="width:100%">Reset undo (ager obosthay ferot)</button>
 <div class="sub" id="rm" style="margin-top:8px"></div>
 </div></details>
+</div>
 </div>
 
 <!-- Product Picker Modal with Long Press Delete & Smooth Scroll -->
@@ -344,8 +346,9 @@ function rcalc(){const i=+$("cp").value||0,k=K(i),a=(+$("ca1").value||0)*k+(+$("
 $("ci").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  ctn dam "+mm2(PR(i))+" tk  |  pcs dam "+mm2(PR(i)/k)+" tk":"");
 $("cr").textContent=fmt(t,k);$("cr").style.color=t<0?"var(--bad)":"";$("ct").textContent="Total "+t+" pcs";$("cd").textContent=PR(i)?"Dam: "+mm2(t/k*PR(i))+" tk":""}
 
-/* ===== Navigation & History Back Management ===== */
+/* ===== Navigation, Tabs, Swipe & History Management ===== */
 const MODAL_IDS = ["ppm", "dm", "hm", "hd", "cm", "sm"];
+const TAB_ORDER = ["0", "1", "4", "5", "2", "3", "6", "7"];
 let currentTab = "0";
 
 function getOpenModal() {
@@ -397,7 +400,11 @@ function switchTab(v, pushHistory = true) {
   if (currentTab === v && !pushHistory) return;
   currentTab = v;
   document.querySelectorAll(".nav button").forEach(b => {
-    b.className = (b.dataset.v === v) ? "on" : "";
+    const on = (b.dataset.v === v);
+    b.className = on ? "on" : "";
+    if (on) {
+      try { b.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); } catch(err){}
+    }
   });
   document.querySelectorAll(".v").forEach(el => el.className = "v");
   const target = $("v" + v);
@@ -415,6 +422,36 @@ document.querySelectorAll(".nav button").forEach(b => {
   };
 });
 history.replaceState({ type: "tab", v: "0" }, "");
+
+/* Swipe Gesture for Left/Right Tab Switching */
+let swX = 0, swY = 0, swValid = false;
+const swipeEl = $("swipeArea");
+
+swipeEl.addEventListener("touchstart", e => {
+  if (getOpenModal()) { swValid = false; return; }
+  const target = e.target;
+  if (target.closest('.wrap') || target.closest('input') || target.closest('select') || target.closest('textarea')) {
+    swValid = false;
+    return;
+  }
+  swValid = true;
+  swX = e.touches[0].clientX;
+  swY = e.touches[0].clientY;
+}, { passive: true });
+
+swipeEl.addEventListener("touchend", e => {
+  if (!swValid || getOpenModal()) return;
+  const dx = e.changedTouches[0].clientX - swX;
+  const dy = e.changedTouches[0].clientY - swY;
+  if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    const idx = TAB_ORDER.indexOf(currentTab);
+    if (dx < 0 && idx < TAB_ORDER.length - 1) {
+      switchTab(TAB_ORDER[idx + 1], true);
+    } else if (dx > 0 && idx > 0) {
+      switchTab(TAB_ORDER[idx - 1], true);
+    }
+  }
+}, { passive: true });
 
 function all(){opts();prev();rs();rk();rp();rsell();rcalc();hrender();zrender()}
 document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{T=b.dataset.t;document.querySelectorAll("[data-t]").forEach(x=>x.className="");b.className="on";prev()});
@@ -555,7 +592,7 @@ $("hdl").onclick=e=>{const b=e.target.closest("[data-ed]");if(!b)return;ask(b,()
 $("hpdf").onclick=async()=>{const A=S.hp;if(!A.length){$("hpm").textContent="Kono bekti nai";return}
 let tj=0,tk=0;A.forEach(p=>{tj+=pj(p);tk+=pk(p)});const net=tj-tk,det=$("hdet").checked;
 const rows=[];A.forEach((p,i)=>{rows.push({p,no:i+1});if(det)p.t.slice().sort((x,y)=>x.d.localeCompare(y.d)||x.id-y.id).forEach(e=>rows.push({e}))});
-const W=1190,H=1684,top=210,RH=det?30:Math.max(24,Math.min(40,Math.floor((H-top-210)/rows.length))),pp=Math.floor((H-top-210)/RH),pg=Math.ceil(rows.length/pp),fs=Math.min(22,RH-8);
+const W=1190,H=1684,top=210,RH=det?30:Math.max(24,Math.min(40,Math.floor((H-top-210)/rows.length))),pp=Math.floor((H-top-210)/RH),pg=Math.ceil(rows.length/pp),fs=21;
 const col=v=>v>0?"#15803d":v<0?"#b91c1c":"#000";
 const doc=new window.jspdf.jsPDF({unit:"pt",format:"a4"});
 const fit=(x,t,w)=>{while(t.length>1&&x.measureText(t).width>w)t=t.slice(0,-1);return t};
