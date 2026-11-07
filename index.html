@@ -841,7 +841,7 @@ rrt();
   $("bk").addEventListener("click",()=>setTimeout(mark,400));
 
   // settings
-  $("bkfreq").value=String(freq());$("bkauto").checked=g(K_AUTO,"0")==="1";lastTxt();
+  $("bkfreq").value=String(freq());$("bkauto").checked=g(K_AUTO,"1")==="1";lastTxt();
   $("bkfreq").onchange=()=>{s(K_FREQ,$("bkfreq").value);s(K_SNZ,"0")};
   $("bkauto").onchange=()=>{s(K_AUTO,$("bkauto").checked?"1":"0");if($("bkauto").checked&&!freq()){$("bkfreq").value="1";s(K_FREQ,"1")}};
 
@@ -856,21 +856,21 @@ rrt();
       '<div style="font-size:18px;font-weight:700;margin:6px 0;color:#0f172a">Backup nibar somoy hoyeche</div>'+
       '<div style="font-size:14px;color:#475569;margin-bottom:14px">'+(l?"Shesh backup "+(d>0?d+" din age":"aj")+" neya hoyechilo.":"Ekhono kono backup neya hoy ni.")+' Data harale ferot ana jabe na.</div>'+
       '<button id="bkp_now" class="big" style="margin-top:0">Ekhoni Backup nao</button>'+
-      '<button id="bkp_later" style="width:100%;margin-top:8px;padding:11px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:14px">Pore (4 ghonta pore janabo)</button></div>';
+      '<button id="bkp_later" style="width:100%;margin-top:8px;padding:11px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:14px">Ektu pore janao</button></div>';
     document.body.appendChild(pop);
     const close=()=>{pop&&pop.remove();pop=null};
     pop.querySelector("#bkp_now").onclick=async()=>{try{await doBackup();$("bm").textContent="Backup hoyeche ✓"}catch(e){}close()};
-    pop.querySelector("#bkp_later").onclick=()=>{s(K_SNZ,String(Date.now()+4*3600000));close()};
+    pop.querySelector("#bkp_later").onclick=()=>{s(K_SNZ,String(Date.now()+5*60000));close()};
   }
 
   async function check(){
     if(!isDue())return;
-    if(g(K_AUTO,"0")==="1"){
+    if(g(K_AUTO,"1")==="1"){
       try{await doBackup();$("bm").textContent="Auto backup hoyeche ✓";return}catch(e){}
     }
     showPop();
   }
-  setTimeout(check,1500);
+  setTimeout(check,1500);setInterval(check,60000);
   document.addEventListener("visibilitychange",()=>{if(!document.hidden)setTimeout(check,500)});
 })();
 </script>
