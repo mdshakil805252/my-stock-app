@@ -35,7 +35,6 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--tx);font-family:'Hind Siliguri','Plus Jakarta Sans',system-ui,sans-serif;padding:12px;max-width:620px;margin:0 auto;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
-/* Splash */
 #splash{position:fixed;inset:0;z-index:9999;background:var(--grad);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;transition:opacity .5s,visibility .5s}
 #splash.hide{opacity:0;visibility:hidden}
 #splash .logo{font-size:64px;animation:bounce 1.2s infinite}
@@ -45,22 +44,16 @@ body{margin:0;background:var(--bg);color:var(--tx);font-family:'Hind Siliguri','
 #splash .bar i{display:block;height:100%;width:40%;background:#fff;border-radius:2px;animation:load 1.2s ease-in-out infinite}
 @keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-/* Offline bar */
 #offbar{position:fixed;top:0;left:0;right:0;background:#f59e0b;color:#fff;text-align:center;font-size:12.5px;font-weight:600;padding:4px;z-index:1000;transform:translateY(-100%);transition:transform .3s}
 #offbar.show{transform:translateY(0)}
-/* Header */
-.top-bar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;margin:0 -12px 10px;background:var(--grad);color:#fff;box-shadow:0 4px 14px -4px rgba(13,148,136,.4);transition:padding .25s}
-.top-bar .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;letter-spacing:.3px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
-.top-bar .brand:active{transform:scale(.97)}
-.top-bar .brand .ico{font-size:20px;animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+/* Header - minimal */
+.top-bar{position:sticky;top:0;z-index:20;display:flex;justify-content:flex-end;align-items:center;padding:8px 12px;margin:0 -12px 8px;background:var(--grad);color:#fff;box-shadow:0 4px 14px -4px rgba(13,148,136,.4);transition:padding .25s;gap:8px}
 .top-bar .right{display:flex;align-items:center;gap:8px}
 .theme-btn{background:rgba(255,255,255,.2);border:0;color:#fff;font-size:16px;padding:6px 10px;border-radius:20px;cursor:pointer;line-height:1}
 .net-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.2);font-size:11.5px;font-weight:600}
 .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 2s infinite}
 .dot.off{background:#f59e0b;animation:none;box-shadow:none}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}70%{box-shadow:0 0 0 8px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
-/* Cards */
 .card{background:var(--card);border:1px solid var(--bd);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--sh);animation:fadeUp .4s ease both;position:relative;overflow:hidden}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);opacity:.7}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -69,7 +62,6 @@ label{font-size:13px;font-weight:600;color:var(--mut);display:block;margin:10px 
 select,input{width:100%;font-size:15.5px;font-family:inherit;padding:11px 13px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
 select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shadow:0 0 0 3px var(--ac-light)}
 .row{display:flex;gap:10px}.row>*{flex:1}
-/* Home Grid */
 .home-hero{background:var(--grad);color:#fff;border-radius:var(--radius);padding:22px 18px;margin-bottom:16px;text-align:center;box-shadow:0 8px 24px -6px rgba(13,148,136,.4);position:relative;overflow:hidden}
 .home-hero::after{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.1)}
 .home-hero .hi{font-size:42px;margin-bottom:6px;animation:float 3s ease-in-out infinite}
@@ -91,7 +83,6 @@ select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shado
 .tile[data-color="6"]{--tileColor:#10b981}
 .tile[data-color="7"]{--tileColor:#ef4444}
 .tile[data-color="8"]{--tileColor:#06b6d4}
-/* Page */
 .page-wrap{display:none}
 .page-wrap.on{display:block;animation:fadeUp .35s ease}
 .page-back{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--card);border:1px solid var(--bd);border-radius:24px;font-size:13.5px;font-weight:600;color:var(--ac);cursor:pointer;margin-bottom:12px;box-shadow:var(--sh-sm);transition:transform .15s,background .2s;user-select:none;-webkit-tap-highlight-color:transparent}
@@ -99,7 +90,6 @@ select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shado
 .page-back:hover{background:var(--ac-light)}
 .page-title{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:800;margin:0 0 12px;color:var(--tx)}
 .page-title .pico{font-size:24px}
-/* Buttons */
 button{font-family:inherit;font-size:14.5px;font-weight:600;padding:11px 14px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .15s,background .2s,box-shadow .2s;position:relative;overflow:hidden}
 button:active{transform:scale(.97)}
 button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
@@ -110,7 +100,6 @@ button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
 .sub{color:var(--mut);font-size:13.5px;line-height:1.5}
 .res{color:var(--ac);font-weight:800;font-size:21px;margin-top:8px}
 h2{font-size:17px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:6px}
-/* Tables */
 .wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--bd)}
 table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
 th{background:var(--card-sub);color:var(--mut);font-weight:600;font-size:12.5px;padding:10px 8px;border-bottom:1.5px solid var(--bd)}
@@ -124,12 +113,10 @@ tbody tr:hover{background:rgba(13,148,136,.04)}
 .dt{font-size:12.5px;padding:5px 10px;margin-top:6px;border-radius:8px;background:var(--card-sub);transition:background .2s}
 .dt:hover{background:var(--ac-light)}
 #ms{color:var(--ac);font-weight:600;font-size:14px;min-height:20px;margin-top:8px;text-align:center}
-/* Accordion */
 details{border:1px solid var(--bd);border-radius:var(--radius);padding:14px;background:var(--card);box-shadow:var(--sh-sm)}
 details summary{font-size:15.5px;font-weight:600;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between}
 details summary::after{content:'+';font-size:18px;font-weight:700;color:var(--ac)}
 details[open] summary::after{content:'−'}
-/* Modal */
 .modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:40;padding:14px;padding-top:calc(14px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center;animation:backdropIn .25s}
 @keyframes backdropIn{from{opacity:0}to{opacity:1}}
 .modal-wrap>.card{width:100%;animation:modalIn .3s cubic-bezier(.34,1.56,.64,1)}
@@ -147,14 +134,13 @@ details[open] summary::after{content:'−'}
 #hd .card > #hdpdf,
 #hd .card > #hdpmsg{flex:0 0 auto}
 #hd .card > .wrap{margin-top:12px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0}
-/* Product Picker */
+#dday{max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
+#dday .dbody{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0;margin-top:10px}
 .prod-pick-item{padding:12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;transition:all .2s}
 .prod-pick-item:active{background:var(--ac-light);border-color:var(--ac);transform:scale(.98)}
-/* Empty State */
 .empty{display:flex;flex-direction:column;align-items:center;padding:28px 12px;gap:8px;color:var(--mut)}
 .empty .eico{font-size:40px;opacity:.6;animation:float 3s ease-in-out infinite}
 .empty .etxt{font-size:13.5px;font-weight:500}
-/* Toast */
 #toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-30px);background:var(--ac);color:#fff;padding:10px 20px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;display:flex;align-items:center;gap:8px;max-width:90%}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast.bad{background:var(--bad)}
@@ -176,7 +162,6 @@ details[open] summary::after{content:'−'}
 <div id="toast"></div>
 
 <div class="top-bar" id="topBar">
-  <div class="brand" id="brandHome"><span class="ico">📦</span><span>Stock Register</span></div>
   <div class="right">
     <div class="net-status"><span id="netDot" class="dot"></span><span id="netTx">Online</span></div>
     <button class="theme-btn" id="themeBtn" title="Theme">🌙</button>
@@ -213,6 +198,7 @@ details[open] summary::after{content:'−'}
     <div style="display:none"><button data-t="open" class="on">Prothom stock +</button><button data-t="mk">Market e gelo −</button></div>
     <div class="sub" style="margin-top:2px">Ekhane shudhu stock jog hoy (Prothom stock), jekono tarikhe. Market er mal ber/ferot Market tab e.</div>
     <label>Tarikh</label><input id="dt" type="date">
+    <button id="viewDay" style="width:100%;margin-top:8px;background:var(--ac-light);color:var(--ac);border:1.5px dashed var(--ac);font-weight:700">📅 Ei tarikher entry dekho</button>
     <label>Product</label>
     <div style="display:flex;gap:6px">
       <button id="pv0" style="flex:0 0 44px;padding:0;font-size:16px">◀</button>
@@ -383,6 +369,14 @@ details[open] summary::after{content:'−'}
 <div id="cm" class="modal-wrap" style="display:none"><div class="card" style="max-width:420px;margin:0 auto"><h2 style="color:var(--bad)">⚠️ Delete korben?</h2><div id="cmt" style="margin:10px 0 16px;line-height:1.6"></div><div class="sub" style="margin-bottom:12px">Vul hole pore "Reset undo" diye ferot ante parben.</div><div class="row"><button id="cn">Na, bondho</button><button id="cy" style="background:var(--bad);color:#fff;border-color:var(--bad)">Haa, delete koro</button></div></div></div>
 
 <div id="sm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><h2 id="sh"></h2><label>Ei product 1 ctn e koto pcs?</label><input id="sk" type="number" inputmode="numeric" min="1"><label>1 ctn er dam (tk)</label><input id="sd" type="number" inputmode="decimal" min="0"><label>1 pcs er dam (tk), ctn dam theke auto ashe</label><input id="sp" type="number" inputmode="decimal" min="0"><label>Lav % (bikri dam theke koto % lav pao). Kroy dor = dam − dam × lav%</label><input id="slv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="skc" type="number" inputmode="decimal" min="0"><div class="row" style="margin-top:14px"><button id="sx">Bondho</button><button class="on" id="ss">Save</button></div></div></div>
+
+<!-- NEW MODAL: Day details -->
+<div id="dday" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto">
+  <div class="row" style="align-items:center"><h2 id="ddayT" style="flex:1;margin:0">📅 Tarikher entry</h2><button id="ddayC" style="flex:0 0 auto">Bondho</button></div>
+  <div class="sub" id="ddayS" style="margin-top:6px"></div>
+  <div class="dbody"><div class="wrap"><table><thead><tr><th>Product</th><th style="text-align:right">Ctn/Pcs</th><th style="text-align:right">Total pcs</th><th></th></tr></thead><tbody id="ddayL"></tbody></table></div></div>
+  <div class="res" id="ddayR" style="text-align:center"></div>
+</div></div>
 
 <script>
 const BASE=[["মিল্ক কেক",72],["মাফিন কেক",48],["ডপস ১০",24],["লুপস ৫",48],["লেক্সাস ৫",48],["লেক্সাস ১০",24],["লেক্সাস ফ্যামিলি",1],["মেরি ফ্যামিলি",12],["মিল্ক ৫",48],["ঘি ৫",48],["ঘি ১০",24],["ঘি ফ্যামিলি",8],["চকোলেট ১০",48],["এনার্জি ৫",48],["এনার্জি ১০",24],["এনার্জি ফ্যামিলি",8],["৪ পিসের নুডলস",1],["৮ পিসের নুডলস",1],["পাতা নুডলস",12],["১৫ গ্রাম মরিচ গুড়া",1],["৫০ গ্রাম মরিচ গুড়া",1],["১৫ গ্রাম হলুদ গুড়া",1],["৫০ গ্রাম হলুদ গুড়া",1],["হলুদ গুড়া ৫ কেজি",1],["মরিচ গুড়া ৫ কেজি",1],["মাংসের মশলা",1],["মুরগির মশলা",1],["গরু মাংসের মশলা",1],["মাছের মশলা",1],["১৫ গ্রাম জিরার গুরা",1],["৫০ গ্রাম জিরার গুরা",1],["বিরিয়ানি মশলা ৪০ গ্রাম",1],["সরিষ তেল ৮০ গ্রাম",1],["সরিষ তেল ২০০ গ্রাম",1],["ঘি টোস্ট মিনি",96],["ড্রাই কেক মিনি",48],["কোকোনাট ২০ টাকা",8],["কোকোনাট ফ্যামিলি",24],["৫ টাকা চানাচুর",1],["৩০ টাকা চানাচুর",1],["৫০ টাকা চানাচুর",1],["লাচ্ছা সেমাই",1],["ভার্মিচিলি সেমাই",1],["বালিশ সেমাই",1],["এগ নুডলস্",24],["তেঁতুল চাটনী",1],["১৫ গ্রাম চা",1],["৫০০ গ্রাম চা",1],["রোস্টের মশলা",1]];
@@ -556,8 +550,7 @@ $("ci").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  ctn dam "+mm2(PR(i))+" tk  
 $("cr").textContent=fmt(t,k);$("cr").style.color=t<0?"var(--bad)":"";$("ct").textContent="Total "+t+" pcs";$("cd").textContent=PR(i)?"Dam: "+mm2(t/k*PR(i))+" tk":""}
 
 /* ===== Page Navigation with History ===== */
-const MODAL_IDS = ["ppm", "dm", "hm", "hd", "cm", "sm"];
-const PAGE_ORDER = ["home", "0", "1", "4", "5", "2", "3", "6", "7"];
+const MODAL_IDS = ["ppm", "dm", "hm", "hd", "cm", "sm", "dday"];
 let currentPage = "home";
 
 function getOpenModal() {
@@ -580,7 +573,7 @@ function openModal(id) {
   const el = $(id);
   if (el) {
     el.style.display = "flex";
-    const inner = el.querySelector(".wrap");
+    const inner = el.querySelector(".wrap, .dbody");
     if (inner) inner.scrollTop = 0;
     el.scrollTop = 0;
     history.pushState({ type: "modal", id }, "");
@@ -619,7 +612,6 @@ function showPage(v, pushHistory = true) {
   try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}
 }
 
-/* Android back button handling via history */
 window.addEventListener("popstate", e => {
   const openM = getOpenModal();
   if (openM) { closeModal(openM); return; }
@@ -629,15 +621,12 @@ window.addEventListener("popstate", e => {
     if (e.state.v) showPage(e.state.v, false);
     else showPage("home", false);
   } else {
-    /* No history state → we're at home. Let browser exit. */
     showPage("home", false);
   }
 });
 
-/* Setup initial state: home on top */
 history.replaceState({ type: "page", v: "home" }, "");
 
-/* Tile clicks → go to page */
 document.querySelectorAll(".tile").forEach(t => {
   t.onclick = () => {
     const v = t.dataset.page;
@@ -645,7 +634,6 @@ document.querySelectorAll(".tile").forEach(t => {
   };
 });
 
-/* Home button (back arrow) */
 document.querySelectorAll("[data-home]").forEach(b => {
   b.onclick = () => {
     if (history.state && history.state.type === "page" && history.state.v !== "home") {
@@ -656,18 +644,6 @@ document.querySelectorAll("[data-home]").forEach(b => {
   };
 });
 
-/* Brand click → home */
-$("brandHome").onclick = () => {
-  if (currentPage !== "home") {
-    if (history.state && history.state.type === "page" && history.state.v !== "home") {
-      history.back();
-    } else {
-      showPage("home", true);
-    }
-  }
-};
-
-/* Swipe navigation: left=next, right=prev (only on pages, not home) */
 let swX = 0, swY = 0, swTime = 0, swActive = false;
 window.addEventListener("touchstart", e => {
   if (getOpenModal()) { swActive = false; return; }
@@ -686,7 +662,6 @@ window.addEventListener("touchend", e => {
   const isLongSwipe = Math.abs(dx) > 55;
   if (isHorizontal && (isFastSwipe || isLongSwipe)) {
     if (dx > 0) {
-      /* swipe right → back/home */
       if (history.state && history.state.type === "page" && history.state.v !== "home") history.back();
       else showPage("home", true);
     }
@@ -697,6 +672,25 @@ window.addEventListener("touchend", e => {
 function all(){opts();prev();rs();rk();rp();rsell();rcalc();hrender();zrender()}
 document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{T=b.dataset.t;document.querySelectorAll("[data-t]").forEach(x=>x.className="");b.className="on";prev()});
 ["c1","c2"].forEach(i=>$(i).oninput=prev);$("q").oninput=rs;$("pp").onchange=rp;
+
+/* ===== NEW: Day-wise entry viewer ===== */
+function openDayView(){
+  const d=$("dt").value||today();
+  const entries=S.log.filter(e=>e.d===d&&e.t!=="out"&&e.t!=="bahir"&&e.t!=="ferot");
+  $("ddayT").textContent="📅 "+d+" er entry";
+  $("ddayS").textContent=entries.length?entries.length+" ta product entry":("Ei tarikhe kono entry nei");
+  let totalPcs=0,totalCtn=0;
+  $("ddayL").innerHTML=entries.length?entries.map(e=>{
+    const k=K(e.i),pcs=qty(e);
+    totalPcs+=pcs;totalCtn+=e.c||0;
+    return `<tr><td>${esc(P()[e.i][0])}<br><span class="sub">${LB[e.t]||e.t}</span></td><td style="text-align:right">${e.c||0} ctn<br><span class="sub">${e.p||0} pcs</span></td><td style="text-align:right"><b>${pcs}</b></td><td><button class="x" data-ddel="${e.id}">✕</button></td></tr>`;
+  }).join(""):'<tr><td colspan="4"><div class="empty"><div class="eico">📭</div><div class="etxt">Ei tarikhe kono entry nei</div></div></td></tr>';
+  $("ddayR").textContent=entries.length?"Total: "+totalCtn+" ctn + "+rd(totalPcs-totalCtn*0)+" pcs":"";
+  openModal("dday");
+}
+$("viewDay").onclick=openDayView;
+$("ddayC").onclick=()=>closeCurrentModalOrBack("dday");
+$("ddayL").onclick=e=>{const b=e.target.closest("[data-ddel]");if(!b)return;ask(b,()=>{S.log=S.log.filter(x=>String(x.id)!==b.dataset.ddel);save();openDayView();rs();rk();prev();toast("Entry delete hoyeche")})};
 
 $("sv").onclick=()=>{const i=+$("pe").value,c=n("c1"),p=n("c2");if(!c&&!p){$("ms").textContent="Ctn ba pcs dao";return}
 const id=Date.now()*1000+Math.floor(Math.random()*1000),d=$("dt").value||today();
