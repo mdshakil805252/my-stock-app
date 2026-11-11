@@ -16,6 +16,7 @@
   --ac:#0d9488;--ac-light:rgba(13,148,136,0.1);--ac-hover:#0f766e;--bd:#e2e8f0;
   --bad:#ef4444;--bad-light:rgba(239,68,68,0.1);--jm:#2563eb;--jm-light:rgba(37,99,235,0.1);
   --sh:0 6px 18px -4px rgba(15,23,42,0.05);--sh-sm:0 2px 6px rgba(15,23,42,0.04);--radius:16px;
+  --grad:linear-gradient(135deg,#0d9488,#2563eb);
   box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
 }
 @media (prefers-color-scheme:dark){
@@ -23,178 +24,338 @@
     --bg:#0b0f17;--card:#141b26;--card-sub:#1a2332;--tx:#f1f5f9;--mut:#94a3b8;
     --ac:#2dd4bf;--ac-light:rgba(45,212,191,0.12);--ac-hover:#14b8a6;--bd:#222f3e;
     --bad:#f87171;--bad-light:rgba(248,113,113,0.15);--jm:#60a5fa;--jm-light:rgba(96,165,250,0.15);
+    --grad:linear-gradient(135deg,#14b8a6,#3b82f6);
   }
 }
+:root[data-theme="dark"]{
+  --bg:#0b0f17;--card:#141b26;--card-sub:#1a2332;--tx:#f1f5f9;--mut:#94a3b8;
+  --ac:#2dd4bf;--ac-light:rgba(45,212,191,0.12);--ac-hover:#14b8a6;--bd:#222f3e;
+  --bad:#f87171;--bad-light:rgba(248,113,113,0.15);--jm:#60a5fa;--jm-light:rgba(96,165,250,0.15);
+  --grad:linear-gradient(135deg,#14b8a6,#3b82f6);
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:'Hind Siliguri','Plus Jakarta Sans',system-ui,sans-serif;padding:12px;max-width:620px;margin:0 auto;-webkit-font-smoothing:antialiased}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Hind Siliguri','Plus Jakarta Sans',system-ui,sans-serif;padding:12px;max-width:620px;margin:0 auto;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+/* Splash */
+#splash{position:fixed;inset:0;z-index:9999;background:var(--grad);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;transition:opacity .5s,visibility .5s}
+#splash.hide{opacity:0;visibility:hidden}
+#splash .logo{font-size:64px;animation:bounce 1.2s infinite}
+#splash h1{margin:12px 0 4px;font-size:26px;font-weight:800;letter-spacing:.5px}
+#splash p{margin:0;opacity:.85;font-size:14px}
+#splash .bar{margin-top:24px;width:160px;height:4px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
+#splash .bar i{display:block;height:100%;width:40%;background:#fff;border-radius:2px;animation:load 1.2s ease-in-out infinite}
+@keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+/* Offline bar */
+#offbar{position:fixed;top:0;left:0;right:0;background:#f59e0b;color:#fff;text-align:center;font-size:12.5px;font-weight:600;padding:4px;z-index:1000;transform:translateY(-100%);transition:transform .3s}
+#offbar.show{transform:translateY(0)}
+/* Header */
+.top-bar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;margin:0 -12px 10px;background:var(--grad);color:#fff;box-shadow:0 4px 14px -4px rgba(13,148,136,.4);transition:padding .25s}
+.top-bar .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;letter-spacing:.3px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.top-bar .brand:active{transform:scale(.97)}
+.top-bar .brand .ico{font-size:20px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.top-bar .right{display:flex;align-items:center;gap:8px}
+.theme-btn{background:rgba(255,255,255,.2);border:0;color:#fff;font-size:16px;padding:6px 10px;border-radius:20px;cursor:pointer;line-height:1}
+.net-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.2);font-size:11.5px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 2s infinite}
+.dot.off{background:#f59e0b;animation:none;box-shadow:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}70%{box-shadow:0 0 0 8px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+/* Cards */
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--sh);animation:fadeUp .4s ease both;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);opacity:.7}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+details.card::before{display:none}
 label{font-size:13px;font-weight:600;color:var(--mut);display:block;margin:10px 0 5px}
-select,input{width:100%;font-size:15.5px;font-family:inherit;padding:11px 13px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);outline:none}
+select,input{width:100%;font-size:15.5px;font-family:inherit;padding:11px 13px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
 select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shadow:0 0 0 3px var(--ac-light)}
 .row{display:flex;gap:10px}.row>*{flex:1}
-.top-bar{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 8px;font-size:12.5px;font-weight:600}
-.net-status{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:20px;background:var(--card);border:1px solid var(--bd)}
-.dot{width:8px;height:8px;border-radius:50%;background:#22c55e}.dot.off{background:#eab308}
-.nav{position:sticky;top:0;z-index:15;background:rgba(244,246,250,0.9);backdrop-filter:blur(10px);padding:6px 0 10px;margin-bottom:8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .nav{background:rgba(11,15,23,0.9)}}
-.nav::-webkit-scrollbar{display:none}
-.nav button{flex:0 0 auto;padding:9px 15px;font-size:13.5px;font-weight:600;border-radius:30px;border:1px solid var(--bd);background:var(--card);color:var(--mut);box-shadow:var(--sh-sm);transition:background 0.15s,color 0.15s}
-.nav button.on{background:var(--ac);color:#fff;border-color:var(--ac);box-shadow:0 3px 10px rgba(13,148,136,0.35)}
-button{font-family:inherit;font-size:14.5px;font-weight:600;padding:11px 14px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent}
-button:active{transform:scale(0.97)}
+/* Home Grid */
+.home-hero{background:var(--grad);color:#fff;border-radius:var(--radius);padding:22px 18px;margin-bottom:16px;text-align:center;box-shadow:0 8px 24px -6px rgba(13,148,136,.4);position:relative;overflow:hidden}
+.home-hero::after{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.1)}
+.home-hero .hi{font-size:42px;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+.home-hero h2{margin:0 0 4px;font-size:22px;font-weight:800;color:#fff;justify-content:center}
+.home-hero p{margin:0;font-size:13.5px;opacity:.9}
+.home-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+.tile{background:var(--card);border:1px solid var(--bd);border-radius:var(--radius);padding:18px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:var(--sh-sm);transition:transform .18s,box-shadow .18s,border-color .18s;position:relative;overflow:hidden;animation:fadeUp .4s ease both;user-select:none;-webkit-tap-highlight-color:transparent}
+.tile::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--tileColor,var(--ac));opacity:.9}
+.tile:active{transform:scale(.96)}
+.tile:hover{border-color:var(--tileColor,var(--ac));box-shadow:0 8px 22px -6px rgba(13,148,136,.25);transform:translateY(-2px)}
+.tile .tico{font-size:30px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.08))}
+.tile .tname{font-size:14.5px;font-weight:700;color:var(--tx);text-align:center}
+.tile .tsub{font-size:11px;color:var(--mut);font-weight:500;text-align:center;line-height:1.3}
+.tile[data-color="1"]{--tileColor:#0d9488}
+.tile[data-color="2"]{--tileColor:#2563eb}
+.tile[data-color="3"]{--tileColor:#f59e0b}
+.tile[data-color="4"]{--tileColor:#8b5cf6}
+.tile[data-color="5"]{--tileColor:#ec4899}
+.tile[data-color="6"]{--tileColor:#10b981}
+.tile[data-color="7"]{--tileColor:#ef4444}
+.tile[data-color="8"]{--tileColor:#06b6d4}
+/* Page */
+.page-wrap{display:none}
+.page-wrap.on{display:block;animation:fadeUp .35s ease}
+.page-back{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--card);border:1px solid var(--bd);border-radius:24px;font-size:13.5px;font-weight:600;color:var(--ac);cursor:pointer;margin-bottom:12px;box-shadow:var(--sh-sm);transition:transform .15s,background .2s;user-select:none;-webkit-tap-highlight-color:transparent}
+.page-back:active{transform:scale(.96)}
+.page-back:hover{background:var(--ac-light)}
+.page-title{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:800;margin:0 0 12px;color:var(--tx)}
+.page-title .pico{font-size:24px}
+/* Buttons */
+button{font-family:inherit;font-size:14.5px;font-weight:600;padding:11px 14px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .15s,background .2s,box-shadow .2s;position:relative;overflow:hidden}
+button:active{transform:scale(.97)}
 button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.big{width:100%;background:linear-gradient(135deg,var(--ac),var(--ac-hover));color:#fff!important;border:0;font-size:16px;font-weight:700;padding:13px;border-radius:12px;box-shadow:0 4px 12px rgba(13,148,136,0.3);margin-top:12px}
+.big{width:100%;background:var(--grad);color:#fff!important;border:0;font-size:16px;font-weight:700;padding:13px;border-radius:12px;box-shadow:0 4px 14px rgba(13,148,136,.3);margin-top:12px}
+.big::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:shine 3s infinite}
+@keyframes shine{0%{left:-100%}60%{left:100%}100%{left:100%}}
+.big.success{background:linear-gradient(135deg,#16a34a,#22c55e)!important}
 .sub{color:var(--mut);font-size:13.5px;line-height:1.5}
 .res{color:var(--ac);font-weight:800;font-size:21px;margin-top:8px}
+h2{font-size:17px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:6px}
+/* Tables */
 .wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--bd)}
 table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
 th{background:var(--card-sub);color:var(--mut);font-weight:600;font-size:12.5px;padding:10px 8px;border-bottom:1.5px solid var(--bd)}
 td{padding:10px 8px;border-bottom:1px solid var(--bd);vertical-align:middle;font-variant-numeric:tabular-nums}
 td:nth-child(n+3){text-align:right;white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
-tbody tr:hover{background:rgba(13,148,136,0.03)}
+tbody tr{animation:rowIn .35s ease both}
+tbody tr:hover{background:rgba(13,148,136,.04)}
+@keyframes rowIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
 .x{color:var(--bad);background:var(--bad-light);border:none;border-radius:8px;padding:4px 10px;font-weight:700;font-size:13px}
-h2{font-size:17px;font-weight:700;margin:0 0 8px}
-.dt{font-size:12.5px;padding:5px 10px;margin-top:6px;border-radius:8px;background:var(--card-sub)}
-.v{display:none}
-.v.on{display:block}
+.dt{font-size:12.5px;padding:5px 10px;margin-top:6px;border-radius:8px;background:var(--card-sub);transition:background .2s}
+.dt:hover{background:var(--ac-light)}
 #ms{color:var(--ac);font-weight:600;font-size:14px;min-height:20px;margin-top:8px;text-align:center}
+/* Accordion */
 details{border:1px solid var(--bd);border-radius:var(--radius);padding:14px;background:var(--card);box-shadow:var(--sh-sm)}
 details summary{font-size:15.5px;font-weight:600;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between}
 details summary::after{content:'+';font-size:18px;font-weight:700;color:var(--ac)}
 details[open] summary::after{content:'−'}
-.modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,0.6);backdrop-filter:blur(6px);z-index:40;padding:14px;padding-top:calc(14px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center}
-.modal-wrap>.card{width:100%}
-.prod-pick-item{padding:12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
-.prod-pick-item:active{background:var(--ac-light);border-color:var(--ac)}
+/* Modal */
+.modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:40;padding:14px;padding-top:calc(14px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center;animation:backdropIn .25s}
+@keyframes backdropIn{from{opacity:0}to{opacity:1}}
+.modal-wrap>.card{width:100%;animation:modalIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes modalIn{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+#hd{align-items:flex-start;padding-top:calc(24px + env(safe-area-inset-top,0px))}
+#hd .card{max-height:90vh;display:flex;flex-direction:column;overflow:hidden;margin:0 auto}
+#hd .card > .row:first-child,
+#hd .card > #hds,
+#hd .card > .row:nth-of-type(2),
+#hd .card > .row:nth-of-type(3),
+#hd .card > label,
+#hd .card > input,
+#hd .card > #hdp,
+#hd .card > #hdv,
+#hd .card > #hdpdf,
+#hd .card > #hdpmsg{flex:0 0 auto}
+#hd .card > .wrap{margin-top:12px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0}
+/* Product Picker */
+.prod-pick-item{padding:12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;transition:all .2s}
+.prod-pick-item:active{background:var(--ac-light);border-color:var(--ac);transform:scale(.98)}
+/* Empty State */
+.empty{display:flex;flex-direction:column;align-items:center;padding:28px 12px;gap:8px;color:var(--mut)}
+.empty .eico{font-size:40px;opacity:.6;animation:float 3s ease-in-out infinite}
+.empty .etxt{font-size:13.5px;font-weight:500}
+/* Toast */
+#toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-30px);background:var(--ac);color:#fff;padding:10px 20px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;display:flex;align-items:center;gap:8px;max-width:90%}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.bad{background:var(--bad)}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <span style="font-weight:700;color:var(--ac)">📦 Stock Register</span>
-  <div class="net-status"><span id="netDot" class="dot"></span><span id="netTx">Online</span></div>
+<div id="splash">
+  <div class="logo">📦</div>
+  <h1>Stock Register</h1>
+  <p>Loading your data…</p>
+  <div class="bar"><i></i></div>
 </div>
 
-<div class="nav" id="navBar">
-  <button data-v="0" class="on">Entry</button><button data-v="1">Stock</button>
-  <button data-v="4">Market</button><button data-v="5">Calc</button>
-  <button data-v="2">Khata</button><button data-v="3">Product</button>
-  <button data-v="6">Hisab</button><button data-v="7">Summary</button>
+<div id="offbar">📴 Offline mode — data local e save hobe</div>
+<div id="toast"></div>
+
+<div class="top-bar" id="topBar">
+  <div class="brand" id="brandHome"><span class="ico">📦</span><span>Stock Register</span></div>
+  <div class="right">
+    <div class="net-status"><span id="netDot" class="dot"></span><span id="netTx">Online</span></div>
+    <button class="theme-btn" id="themeBtn" title="Theme">🌙</button>
+  </div>
 </div>
 
-<div id="swipeArea" style="min-height:80vh">
-<div class="v on" id="v0"><div class="card">
-<div style="display:none"><button data-t="open" class="on">Prothom stock +</button><button data-t="mk">Market e gelo −</button></div>
-<div class="sub" style="margin-top:2px">Ekhane shudhu stock jog hoy (Prothom stock), jekono tarikhe. Market er mal ber/ferot Market tab e.</div>
-<label>Tarikh</label><input id="dt" type="date">
-<label>Product</label>
-<div style="display:flex;gap:6px">
-  <button id="pv0" style="flex:0 0 44px;padding:0;font-size:16px">◀</button>
-  <select id="pe" style="display:none"></select>
-  <button id="pe_btn" type="button" style="flex:1;min-width:0;text-align:left;font-size:15px;font-weight:600;padding:11px 13px;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;display:flex;justify-content:space-between;align-items:center">
-    <span id="pe_name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Product baachun</span>
-    <span style="font-size:12px;color:var(--mut);flex:0 0 auto;margin-left:6px">▼</span>
-  </button>
-  <button id="nx0" style="flex:0 0 44px;padding:0;font-size:16px">▶</button>
-</div>
-<div class="row" style="margin-top:8px"><button id="de">Details</button><button id="se">Pcs/Ctn</button></div>
-<div class="row"><div><label>CTN</label><input id="c1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="c2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div></div>
-<label>Kroy dor (dealer price), 1 ctn = ___ tk</label><input id="ec" type="number" inputmode="decimal" step="any" min="0">
-<div id="rtw" style="display:none"><label>Ctn dor (tk), product er dam theke ashe, bodlate paro</label><input id="rt" type="number" inputmode="decimal" step="any" min="0"></div>
-<div class="sub" id="pv" style="margin-top:10px;font-weight:500"></div>
-<label style="display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--tx);cursor:pointer"><input type="checkbox" id="nx" style="width:auto;accent-color:var(--ac)"> Save korle porer product e jabe</label>
-<button class="big" id="sv">Save koro</button><div id="ms"></div>
-<button id="gb" style="display:none;width:100%;margin-top:10px">Ferot dao / Bikri hishab dekho →</button>
-</div>
-<details class="card" id="ad"><summary style="font-size:15.5px;font-weight:600">Notun product add</summary>
-<div style="margin-top:8px">
-<label>Nam</label><input id="nn" type="text" placeholder="Product er nam">
-<div class="row"><div><label>1 ctn e pcs</label><input id="nk" type="number" inputmode="numeric" min="1" placeholder="1"></div><div><label>1 ctn dam (tk)</label><input id="np" type="number" inputmode="decimal" min="0" placeholder="0"></div></div>
-<button class="big" id="na">+ Add koro</button>
-</div>
-</details>
+<!-- ================= HOME ================= -->
+<div class="page-wrap on" id="pgHome">
+  <div class="home-hero">
+    <div class="hi">📦</div>
+    <h2>Stock Register</h2>
+    <p>Apnar dokan er shob hisab ek jaygay</p>
+  </div>
+  <div class="home-grid">
+    <div class="tile" data-color="1" data-page="0"><div class="tico">📥</div><div class="tname">Entry</div><div class="tsub">Stock jog koro</div></div>
+    <div class="tile" data-color="2" data-page="1"><div class="tico">📊</div><div class="tname">Stock</div><div class="tsub">Stock dekho & PDF</div></div>
+    <div class="tile" data-color="3" data-page="4"><div class="tico">🛒</div><div class="tname">Market</div><div class="tsub">Mal ber & ferot</div></div>
+    <div class="tile" data-color="4" data-page="5"><div class="tico">🧮</div><div class="tname">Calc</div><div class="tsub">Quick hisab</div></div>
+    <div class="tile" data-color="5" data-page="2"><div class="tico">📒</div><div class="tname">Khata</div><div class="tsub">Shesh entry gulo</div></div>
+    <div class="tile" data-color="6" data-page="3"><div class="tico">🏷️</div><div class="tname">Product</div><div class="tsub">Pcs/ctn & dam</div></div>
+    <div class="tile" data-color="7" data-page="6"><div class="tico">💰</div><div class="tname">Hisab</div><div class="tsub">Bekti wise joma/khoroch</div></div>
+    <div class="tile" data-color="8" data-page="7"><div class="tico">📈</div><div class="tname">Summary</div><div class="tsub">Total sell/joma/baki</div></div>
+  </div>
+  <div class="card" style="text-align:center;padding:12px">
+    <div class="sub">💡 Protidin backup nite bhulben na — Product tab theke.</div>
+  </div>
 </div>
 
-<div class="v" id="v1"><div class="card">
-<div class="row" id="sm3"><button data-m="0" class="on">Ekhon</button><button data-m="1">Tarikh obdhi</button><button data-m="2">Lenden</button></div>
-<div class="row" id="rg" style="display:none;margin-top:8px"><div id="d1w"><label>Theke</label><input id="d1" type="date"></div><div><label id="d2l">Tarikh porjonto</label><input id="d2" type="date"></div></div>
-<input id="q" placeholder="🔍 Product khujo..." style="margin-top:12px">
-<div class="wrap" style="margin-top:12px"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
-<div class="res" id="tv"></div>
-<button class="big" id="pdf">PDF download</button><div id="pm" class="sub" style="margin-top:8px;text-align:center"></div>
-</div></div>
-
-<div class="v" id="v4">
-<div class="card"><label>Market er tarikh</label><input id="mdt" type="date"></div>
-<div class="card"><h2>1. Bahir (mal gelo)</h2>
-<div style="display:flex;gap:6px"><button id="mbv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="mb" style="flex:1;min-width:0"></select><button id="mbx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
-<div class="row"><div><label>CTN</label><input id="mb1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="mb2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>Dor / ctn</label><input id="mbr" type="number" inputmode="decimal" step="any" min="0"></div></div>
-<label style="display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--tx);cursor:pointer"><input type="checkbox" id="mbc" checked style="width:auto;accent-color:var(--ac)"> Add korle porer product e jabe</label>
-<button class="big" id="mba">+ Bahir e jog koro</button><div id="mbm" class="sub" style="min-height:18px;margin-top:6px;text-align:center"></div>
-<div id="mbl"></div></div>
-<div class="card"><h2>2. Ferot</h2>
-<div style="display:flex;gap:6px"><button id="mfv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="mf" style="flex:1;min-width:0"></select><button id="mfx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
-<div id="mfb"><div class="row"><div><label>Ferot CTN</label><input id="mf1" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Ferot PCS</label><input id="mf2" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Dor / ctn</label><input id="mfr" type="number" inputmode="decimal" step="any" min="0"></div></div></div>
-<div id="mfi" style="margin-top:10px;line-height:1.7"></div></div>
-<button class="big" id="mfin" style="margin-bottom:12px">Finish: pura Market Sheet dekho</button>
-<div id="msheet"></div>
-<div class="card"><h2>History (tarikh onujayi)</h2><div class="row"><div><label>Theke</label><input id="hy1" type="date"></div><div><label>Porjonto</label><input id="hy2" type="date"></div></div>
-<div class="sub" style="margin-top:6px">Tarikh na dile shob market ashbe.</div><div id="hys" style="margin-top:10px;line-height:1.8"></div>
-<button class="big" id="hypdf">History PDF</button><div id="hym" class="sub" style="margin-top:8px;text-align:center"></div></div>
+<!-- ================= PAGE 0: Entry ================= -->
+<div class="page-wrap" id="pg0">
+  <div class="page-back" data-home>← Home</div>
+  <div class="page-title"><span class="pico">📥</span> Entry</div>
+  <div class="card">
+    <div style="display:none"><button data-t="open" class="on">Prothom stock +</button><button data-t="mk">Market e gelo −</button></div>
+    <div class="sub" style="margin-top:2px">Ekhane shudhu stock jog hoy (Prothom stock), jekono tarikhe. Market er mal ber/ferot Market tab e.</div>
+    <label>Tarikh</label><input id="dt" type="date">
+    <label>Product</label>
+    <div style="display:flex;gap:6px">
+      <button id="pv0" style="flex:0 0 44px;padding:0;font-size:16px">◀</button>
+      <select id="pe" style="display:none"></select>
+      <button id="pe_btn" type="button" style="flex:1;min-width:0;text-align:left;font-size:15px;font-weight:600;padding:11px 13px;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;display:flex;justify-content:space-between;align-items:center">
+        <span id="pe_name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Product baachun</span>
+        <span style="font-size:12px;color:var(--mut);flex:0 0 auto;margin-left:6px">▼</span>
+      </button>
+      <button id="nx0" style="flex:0 0 44px;padding:0;font-size:16px">▶</button>
+    </div>
+    <div class="row" style="margin-top:8px"><button id="de">Details</button><button id="se">Pcs/Ctn</button></div>
+    <div class="row"><div><label>CTN</label><input id="c1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="c2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div></div>
+    <label>Kroy dor (dealer price), 1 ctn = ___ tk</label><input id="ec" type="number" inputmode="decimal" step="any" min="0">
+    <div id="rtw" style="display:none"><label>Ctn dor (tk), product er dam theke ashe, bodlate paro</label><input id="rt" type="number" inputmode="decimal" step="any" min="0"></div>
+    <div class="sub" id="pv" style="margin-top:10px;font-weight:500"></div>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--tx);cursor:pointer"><input type="checkbox" id="nx" style="width:auto;accent-color:var(--ac)"> Save korle porer product e jabe</label>
+    <button class="big" id="sv">Save koro</button><div id="ms"></div>
+    <button id="gb" style="display:none;width:100%;margin-top:10px">Ferot dao / Bikri hishab dekho →</button>
+  </div>
+  <details class="card" id="ad"><summary style="font-size:15.5px;font-weight:600">➕ Notun product add</summary>
+    <div style="margin-top:8px">
+      <label>Nam</label><input id="nn" type="text" placeholder="Product er nam">
+      <div class="row"><div><label>1 ctn e pcs</label><input id="nk" type="number" inputmode="numeric" min="1" placeholder="1"></div><div><label>1 ctn dam (tk)</label><input id="np" type="number" inputmode="decimal" min="0" placeholder="0"></div></div>
+      <button class="big" id="na">+ Add koro</button>
+    </div>
+  </details>
 </div>
 
-<div class="v" id="v6"><div class="card"><button class="big" id="hadd" style="margin-top:0">+ Add</button>
-<div class="wrap" style="margin-top:12px"><table><thead><tr><th>Nam</th><th style="text-align:right">Joma</th><th style="text-align:right">Khoroch</th><th style="text-align:right">Baki</th><th></th></tr></thead><tbody id="hb"></tbody></table></div>
-<div id="ht" style="margin-top:12px;line-height:1.8"></div>
-<label style="display:flex;gap:8px;align-items:center;color:var(--tx);margin-top:12px;cursor:pointer"><input type="checkbox" id="hdet" style="width:auto;accent-color:var(--ac)"> PDF e protita entry-o dekhao</label>
-<button class="big" id="hpdf" style="margin-top:10px">PDF download</button><div id="hpm" class="sub" style="margin-top:8px;text-align:center"></div></div></div>
-
-<div class="v" id="v7">
-<div class="card"><div class="row"><div><label>Theke</label><input id="zs1" type="date"></div><div><label>Porjonto</label><input id="zs2" type="date"></div></div><div class="sub" style="margin-top:6px">Tarikh na dile shob din. Sell Market theke, Joma/Khoroch Hisab theke auto ashe.</div></div>
-<div class="card"><h2>Total</h2><div id="zg"></div></div>
-<div id="zl"></div>
+<!-- ================= PAGE 1: Stock ================= -->
+<div class="page-wrap" id="pg1">
+  <div class="page-back" data-home>← Home</div>
+  <div class="page-title"><span class="pico">📊</span> Stock</div>
+  <div class="card">
+    <div class="row" id="sm3"><button data-m="0" class="on">Ekhon</button><button data-m="1">Tarikh obdhi</button><button data-m="2">Lenden</button></div>
+    <div class="row" id="rg" style="display:none;margin-top:8px"><div id="d1w"><label>Theke</label><input id="d1" type="date"></div><div><label id="d2l">Tarikh porjonto</label><input id="d2" type="date"></div></div>
+    <input id="q" placeholder="🔍 Product khujo..." style="margin-top:12px">
+    <div class="wrap" style="margin-top:12px"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+    <div class="res" id="tv"></div>
+    <button class="big" id="pdf">📄 PDF download</button><div id="pm" class="sub" style="margin-top:8px;text-align:center"></div>
+  </div>
 </div>
 
-<div class="v" id="v5"><div class="card"><label>Product</label><div style="display:flex;gap:6px"><button id="cpv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="cp" style="flex:1;min-width:0"></select><button id="cnx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
-<div class="sub" id="ci" style="margin-top:6px"></div>
-<h2 style="margin-top:14px">Prothom</h2>
-<div class="row"><div><label>CTN</label><input id="ca1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="ca2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
-<div class="row" style="margin-top:12px"><button id="cm0" class="on">− Biyog</button><button id="cp0">+ Jog</button></div>
-<div class="row"><div><label>CTN</label><input id="cb1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="cb2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
-<div class="res" id="cr">0 ctn 0 pcs</div><div class="sub" id="ct"></div><div class="res" id="cd" style="font-size:20px"></div></div></div>
-
-<div class="v" id="v2"><div class="card"><h2>Shesh 150 ta entry</h2><div class="wrap"><table><tbody id="kh"></tbody></table></div></div></div>
-
-<div class="v" id="v3">
-<div class="card"><h2>Product er pcs/ctn ar dam</h2>
-<div style="display:flex;gap:6px"><button id="ppv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="pp" style="flex:1;min-width:0"></select><button id="pnx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
-<div class="row"><div><label>1 ctn = ___ pcs</label><input id="pk" type="number" inputmode="numeric" min="1"></div><div><label>1 ctn dam (tk)</label><input id="pd" type="number" inputmode="decimal" min="0"></div></div>
-<label>Lav % (bikri dam theke koto % lav pao). Kroy dor = dam − dam × lav%</label><input id="plv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="pcr" type="number" inputmode="decimal" min="0"></div>
-<details class="card" id="bkd"><summary class="sub" style="cursor:pointer;font-weight:600">💾 Backup (data nirapod rakhte)</summary>
-<div style="margin-top:8px"><div class="row"><button id="bk">Backup download</button><button id="rs0">Restore</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:8px"></div>
-<div id="bkset" style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0">
-<div class="sub" id="bklast" style="margin-bottom:8px"></div>
-<div class="row" style="align-items:center;gap:8px"><span class="sub">Remainder:</span>
-<select id="bkfreq"><option value="1">Protidin</option><option value="3">3 din por por</option><option value="7">7 din por por</option><option value="0">Bondho</option></select></div>
-<label class="sub" style="display:flex;align-items:center;gap:8px;margin-top:8px"><input type="checkbox" id="bkauto"> Auto backup (app khulle nijei download hobe)</label>
-</div></div></details>
-<details class="card" id="rsd"><summary class="sub" style="cursor:pointer;font-weight:600">⚙ Reset</summary>
-<div style="margin-top:8px">
-<div class="sub" style="margin:8px 0">Reset korar age Backup nao. Protita button 2 bar chapte hobe.</div>
-<button id="r1" style="width:100%;margin-bottom:8px">Shob entry muche felo (product, pcs/ctn, dam thakbe)</button>
-<button id="r2" style="width:100%;margin-bottom:8px">Pura reset (product, pcs/ctn, dam shoho shob)</button>
-<button id="r3" style="width:100%">Reset undo (ager obosthay ferot)</button>
-<div class="sub" id="rm" style="margin-top:8px"></div>
-</div></details>
-</div>
+<!-- ================= PAGE 4: Market ================= -->
+<div class="page-wrap" id="pg4">
+  <div class="page-back" data-home>← Home</div>
+  <div class="page-title"><span class="pico">🛒</span> Market</div>
+  <div class="card"><label>Market er tarikh</label><input id="mdt" type="date"></div>
+  <div class="card"><h2>🚚 1. Bahir (mal gelo)</h2>
+    <div style="display:flex;gap:6px"><button id="mbv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="mb" style="flex:1;min-width:0"></select><button id="mbx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
+    <div class="row"><div><label>CTN</label><input id="mb1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="mb2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>Dor / ctn</label><input id="mbr" type="number" inputmode="decimal" step="any" min="0"></div></div>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--tx);cursor:pointer"><input type="checkbox" id="mbc" checked style="width:auto;accent-color:var(--ac)"> Add korle porer product e jabe</label>
+    <button class="big" id="mba">+ Bahir e jog koro</button><div id="mbm" class="sub" style="min-height:18px;margin-top:6px;text-align:center"></div>
+    <div id="mbl"></div>
+  </div>
+  <div class="card"><h2>↩️ 2. Ferot</h2>
+    <div style="display:flex;gap:6px"><button id="mfv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="mf" style="flex:1;min-width:0"></select><button id="mfx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
+    <div id="mfb"><div class="row"><div><label>Ferot CTN</label><input id="mf1" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Ferot PCS</label><input id="mf2" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Dor / ctn</label><input id="mfr" type="number" inputmode="decimal" step="any" min="0"></div></div></div>
+    <div id="mfi" style="margin-top:10px;line-height:1.7"></div>
+  </div>
+  <button class="big" id="mfin" style="margin-bottom:12px">✅ Finish: pura Market Sheet dekho</button>
+  <div id="msheet"></div>
+  <div class="card"><h2>📜 History (tarikh onujayi)</h2><div class="row"><div><label>Theke</label><input id="hy1" type="date"></div><div><label>Porjonto</label><input id="hy2" type="date"></div></div>
+    <div class="sub" style="margin-top:6px">Tarikh na dile shob market ashbe.</div><div id="hys" style="margin-top:10px;line-height:1.8"></div>
+    <button class="big" id="hypdf">📄 History PDF</button><div id="hym" class="sub" style="margin-top:8px;text-align:center"></div>
+  </div>
 </div>
 
-<!-- Product Picker Modal with Long Press Delete & Smooth Scroll -->
+<!-- ================= PAGE 5: Calc ================= -->
+<div class="page-wrap" id="pg5">
+  <div class="page-back" data-home>← Home</div>
+  <div class="page-title"><span class="pico">🧮</span> Calc</div>
+  <div class="card"><label>Product</label><div style="display:flex;gap:6px"><button id="cpv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="cp" style="flex:1;min-width:0"></select><button id="cnx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
+    <div class="sub" id="ci" style="margin-top:6px"></div>
+    <h2 style="margin-top:14px">🧮 Prothom</h2>
+    <div class="row"><div><label>CTN</label><input id="ca1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="ca2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
+    <div class="row" style="margin-top:12px"><button id="cm0" class="on">− Biyog</button><button id="cp0">+ Jog</button></div>
+    <div class="row"><div><label>CTN</label><input id="cb1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="cb2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
+    <div class="res" id="cr">0 ctn 0 pcs</div><div class="sub" id="ct"></div><div class="res" id="cd" style="font-size:20px"></div>
+  </div>
+</div>
+
+<!-- ================= PAGE 2: Khata ================= -->
+<div class="page-wrap" id="pg2">
+  <div class="page-back" data-home>← Home</div>
+  <div class="page-title"><span class="pico">📒</span> Khata</div>
+  <div class="card"><h2>📒 Shesh 150 ta entry</h2><div class="wrap"><table><tbody id="kh"></tbody></table></div></div>
+</div>
+
+<!-- ================= PAGE 3: Product ================= -->
+<div class="page-wrap" id="pg3">
+  <div class="page-back" data-home>← Home</div>
+  <div class="page-title"><span class="pico">🏷️</span> Product</div>
+  <div class="card"><h2>🏷️ Product er pcs/ctn ar dam</h2>
+    <div style="display:flex;gap:6px"><button id="ppv" style="flex:0 0 44px;padding:0;font-size:16px">◀</button><select id="pp" style="flex:1;min-width:0"></select><button id="pnx" style="flex:0 0 44px;padding:0;font-size:16px">▶</button></div>
+    <div class="row"><div><label>1 ctn = ___ pcs</label><input id="pk" type="number" inputmode="numeric" min="1"></div><div><label>1 ctn dam (tk)</label><input id="pd" type="number" inputmode="decimal" min="0"></div></div>
+    <label>Lav % (bikri dam theke koto % lav pao). Kroy dor = dam − dam × lav%</label><input id="plv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="pcr" type="number" inputmode="decimal" min="0">
+  </div>
+  <details class="card" id="bkd"><summary class="sub" style="cursor:pointer;font-weight:600">💾 Backup (data nirapod rakhte)</summary>
+    <div style="margin-top:8px"><div class="row"><button id="bk">Backup download</button><button id="rs0">Restore</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:8px"></div>
+    <div id="bkset" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bd)">
+    <div class="sub" id="bklast" style="margin-bottom:8px"></div>
+    <div class="row" style="align-items:center;gap:8px"><span class="sub">Remainder:</span>
+    <select id="bkfreq"><option value="1">Protidin</option><option value="3">3 din por por</option><option value="7">7 din por por</option><option value="0">Bondho</option></select></div>
+    <label class="sub" style="display:flex;align-items:center;gap:8px;margin-top:8px"><input type="checkbox" id="bkauto"> Auto backup (app khulle nijei download hobe)</label>
+    </div></div>
+  </details>
+  <details class="card" id="rsd"><summary class="sub" style="cursor:pointer;font-weight:600">⚙️ Reset</summary>
+    <div style="margin-top:8px">
+      <div class="sub" style="margin:8px 0">Reset korar age Backup nao. Protita button 2 bar chapte hobe.</div>
+      <button id="r1" style="width:100%;margin-bottom:8px">Shob entry muche felo (product, pcs/ctn, dam thakbe)</button>
+      <button id="r2" style="width:100%;margin-bottom:8px">Pura reset (product, pcs/ctn, dam shoho shob)</button>
+      <button id="r3" style="width:100%">Reset undo (ager obosthay ferot)</button>
+      <div class="sub" id="rm" style="margin-top:8px"></div>
+    </div>
+  </details>
+</div>
+
+<!-- ================= PAGE 6: Hisab ================= -->
+<div class="page-wrap" id="pg6">
+  <div class="page-back" data-home>← Home</div>
+  <div class="page-title"><span class="pico">💰</span> Hisab</div>
+  <div class="card"><button class="big" id="hadd" style="margin-top:0">➕ Notun bekti Add</button>
+    <div class="wrap" style="margin-top:12px"><table><thead><tr><th>Nam</th><th style="text-align:right">Joma</th><th style="text-align:right">Khoroch</th><th style="text-align:right">Baki</th><th></th></tr></thead><tbody id="hb"></tbody></table></div>
+    <div id="ht" style="margin-top:12px;line-height:1.8"></div>
+    <label style="display:flex;gap:8px;align-items:center;color:var(--tx);margin-top:12px;cursor:pointer"><input type="checkbox" id="hdet" style="width:auto;accent-color:var(--ac)"> PDF e protita entry-o dekhao</label>
+    <button class="big" id="hpdf" style="margin-top:10px">📄 PDF download</button><div id="hpm" class="sub" style="margin-top:8px;text-align:center"></div>
+  </div>
+</div>
+
+<!-- ================= PAGE 7: Summary ================= -->
+<div class="page-wrap" id="pg7">
+  <div class="page-back" data-home>← Home</div>
+  <div class="page-title"><span class="pico">📈</span> Summary</div>
+  <div class="card"><h2>📅 Tarikh porisima</h2><div class="row"><div><label>Theke</label><input id="zs1" type="date"></div><div><label>Porjonto</label><input id="zs2" type="date"></div></div><div class="sub" style="margin-top:6px">Tarikh na dile shob din. Sell Market theke, Joma/Khoroch Hisab theke auto ashe.</div></div>
+  <div class="card"><h2>📊 Total</h2><div id="zg"></div></div>
+  <div id="zl"></div>
+</div>
+
+<!-- ================= MODALS ================= -->
 <div id="ppm" class="modal-wrap" style="display:none">
   <div class="card" style="max-width:540px;max-height:85vh;display:flex;flex-direction:column;padding:16px;">
     <div class="row" style="align-items:center;margin-bottom:8px">
-      <h2 style="flex:1;margin:0">Product List</h2>
+      <h2 style="flex:1;margin:0">🔍 Product List</h2>
       <button id="ppmc" style="flex:0 0 auto;padding:6px 14px">Bondho</button>
     </div>
     <div class="sub" style="margin-bottom:10px;font-size:12.5px;">💡 <b>Tap</b> korle select hobe · <b>Chepe dhore rakhle (1s)</b> Delete option ashbe</div>
@@ -205,9 +366,9 @@ details[open] summary::after{content:'−'}
 
 <div id="dm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><div class="row" style="align-items:center"><h2 id="dh" style="flex:1;margin:0"></h2><button id="dc" style="flex:0 0 auto">Bondho</button></div><div class="sub" id="dr" style="margin-top:6px"></div><div id="ds" style="margin:10px 0;line-height:1.7"></div><div class="wrap"><table><tbody id="dl"></tbody></table></div></div></div>
 
-<div id="hm" class="modal-wrap" style="display:none"><div class="card" style="max-width:520px;margin:0 auto"><h2>Notun bekti add</h2><label>Bektir nam</label><input id="hmn" type="text" placeholder="Nam likhun"><div id="hmp" class="sub" style="margin-top:8px;min-height:20px"></div><div class="row" style="margin-top:14px"><button id="hmx">Bondho</button><button class="on" id="hms">Add</button></div></div></div>
+<div id="hm" class="modal-wrap" style="display:none"><div class="card" style="max-width:520px;margin:0 auto"><h2>➕ Notun bekti add</h2><label>Bektir nam</label><input id="hmn" type="text" placeholder="Nam likhun"><div id="hmp" class="sub" style="margin-top:8px;min-height:20px"></div><div class="row" style="margin-top:14px"><button id="hmx">Bondho</button><button class="on" id="hms">Add</button></div></div></div>
 
-<div id="hd" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto">
+<div id="hd" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto;max-height:90vh;display:flex;flex-direction:column;overflow:hidden">
 <div class="row" style="align-items:center"><input id="hdn" type="text" style="flex:1;font-weight:700"><button id="hdc" style="flex:0 0 auto">Bondho</button></div>
 <div id="hds" style="margin:10px 0;line-height:1.7"></div>
 <div class="row"><button id="hdj" class="on">+ Joma</button><button id="hdk">− Khoroch</button></div>
@@ -215,9 +376,11 @@ details[open] summary::after{content:'−'}
 <label>Note (na dileo hoy)</label><input id="hdt" type="text" placeholder="Bistarito...">
 <div id="hdp" style="margin:8px 0;min-height:20px"></div>
 <button class="big" id="hdv" style="margin-top:4px">Save</button>
-<div class="wrap" style="margin-top:12px"><table><tbody id="hdl"></tbody></table></div></div></div>
+<button class="big" id="hdpdf" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);margin-top:8px">📄 Ei bektir PDF</button>
+<div id="hdpmsg" class="sub" style="margin-top:6px;text-align:center;min-height:18px"></div>
+<div class="wrap" style="margin-top:12px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0"><table><tbody id="hdl"></tbody></table></div></div></div>
 
-<div id="cm" class="modal-wrap" style="display:none"><div class="card" style="max-width:420px;margin:0 auto"><h2 style="color:var(--bad)">Delete korben?</h2><div id="cmt" style="margin:10px 0 16px;line-height:1.6"></div><div class="sub" style="margin-bottom:12px">Vul hole pore "Reset undo" diye ferot ante parben.</div><div class="row"><button id="cn">Na, bondho</button><button id="cy" style="background:var(--bad);color:#fff;border-color:var(--bad)">Haa, delete koro</button></div></div></div>
+<div id="cm" class="modal-wrap" style="display:none"><div class="card" style="max-width:420px;margin:0 auto"><h2 style="color:var(--bad)">⚠️ Delete korben?</h2><div id="cmt" style="margin:10px 0 16px;line-height:1.6"></div><div class="sub" style="margin-bottom:12px">Vul hole pore "Reset undo" diye ferot ante parben.</div><div class="row"><button id="cn">Na, bondho</button><button id="cy" style="background:var(--bad);color:#fff;border-color:var(--bad)">Haa, delete koro</button></div></div></div>
 
 <div id="sm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><h2 id="sh"></h2><label>Ei product 1 ctn e koto pcs?</label><input id="sk" type="number" inputmode="numeric" min="1"><label>1 ctn er dam (tk)</label><input id="sd" type="number" inputmode="decimal" min="0"><label>1 pcs er dam (tk), ctn dam theke auto ashe</label><input id="sp" type="number" inputmode="decimal" min="0"><label>Lav % (bikri dam theke koto % lav pao). Kroy dor = dam − dam × lav%</label><input id="slv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk (stock dam er jonno)</label><input id="skc" type="number" inputmode="decimal" min="0"><div class="row" style="margin-top:14px"><button id="sx">Bondho</button><button class="on" id="ss">Save</button></div></div></div>
 
@@ -252,7 +415,7 @@ function mig(){
 }
 mig();
 
-const save=()=>{try{localStorage.setItem("stk1",JSON.stringify(S))}catch(e){alert("Save hocche na! Backup download koro.")}};
+const save=()=>{try{localStorage.setItem("stk1",JSON.stringify(S))}catch(e){toast("Save hocche na! Backup download koro","bad")}};
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 async function dlFile(fn,blob){const dl=window.claude&&claude.use?await claude.use("downloads").catch(()=>null):null;if(dl)await dl.save({filename:fn,data:blob});else{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}}
 const P=()=>BASE.concat(S.custom),K=i=>S.per[i]||P()[i][1]||1,PR=i=>S.pr[i]||0;
@@ -273,6 +436,45 @@ const mm2=v=>(Math.round(v*100)/100).toLocaleString("en-IN"),m2=v=>String(Math.r
 const fmt=(q,k)=>{q=rd(q);const u=Math.abs(q),c=Math.floor(u/k+1e-9);return(q<0?"-":"")+c+" ctn "+rd(u-c*k)+" pcs"};
 const dq=(q,k)=>{q=rd(q);if(k>1&&q%k===0)return q/k+" ctn";const c=q/k;if(k>1&&Math.abs(c*100-Math.round(c*100))<1e-6)return Math.round(c*100)/100+" ctn";return fmt(q,k)};
 const money=v=>Math.round(v).toLocaleString("en-IN");
+
+let toastT=null;
+function toast(msg,type){
+  const el=$("toast");
+  el.textContent=(type==="bad"?"❌ ":"✅ ")+msg;
+  el.className=type==="bad"?"bad":"";
+  el.classList.add("show");
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>el.classList.remove("show"),2200);
+}
+
+function applyTheme(t){
+  const root=document.documentElement;
+  if(t==="dark")root.setAttribute("data-theme","dark");
+  else if(t==="light")root.setAttribute("data-theme","light");
+  else root.removeAttribute("data-theme");
+  $("themeBtn").textContent=t==="dark"?"☀️":"🌙";
+  try{localStorage.setItem("stk1_theme",t)}catch(e){}
+}
+(function initTheme(){
+  let saved=null;try{saved=localStorage.getItem("stk1_theme")}catch(e){}
+  if(saved){applyTheme(saved)}else{
+    const isDark=matchMedia("(prefers-color-scheme:dark)").matches;
+    $("themeBtn").textContent=isDark?"☀️":"🌙";
+  }
+})();
+$("themeBtn").onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  let next;
+  if(cur==="dark")next="light";
+  else if(cur==="light")next="dark";
+  else next=matchMedia("(prefers-color-scheme:dark)").matches?"light":"dark";
+  applyTheme(next);
+};
+
+window.addEventListener("scroll",()=>{
+  const tb=$("topBar");
+  if(window.scrollY>20)tb.classList.add("shrink");else tb.classList.remove("shrink");
+},{passive:true});
 
 function updatePeBtn(){
   const i=+$("pe").value;
@@ -305,13 +507,13 @@ else{const v=M.reduce((s,r)=>s+nq(r)/k*r.r,0);tv+=v;R.push({i,k,c:[fmt(j,k),fmt(
 return{R,tv}}
 
 function rs(){const{R,tv}=getData();$("th").innerHTML="<tr><th>Product</th>"+heads().map(x=>"<th>"+x+"</th>").join("")+"</tr>";
-$("tb").innerHTML=R.map(r=>`<tr><td>${esc(P()[r.i][0])}<br><span class="sub">1 ctn = ${r.k} pcs<br>${rcst(r.i)?"Kroy dor: "+mm2(rcst(r.i))+" tk/ctn (pcs "+mm2(rcst(r.i)/r.k)+")":"<span style='color:var(--bad)'>kroy dor deya nai</span>"}<br>Bikri dam: ${PR(r.i)?mm2(PR(r.i))+" tk/ctn":"nai"}${S.lv[r.i]?" · Lav "+S.lv[r.i]+"%":""}</span><br><button class="dt" data-i="${r.i}">Details</button> <button class="dt" data-s="${r.i}">Pcs/Ctn set</button></td>${r.c.map(c=>"<td>"+c+"</td>").join("")}</tr>`).join("")||'<tr><td colspan="4" class="sub" style="text-align:center;padding:16px">Kono entry nei</td></tr>';
+$("tb").innerHTML=R.map((r,idx)=>`<tr style="animation-delay:${Math.min(idx*20,300)}ms"><td>${esc(P()[r.i][0])}<br><span class="sub">1 ctn = ${r.k} pcs<br>${rcst(r.i)?"Kroy dor: "+mm2(rcst(r.i))+" tk/ctn (pcs "+mm2(rcst(r.i)/r.k)+")":"<span style='color:var(--bad)'>kroy dor deya nai</span>"}<br>Bikri dam: ${PR(r.i)?mm2(PR(r.i))+" tk/ctn":"nai"}${S.lv[r.i]?" · Lav "+S.lv[r.i]+"%":""}</span><br><button class="dt" data-i="${r.i}">Details</button> <button class="dt" data-s="${r.i}">Pcs/Ctn set</button></td>${r.c.map(c=>"<td>"+c+"</td>").join("")}</tr>`).join("")||'<tr><td colspan="4"><div class="empty"><div class="eico">📭</div><div class="etxt">Kono entry nei. Entry tab theke stock jog koro.</div></div></td></tr>';
 $("tv").textContent=R.length?(SM===2?"Total bikri dam: ":"Total stock dam (kroy dor): ")+money(tv)+" tk":""}
 
 function rk(){const A=S.log.map(e=>({k:"l",e})).concat(S.mk.map(r=>({k:"m",e:r}))).sort((a,b)=>b.e.d.localeCompare(a.e.d)||b.e.id-a.e.id).slice(0,150);
 $("kh").innerHTML=A.map(({k,e})=>{const p=P()[e.i],nm=p?esc(p[0]):"?";
 return k==="l"?`<tr><td>${e.d}<br><span class="sub">${LB[e.t]}</span></td><td>${nm}</td><td>${e.c} ctn ${e.p} pcs</td><td><button class="x" data-id="${e.id}">✕</button></td></tr>`
-:`<tr><td>${e.d}<br><span class="sub">Market e gelo</span></td><td>${nm}</td><td>Gelo ${e.gc} ctn ${e.gp} pcs<br><span class="sub">Ferot ${e.fc} ctn ${e.fp} pcs</span></td><td><button class="x" data-mk="${e.id}">✕</button></td></tr>`}).join("")||'<tr><td class="sub" style="text-align:center;padding:16px">Kono entry nei</td></tr>'}
+:`<tr><td>${e.d}<br><span class="sub">Market e gelo</span></td><td>${nm}</td><td>Gelo ${e.gc} ctn ${e.gp} pcs<br><span class="sub">Ferot ${e.fc} ctn ${e.fp} pcs</span></td><td><button class="x" data-mk="${e.id}">✕</button></td></tr>`}).join("")||'<tr><td><div class="empty"><div class="eico">📒</div><div class="etxt">Kono entry nei</div></div></td></tr>'}
 
 function rp(){const i=+$("pp").value;$("pk").value=K(i);$("pd").value=PR(i)||"";$("pcr").value=CP(i)||"";$("plv").value=S.lv[i]||""}
 const mdate=()=>$("mdt").value||today();
@@ -336,7 +538,7 @@ const ffe=()=>{const r=S.mk.find(y=>y.d===mdate()&&String(y.i)===$("mf").value);
 function labOf(R,d){const lc=R.filter(x=>acost(x.i,d)>0);return{cost:lc.reduce((s,x)=>s+x.net/x.k*acost(x.i,d),0),lab:lc.reduce((s,x)=>s+x.v-x.net/x.k*acost(x.i,d),0),n:lc.length}}
 function LAB(R,d){const o=labOf(R,d);return o.n?`Kroy dam: ${mm2(o.cost)} tk · <b style="color:${sc(o.lab)}">Lab: ${sg(o.lab)} tk</b>`+(o.n<R.length?" (kichu product e kroy dor nai)":""):"Kroy dor deya nai, lab dekhano jachche na"}
 function rsheet(){if(!FM){$("msheet").innerHTML="";return}const{R,tv}=sellData();
-$("msheet").innerHTML=`<div class="card"><h2>Market Sheet · ${mdate()}</h2><div class="wrap"><table><thead><tr><th>Product</th><th>Gelo</th><th>Ferot</th><th>Bikri</th><th>Dam</th></tr></thead><tbody>${R.map(x=>`<tr><td>${esc(P()[x.i][0])}<br><span class="sub">dor ${x.r.r?mm2(x.r.r):"?"}</span></td><td>${dq(x.g,x.k)}</td><td>${dq(x.f,x.k)}</td><td><b>${dq(x.net,x.k)}</b></td><td>${x.r.r?mm2(x.v):""}</td></tr>`).join("")||'<tr><td colspan="5" class="sub" style="text-align:center;padding:14px">Kono bahir entry nei</td></tr>'}</tbody><tfoot><tr><td colspan="4"><b>Total dam</b></td><td style="text-align:right"><b>${mm2(tv)}</b></td></tr></tfoot></table></div><div class="res">Total: ${mm2(tv)} tk</div><div class="sub" style="margin-top:6px">${LAB(R,mdate())}</div><button class="big" id="spdf">PDF download</button><div id="spm" class="sub" style="margin-top:8px;text-align:center"></div></div>`;$("spdf").onclick=pdfSheet}
+$("msheet").innerHTML=`<div class="card"><h2>🧾 Market Sheet · ${mdate()}</h2><div class="wrap"><table><thead><tr><th>Product</th><th>Gelo</th><th>Ferot</th><th>Bikri</th><th>Dam</th></tr></thead><tbody>${R.map(x=>`<tr><td>${esc(P()[x.i][0])}<br><span class="sub">dor ${x.r.r?mm2(x.r.r):"?"}</span></td><td>${dq(x.g,x.k)}</td><td>${dq(x.f,x.k)}</td><td><b>${dq(x.net,x.k)}</b></td><td>${x.r.r?mm2(x.v):""}</td></tr>`).join("")||'<tr><td colspan="5"><div class="empty"><div class="eico">🛒</div><div class="etxt">Kono bahir entry nei</div></div></td></tr>'}</tbody><tfoot><tr><td colspan="4"><b>Total dam</b></td><td style="text-align:right"><b>${mm2(tv)}</b></td></tr></tfoot></table></div><div class="res">Total: ${mm2(tv)} tk</div><div class="sub" style="margin-top:6px">${LAB(R,mdate())}</div><button class="big" id="spdf">📄 PDF download</button><div id="spm" class="sub" style="margin-top:8px;text-align:center"></div></div>`;$("spdf").onclick=pdfSheet}
 function rsell(){opts2();if($("mbr").value==="")rmb();rlist();rferot();rsheet();hyRender()}
 $("mb").onchange=rmb;$("mf").onchange=rferot;
 $("mbv").onclick=()=>stp("mb",-1,rmb);$("mbx").onclick=()=>stp("mb",1,rmb);
@@ -347,16 +549,16 @@ $("mfin").onclick=()=>{FM=true;rsheet();try{$("msheet").scrollIntoView({behavior
 $("mba").onclick=()=>{const i=+$("mb").value,c=n("mb1"),p=n("mb2");if(!c&&!p){$("mbm").textContent="Ctn ba pcs dao";return}
 const d=mdate();let r=S.mk.find(x=>x.d===d&&x.i===i);if(!r){r={id:Date.now()*1000+Math.floor(Math.random()*1000),d,i,gc:0,gp:0,fc:0,fp:0,r:0};S.mk.push(r)}
 r.gc=rd(r.gc+c);r.gp=rd(r.gp+p);r.r=$("mbr").value!==""?Math.max(0,parseFloat($("mbr").value)||0):PR(i);save();$("mb1").value=$("mb2").value="";
-$("mbm").textContent="Jog hoyeche ✓";setTimeout(()=>$("mbm").textContent="",2000);if($("mbc").checked)stp("mb",1,rmb);rsell()};
+$("mbm").textContent="Jog hoyeche ✓";toast("Bahir entry jog hoyeche");setTimeout(()=>$("mbm").textContent="",2000);if($("mbc").checked)stp("mb",1,rmb);rsell()};
 let CM=-1;
 function rcalc(){const i=+$("cp").value||0,k=K(i),a=(+$("ca1").value||0)*k+(+$("ca2").value||0),b=(+$("cb1").value||0)*k+(+$("cb2").value||0),t=a+CM*b;
 $("ci").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  ctn dam "+mm2(PR(i))+" tk  |  pcs dam "+mm2(PR(i)/k)+" tk":"");
 $("cr").textContent=fmt(t,k);$("cr").style.color=t<0?"var(--bad)":"";$("ct").textContent="Total "+t+" pcs";$("cd").textContent=PR(i)?"Dam: "+mm2(t/k*PR(i))+" tk":""}
 
-/* ===== Fast Navigation, Lazy Tabs & Super-Smooth Swipe ===== */
+/* ===== Page Navigation with History ===== */
 const MODAL_IDS = ["ppm", "dm", "hm", "hd", "cm", "sm"];
-const TAB_ORDER = ["0", "1", "4", "5", "2", "3", "6", "7"];
-let currentTab = "0";
+const PAGE_ORDER = ["home", "0", "1", "4", "5", "2", "3", "6", "7"];
+let currentPage = "home";
 
 function getOpenModal() {
   for (const id of MODAL_IDS) {
@@ -378,6 +580,9 @@ function openModal(id) {
   const el = $(id);
   if (el) {
     el.style.display = "flex";
+    const inner = el.querySelector(".wrap");
+    if (inner) inner.scrollTop = 0;
+    el.scrollTop = 0;
     history.pushState({ type: "modal", id }, "");
   }
 }
@@ -390,21 +595,8 @@ function closeCurrentModalOrBack(id) {
   }
 }
 
-window.addEventListener("popstate", e => {
-  const openM = getOpenModal();
-  if (openM) {
-    closeModal(openM);
-    return;
-  }
-  if (e.state && e.state.type === "tab") {
-    switchTab(e.state.v, false);
-  } else {
-    switchTab("0", false);
-  }
-});
-
-// Fast Tab Render (Only renders the active tab!)
-function renderActiveTab(v) {
+function renderActivePage(v) {
+  if (v === "home") return;
   if (v === "0") { prev(); rrt(); }
   else if (v === "1") { rs(); }
   else if (v === "4") { rsell(); }
@@ -415,66 +607,88 @@ function renderActiveTab(v) {
   else if (v === "7") { zrender(); }
 }
 
-function switchTab(v, pushHistory = true) {
-  if (currentTab === v && !pushHistory) return;
-  currentTab = v;
-  document.querySelectorAll(".nav button").forEach(b => {
-    const on = (b.dataset.v === v);
-    b.className = on ? "on" : "";
-    if (on) {
-      try { b.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); } catch(err){}
-    }
-  });
-  document.querySelectorAll(".v").forEach(el => el.className = "v");
-  const target = $("v" + v);
-  if (target) target.className = "v on";
-  if (pushHistory) {
-    history.pushState({ type: "tab", v }, "");
-  }
-  renderActiveTab(v);
+function showPage(v, pushHistory = true) {
+  if (currentPage === v && !pushHistory) return;
+  currentPage = v;
+  document.querySelectorAll(".page-wrap").forEach(el => el.classList.remove("on"));
+  const target = v === "home" ? $("pgHome") : $("pg" + v);
+  if (target) target.classList.add("on");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (pushHistory) history.pushState({ type: "page", v }, "");
+  renderActivePage(v);
+  try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}
 }
 
-document.querySelectorAll(".nav button").forEach(b => {
-  b.onclick = () => {
-    const v = b.dataset.v;
-    if (v !== currentTab) switchTab(v, true);
+/* Android back button handling via history */
+window.addEventListener("popstate", e => {
+  const openM = getOpenModal();
+  if (openM) { closeModal(openM); return; }
+  if (e.state && e.state.type === "page") {
+    showPage(e.state.v, false);
+  } else if (e.state && e.state.type === "modal") {
+    if (e.state.v) showPage(e.state.v, false);
+    else showPage("home", false);
+  } else {
+    /* No history state → we're at home. Let browser exit. */
+    showPage("home", false);
+  }
+});
+
+/* Setup initial state: home on top */
+history.replaceState({ type: "page", v: "home" }, "");
+
+/* Tile clicks → go to page */
+document.querySelectorAll(".tile").forEach(t => {
+  t.onclick = () => {
+    const v = t.dataset.page;
+    showPage(v, true);
   };
 });
-history.replaceState({ type: "tab", v: "0" }, "");
 
-/* Ultra-Smooth Swipe Detection (Fast & Responsive) */
+/* Home button (back arrow) */
+document.querySelectorAll("[data-home]").forEach(b => {
+  b.onclick = () => {
+    if (history.state && history.state.type === "page" && history.state.v !== "home") {
+      history.back();
+    } else {
+      showPage("home", true);
+    }
+  };
+});
+
+/* Brand click → home */
+$("brandHome").onclick = () => {
+  if (currentPage !== "home") {
+    if (history.state && history.state.type === "page" && history.state.v !== "home") {
+      history.back();
+    } else {
+      showPage("home", true);
+    }
+  }
+};
+
+/* Swipe navigation: left=next, right=prev (only on pages, not home) */
 let swX = 0, swY = 0, swTime = 0, swActive = false;
-
 window.addEventListener("touchstart", e => {
   if (getOpenModal()) { swActive = false; return; }
+  if (currentPage === "home") { swActive = false; return; }
   const tag = e.target.tagName.toLowerCase();
-  if (tag === 'input' || tag === 'select' || tag === 'textarea') {
-    swActive = false;
-    return;
-  }
-  swActive = true;
-  swX = e.touches[0].clientX;
-  swY = e.touches[0].clientY;
-  swTime = Date.now();
+  if (tag === 'input' || tag === 'select' || tag === 'textarea') { swActive = false; return; }
+  swActive = true; swX = e.touches[0].clientX; swY = e.touches[0].clientY; swTime = Date.now();
 }, { passive: true });
-
 window.addEventListener("touchend", e => {
-  if (!swActive || getOpenModal()) return;
+  if (!swActive || getOpenModal() || currentPage === "home") return;
   const dx = e.changedTouches[0].clientX - swX;
   const dy = e.changedTouches[0].clientY - swY;
   const dt = Date.now() - swTime;
-  
-  // Fast flick or standard drag
   const isHorizontal = Math.abs(dx) > Math.abs(dy) * 1.2;
   const isFastSwipe = dt < 350 && Math.abs(dx) > 35;
   const isLongSwipe = Math.abs(dx) > 55;
-
   if (isHorizontal && (isFastSwipe || isLongSwipe)) {
-    const idx = TAB_ORDER.indexOf(currentTab);
-    if (dx < 0 && idx < TAB_ORDER.length - 1) {
-      switchTab(TAB_ORDER[idx + 1], true);
-    } else if (dx > 0 && idx > 0) {
-      switchTab(TAB_ORDER[idx - 1], true);
+    if (dx > 0) {
+      /* swipe right → back/home */
+      if (history.state && history.state.type === "page" && history.state.v !== "home") history.back();
+      else showPage("home", true);
     }
   }
   swActive = false;
@@ -488,16 +702,20 @@ $("sv").onclick=()=>{const i=+$("pe").value,c=n("c1"),p=n("c2");if(!c&&!p){$("ms
 const id=Date.now()*1000+Math.floor(Math.random()*1000),d=$("dt").value||today();
 if(T==="mk"){let r=S.mk.find(x=>x.d===d&&x.i===i);if(!r){r={id,d,i,gc:0,gp:0,fc:0,fp:0,r:0};S.mk.push(r)}r.gc=rd(r.gc+c);r.gp=rd(r.gp+p);r.r=$("rt").value!==""?Math.max(0,parseFloat($("rt").value)||0):PR(i)}
 else{const cpv=$("ec").value!==""?Math.max(0,parseFloat($("ec").value)||0):CP(i);S.log.push({id,d,t:T,i,c,p,cp:cpv});if(cpv)S.cp[i]=cpv}
-save();$("c1").value="";$("c2").value="";prev();if($("nx").checked)go(1,1);$("ms").textContent="Save hoyeche ✓";$("gb").style.display=T==="mk"?"block":"none";setTimeout(()=>$("ms").textContent="",2000)};
+save();$("c1").value="";$("c2").value="";prev();if($("nx").checked)go(1,1);
+$("ms").textContent="Save hoyeche ✓";
+const sb=$("sv");sb.classList.add("success");sb.textContent="✓ Save hoyeche";setTimeout(()=>{sb.classList.remove("success");sb.textContent="Save koro"},1200);
+toast("Entry save hoyeche");
+$("gb").style.display=T==="mk"?"block":"none";setTimeout(()=>$("ms").textContent="",2000)};
 
-$("kh").onclick=e=>{const b=e.target.closest("[data-id],[data-mk]");if(!b)return;ask(b,()=>{if(b.dataset.mk)S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);else S.log=S.log.filter(x=>String(x.id)!==b.dataset.id);save();rk();rs();prev();rsell()})};
+$("kh").onclick=e=>{const b=e.target.closest("[data-id],[data-mk]");if(!b)return;ask(b,()=>{if(b.dataset.mk)S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);else S.log=S.log.filter(x=>String(x.id)!==b.dataset.id);save();rk();rs();prev();rsell();toast("Delete hoyeche")})};
 $("pk").oninput=()=>{const v=parseInt($("pk").value);if(v>0){S.per[+$("pp").value]=v;save()}};
 function plsync(){const i=+$("pp").value,l=S.lv[i];if(l>0&&PR(i)){S.cp[i]=Math.round(PR(i)*(1-l/100)*100)/100;$("pcr").value=S.cp[i]}}
 $("pd").oninput=()=>{S.pr[+$("pp").value]=parseFloat($("pd").value)||0;plsync();save()};
 $("plv").oninput=()=>{const i=+$("pp").value;S.lv[i]=parseFloat($("plv").value)||0;plsync();save()};
 $("pcr").oninput=()=>{const i=+$("pp").value;S.cp[i]=parseFloat($("pcr").value)||0;S.lv[i]=PR(i)&&S.cp[i]?Math.round((PR(i)-S.cp[i])/PR(i)*10000)/100:0;$("plv").value=S.lv[i]||"";save()};
 
-$("na").onclick=()=>{const nm=$("nn").value.trim(),k=parseInt($("nk").value);if(!nm||!(k>0)){$("ms").textContent="Nam ar 1 ctn e pcs dao";return}S.custom.push([nm,k]);const i=P().length-1;S.pr[i]=parseFloat($("np").value)||0;save();$("nn").value=$("nk").value=$("np").value="";opts();$("pp").value=i;$("pe").value=i;$("ad").open=false;updatePeBtn();rp();prev()};
+$("na").onclick=()=>{const nm=$("nn").value.trim(),k=parseInt($("nk").value);if(!nm||!(k>0)){$("ms").textContent="Nam ar 1 ctn e pcs dao";return}S.custom.push([nm,k]);const i=P().length-1;S.pr[i]=parseFloat($("np").value)||0;save();$("nn").value=$("nk").value=$("np").value="";opts();$("pp").value=i;$("pe").value=i;$("ad").open=false;updatePeBtn();rp();prev();toast("Notun product add hoyeche")};
 
 $("pdf").onclick=async()=>{
 const{R,tv}=getData(true);if(!R.length){$("pm").textContent="Kono entry nei";return}
@@ -523,11 +741,11 @@ x.textAlign="right";const kd=SM<2?rcst(r.i):PR(r.i);x.fillText(kd?mm2(kd):"",650
 x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1);x.fillStyle="#000"});
 if(p===pg-1){x.font="bold 32px sans-serif";x.textAlign="right";x.fillText((SM===2?"Total bikri dam: ":"Total stock dam (kroy dor): ")+money(tv)+" tk",1140,H-55)}
 if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
-try{await dlFile((SM===2?"lenden-":"stock-")+today()+".pdf",doc.output("blob"));$("pm").textContent="PDF hoyeche ✓"}catch(e){$("pm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}};
+try{await dlFile((SM===2?"lenden-":"stock-")+today()+".pdf",doc.output("blob"));$("pm").textContent="PDF hoyeche ✓";toast("PDF download hoyeche")}catch(e){$("pm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}};
 
-$("bk").onclick=async()=>{try{await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));$("bm").textContent="Backup hoyeche ✓"}catch(e){}};
+$("bk").onclick=async()=>{try{await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));$("bm").textContent="Backup hoyeche ✓";toast("Backup download hoyeche")}catch(e){}};
 $("rs0").onclick=()=>$("rf").click();
-$("rf").onchange=async()=>{const f=$("rf").files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.log)||!Array.isArray(x.custom))throw 0;try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}S=Object.assign({custom:[],per:{},pr:{},log:[],del:{}},x);mig();save();all();$("bm").textContent="Restore hoyeche ✓"}catch(e){$("bm").textContent="File ta thik na"}$("rf").value=""};
+$("rf").onchange=async()=>{const f=$("rf").files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.log)||!Array.isArray(x.custom))throw 0;try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}S=Object.assign({custom:[],per:{},pr:{},log:[],del:{}},x);mig();save();all();$("bm").textContent="Restore hoyeche ✓";toast("Restore hoyeche")}catch(e){$("bm").textContent="File ta thik na";toast("File ta thik na","bad")}$("rf").value=""};
 $("dt").value=$("d1").value=$("d2").value=today();$("mdt").value=today();
 ["cp","ca1","ca2","cb1","cb2"].forEach(i=>$(i).oninput=rcalc);$("cp").onchange=rcalc;
 $("cm0").onclick=()=>{CM=-1;$("cm0").className="on";$("cp0").className="";rcalc()};
@@ -561,7 +779,7 @@ x.textAlign="right";x.fillText(r.r.r?mm2(r.r.r):"",960,y);x.fillText(r.r.r?mm2(r
 x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1)});
 if(p===pg-1){x.fillStyle="#000";x.fillRect(50,H-100,W-100,2);x.font="bold 32px sans-serif";x.textAlign="left";x.fillText(days.length+" ta market",60,H-55);x.textAlign="right";x.fillText("History total: "+mm2(tv)+" tk",1140,H-55)}
 if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
-try{await dlFile("market-history-"+today()+".pdf",doc.output("blob"));$("hym").textContent="PDF hoyeche ✓"}catch(e){$("hym").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}}
+try{await dlFile("market-history-"+today()+".pdf",doc.output("blob"));$("hym").textContent="PDF hoyeche ✓";toast("History PDF download hoyeche")}catch(e){$("hym").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}}
 $("hypdf").onclick=hyPdf;
 
 async function pdfSheet(){const{R,tv}=sellData();if(!R.length){$("spm").textContent="Kono entry nei";return}
@@ -584,7 +802,7 @@ x.textAlign="right";x.fillText(r.r.r?mm2(r.r.r):"",960,y);x.fillText(r.r.r?mm2(r
 x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1);x.fillStyle="#000"});
 if(p===pg-1){x.fillStyle="#000";x.fillRect(50,H-100,W-100,2);x.font="bold 32px sans-serif";x.textAlign="left";x.fillText("Total ("+R.length+" ta product)",60,H-55);x.textAlign="right";x.fillText("Total dam: "+mm2(tv)+" tk",1140,H-55);if(lo.n){x.font="24px sans-serif";x.textAlign="left";x.fillText("Kroy dam: "+mm2(lo.cost)+" tk",60,H-115);x.textAlign="right";x.fillStyle=lo.lab>=0?"#15803d":"#b91c1c";x.fillText("Lab: "+sg(lo.lab)+" tk",1140,H-115)}}
 if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
-try{await dlFile("market-sheet-"+d+".pdf",doc.output("blob"));$("spm").textContent="PDF hoyeche ✓"}catch(e){$("spm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}}
+try{await dlFile("market-sheet-"+d+".pdf",doc.output("blob"));$("spm").textContent="PDF hoyeche ✓";toast("Market Sheet PDF download hoyeche")}catch(e){$("spm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}}
 
 let DI=-1,SI=-1;
 const am=v=>String(v||"").split("+").reduce((s,x)=>s+(parseFloat(x.replace(/,/g,""))||0),0);
@@ -594,27 +812,95 @@ const pj=p=>p.t.filter(e=>e.ty==="j").reduce((s,e)=>s+e.a,0),pk=p=>p.t.filter(e=
 const gp=()=>S.hp.find(x=>x.id===HP);
 
 function hrender(){let tj=0,tk=0;
-$("hb").innerHTML=S.hp.map(p=>{const j=pj(p),k=pk(p),b=j-k;tj+=j;tk+=k;return`<tr><td data-hp="${p.id}" style="cursor:pointer">${esc(p.n)||"(nam nai)"}<br><span class="sub">${p.t.length} ta entry · tap koro</span></td><td style="text-align:right">${j?mm2(j):""}</td><td>${k?mm2(k):""}</td><td style="color:${sc(b)};font-weight:700">${sg(b)}</td><td><button class="x" data-hd="${p.id}">✕</button></td></tr>`}).join("")||'<tr><td colspan="5" class="sub" style="text-align:center;padding:14px">Kono bekti nai. + Add chapo.</td></tr>';
+$("hb").innerHTML=S.hp.map(p=>{const j=pj(p),k=pk(p),b=j-k;tj+=j;tk+=k;return`<tr><td data-hp="${p.id}" style="cursor:pointer">${esc(p.n)||"(nam nai)"}<br><span class="sub">${p.t.length} ta entry · tap koro</span></td><td style="text-align:right">${j?mm2(j):""}</td><td>${k?mm2(k):""}</td><td style="color:${sc(b)};font-weight:700">${sg(b)}</td><td><button class="x" data-hd="${p.id}">✕</button></td></tr>`}).join("")||'<tr><td colspan="5"><div class="empty"><div class="eico">💰</div><div class="etxt">Kono bekti nai. + Add chapo.</div></div></td></tr>';
 const n=tj-tk;$("ht").innerHTML=S.hp.length?`Total joma: <b>${mm2(tj)}</b><br>Total khoroch: <b>${mm2(tk)}</b><br><span style="font-size:22px;font-weight:800;color:${sc(n)}">Baki: ${sg(n)} tk</span>`:""}
 
 function hdrender(){const p=gp();if(!p)return;const j=pj(p),k=pk(p),b=j-k;
 $("hds").innerHTML=`Joma: <b>${mm2(j)}</b> · Khoroch: <b>${mm2(k)}</b><br><span style="font-size:22px;font-weight:800;color:${sc(b)}">Baki: ${sg(b)} tk</span>`;
-$("hdl").innerHTML=p.t.slice().sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(e=>`<tr><td>${e.d}<br><span class="sub">${esc(e.nt||"")}</span></td><td style="color:${e.ty==="j"?"var(--ac)":"var(--bad)"};font-weight:600">${e.ty==="j"?"Joma +":"Khoroch −"}</td><td style="text-align:right">${mm2(e.a)}</td><td><button class="x" data-ed="${e.id}">✕</button></td></tr>`).join("")||'<tr><td class="sub" style="text-align:center;padding:14px">Kono entry nei</td></tr>';hdprev()}
+$("hdl").innerHTML=p.t.slice().sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(e=>`<tr><td>${e.d}<br><span class="sub">${esc(e.nt||"")}</span></td><td style="color:${e.ty==="j"?"var(--ac)":"var(--bad)"};font-weight:600">${e.ty==="j"?"Joma +":"Khoroch −"}</td><td style="text-align:right">${mm2(e.a)}</td><td><button class="x" data-ed="${e.id}">✕</button></td></tr>`).join("")||'<tr><td colspan="4"><div class="empty"><div class="eico">📝</div><div class="etxt">Kono entry nei</div></div></td></tr>';hdprev()}
 
 function hdprev(){const p=gp();if(!p)return;const a=am($("hda").value),b=pj(p)-pk(p);$("hdp").innerHTML=a?"Save korle Baki hobe: <b style='color:"+sc(b+(HT==="j"?a:-a))+"'>"+sg(b+(HT==="j"?a:-a))+" tk</b>":""}
-function hdopen(id){HP=id;const p=gp();$("hdn").value=p.n;$("hda").value=$("hdt").value="";$("hdd").value=today();hdrender();openModal("hd");}
+function hdopen(id){HP=id;const p=gp();$("hdn").value=p.n;$("hda").value=$("hdt").value="";$("hdd").value=today();$("hdpmsg").textContent="";hdrender();openModal("hd");
+  const w=$("hd").querySelector(".wrap");if(w)w.scrollTop=0;
+}
 $("hadd").onclick=()=>{$("hmn").value="";$("hmp").textContent="";openModal("hm");$("hmn").focus()};
 $("hmx").onclick=()=>closeCurrentModalOrBack("hm");
-$("hms").onclick=()=>{const n=$("hmn").value.trim();if(!n){$("hmp").textContent="Nam dao";return}const p={id:Date.now()*1000+Math.floor(Math.random()*1000),n,t:[]};S.hp.push(p);save();closeCurrentModalOrBack("hm");hrender();hdopen(p.id)};
-$("hb").onclick=e=>{const d=e.target.closest("[data-hd]");if(d){ask(d,()=>{S.hp=S.hp.filter(x=>String(x.id)!==d.dataset.hd);save();hrender()});return}const t=e.target.closest("[data-hp]");if(t)hdopen(+t.dataset.hp)};
+$("hms").onclick=()=>{const n=$("hmn").value.trim();if(!n){$("hmp").textContent="Nam dao";return}const p={id:Date.now()*1000+Math.floor(Math.random()*1000),n,t:[]};S.hp.push(p);save();closeCurrentModalOrBack("hm");hrender();hdopen(p.id);toast("Bekti add hoyeche")};
+$("hb").onclick=e=>{const d=e.target.closest("[data-hd]");if(d){ask(d,()=>{S.hp=S.hp.filter(x=>String(x.id)!==d.dataset.hd);save();hrender();toast("Bekti delete hoyeche")});return}const t=e.target.closest("[data-hp]");if(t)hdopen(+t.dataset.hp)};
 $("hdc").onclick=()=>closeCurrentModalOrBack("hd");
 $("hdn").oninput=()=>{const p=gp();if(p){p.n=$("hdn").value;save()}};
 $("hdj").onclick=()=>{HT="j";$("hdj").className="on";$("hdk").className="";hdprev()};
 $("hdk").onclick=()=>{HT="k";$("hdk").className="on";$("hdj").className="";hdprev()};
 $("hda").oninput=hdprev;
 $("hdv").onclick=()=>{const p=gp(),a=am($("hda").value);if(!p)return;if(!a){$("hdp").textContent="Taka dao";return}
-p.t.push({id:Date.now()*1000+Math.floor(Math.random()*1000),ty:HT,a,d:$("hdd").value||today(),nt:$("hdt").value.trim()});save();$("hda").value=$("hdt").value="";hdrender();hrender()};
-$("hdl").onclick=e=>{const b=e.target.closest("[data-ed]");if(!b)return;ask(b,()=>{const p=gp();if(!p)return;p.t=p.t.filter(x=>String(x.id)!==b.dataset.ed);save();hdrender();hrender()})};
+p.t.push({id:Date.now()*1000+Math.floor(Math.random()*1000),ty:HT,a,d:$("hdd").value||today(),nt:$("hdt").value.trim()});save();$("hda").value=$("hdt").value="";hdrender();hrender();toast("Entry save hoyeche")};
+$("hdl").onclick=e=>{const b=e.target.closest("[data-ed]");if(!b)return;ask(b,()=>{const p=gp();if(!p)return;p.t=p.t.filter(x=>String(x.id)!==b.dataset.ed);save();hdrender();hrender();toast("Entry delete hoyeche")})};
+
+async function personPdf(){
+  const p=gp();
+  if(!p){$("hdpmsg").textContent="Bekti pawa jayni";return}
+  const name=(p.n||"nam-nai").trim();
+  const entries=p.t.slice().sort((x,y)=>x.d.localeCompare(y.d)||x.id-y.id);
+  const j=pj(p),k=pk(p),b=j-k;
+  $("hdpmsg").textContent="PDF toiri hocche...";
+  try{
+    const W=1190,H=1684,top=330;
+    const RH=Math.max(26,Math.min(36,Math.floor((H-top-220)/Math.max(entries.length,1))));
+    const pp=Math.max(1,Math.floor((H-top-220)/RH));
+    const pg=Math.max(1,Math.ceil(entries.length/pp));
+    const fs=Math.min(24,RH-8);
+    const doc=new window.jspdf.jsPDF({unit:"pt",format:"a4"});
+    const fit=(x,t,w)=>{while(t.length>1&&x.measureText(t).width>w)t=t.slice(0,-1);return t};
+    const col=v=>v>0?"#15803d":v<0?"#b91c1c":"#000";
+    for(let pi=0;pi<pg;pi++){
+      const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+      x.fillStyle="#fff";x.fillRect(0,0,W,H);x.fillStyle="#000";
+      x.font="bold 46px sans-serif";x.fillText("Hisab · "+fit(x,name,800),60,85);
+      x.font="26px sans-serif";x.fillText("Tarikh: "+today()+"     Page "+(pi+1)+"/"+pg,60,130);
+      x.fillStyle="#f1f5f9";x.fillRect(50,160,W-100,130);
+      x.fillStyle="#000";x.font="bold 26px sans-serif";x.textAlign="left";x.fillText("Joma",80,205);
+      x.textAlign="right";x.fillStyle="#15803d";x.fillText(mm2(j)+" tk",380,205);
+      x.fillStyle="#000";x.textAlign="left";x.fillText("Khoroch",420,205);
+      x.textAlign="right";x.fillStyle="#b91c1c";x.fillText(mm2(k)+" tk",760,205);
+      x.fillStyle="#000";x.textAlign="left";x.fillText("Baki",800,205);
+      x.textAlign="right";x.fillStyle=col(b);x.font="bold 30px sans-serif";x.fillText(sg(b)+" tk",1140,205);
+      x.fillStyle="#000";x.font="22px sans-serif";x.textAlign="left";x.fillText("Total entry: "+entries.length+" ta",80,260);
+      x.fillStyle="#e5e7eb";x.fillRect(50,300,W-100,44);x.fillStyle="#000";x.font="bold 22px sans-serif";
+      x.textAlign="left";x.fillText("No",60,332);x.fillText("Tarikh",110,332);x.fillText("Dhoron",340,332);x.fillText("Note",580,332);
+      x.textAlign="right";x.fillText("Taka",1140,332);
+      x.font=fs+"px sans-serif";
+      if(!entries.length){
+        x.fillStyle="#64748b";x.textAlign="center";x.font="24px sans-serif";x.fillText("Kono entry nei",W/2, top+40);
+      } else {
+        entries.slice(pi*pp,(pi+1)*pp).forEach((e,idx)=>{
+          const y=top+idx*RH+Math.round(RH*0.72);
+          x.fillStyle="#000";x.textAlign="left";x.font=fs+"px sans-serif";
+          x.fillText(String(pi*pp+idx+1),60,y);
+          x.fillText(e.d,110,y);
+          x.fillStyle=e.ty==="j"?"#15803d":"#b91c1c";
+          x.fillText(e.ty==="j"?"Joma":"Khoroch",340,y);
+          x.fillStyle="#334155";x.fillText(fit(x,e.nt||"-",560),580,y);
+          x.fillStyle=e.ty==="j"?"#15803d":"#b91c1c";x.textAlign="right";x.font="bold "+fs+"px sans-serif";
+          x.fillText((e.ty==="j"?"+":"−")+mm2(e.a),1140,y);
+          x.fillStyle="#d1d5db";x.fillRect(50,top+idx*RH+RH,W-100,1);
+        });
+      }
+      if(pi===pg-1){
+        x.fillStyle="#000";x.fillRect(50,H-110,W-100,2);x.font="bold 30px sans-serif";x.textAlign="left";
+        x.fillText("Total joma: "+mm2(j)+" tk",60,H-70);
+        x.textAlign="right";x.fillText("Total khoroch: "+mm2(k)+" tk",1140,H-70);
+        x.fillStyle=col(b);x.font="bold 36px sans-serif";x.textAlign="center";x.fillText("Baki: "+sg(b)+" tk",W/2,H-25);
+      }
+      if(pi)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842);
+    }
+    const safe=name.replace(/[^a-zA-Z0-9\u0980-\u09FF]+/g,"-").replace(/^-+|-+$/g,"")||"person";
+    await dlFile("hisab-"+safe+"-"+today()+".pdf",doc.output("blob"));
+    $("hdpmsg").textContent="PDF hoyeche ✓";toast("Bektir PDF download hoyeche");
+  }catch(e){
+    $("hdpmsg").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro";
+  }
+}
+$("hdpdf").onclick=personPdf;
 
 $("hpdf").onclick=async()=>{const A=S.hp;if(!A.length){$("hpm").textContent="Kono bekti nai";return}
 let tj=0,tk=0;A.forEach(p=>{tj+=pj(p);tk+=pk(p)});const net=tj-tk,det=$("hdet").checked;
@@ -641,7 +927,7 @@ if(p===pg-1){x.fillStyle="#000";x.fillRect(50,H-190,W-100,2);x.font="bold 30px s
 x.textAlign="left";x.fillText("Total joma",60,H-150);x.fillText("Total khoroch",60,H-105);x.fillText("Baki (joma − khoroch)",60,H-55);
 x.textAlign="right";x.fillText(mm2(tj)+" tk",1140,H-150);x.fillText(mm2(tk)+" tk",1140,H-105);x.fillStyle=col(net);x.font="bold 36px sans-serif";x.fillText(sg(net)+" tk",1140,H-55)}
 if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
-try{await dlFile("hisab-"+today()+".pdf",doc.output("blob"));$("hpm").textContent="PDF hoyeche ✓"}catch(e){$("hpm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}};
+try{await dlFile("hisab-"+today()+".pdf",doc.output("blob"));$("hpm").textContent="PDF hoyeche ✓";toast("Hisab PDF download hoyeche")}catch(e){$("hpm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}};
 
 function arm(b,t,fn){if(b.dataset.arm){fn();return}b.dataset.arm="1";b.textContent=t;b.style.fontWeight="700";setTimeout(()=>{if(b.dataset.arm){delete b.dataset.arm;b.textContent=b.dataset.o;b.style.fontWeight=""}},4000)}
 function done(b){delete b.dataset.arm;b.textContent=b.dataset.o;b.style.fontWeight=""}
@@ -650,9 +936,9 @@ let CF=null;
 function cbox(msg,fn){$("cmt").textContent=msg;CF=fn;openModal("cm");}
 $("cn").onclick=()=>closeCurrentModalOrBack("cm");
 $("cy").onclick=()=>{const f=CF;CF=null;closeCurrentModalOrBack("cm");if(f)f()};
-$("r1").onclick=()=>cbox("Apni ki nishchit shob entry (prothom stock, joma, bikri) muche felben? Product, pcs/ctn ar dam thakbe.",()=>{keep();S.log=[];S.mk=[];save();all();$("rm").textContent="Shob entry muche gechhe ✓"});
-$("r2").onclick=()=>cbox("Apni ki nishchit PURA reset korben? Shob entry, notun product, pcs/ctn ar dam muche jabe.",()=>{keep();const nx=S.nx;S={custom:[],per:{},pr:{},cp:{},lv:{},log:[],mk:[],hs:[],hp:[],del:{},nx};save();all();$("rm").textContent="Pura reset hoyeche ✓"});
-$("r3").onclick=()=>{try{const x=JSON.parse(localStorage.getItem("stk1_prev")||"null");if(!x){$("rm").textContent="Ager kichu nei";return}S=Object.assign({custom:[],per:{},pr:{},log:[],del:{}},x);mig();save();all();$("rm").textContent="Ager obosthay ferot ashche ✓"}catch(e){$("rm").textContent="Ferot ana gelo na"}};
+$("r1").onclick=()=>cbox("Apni ki nishchit shob entry (prothom stock, joma, bikri) muche felben? Product, pcs/ctn ar dam thakbe.",()=>{keep();S.log=[];S.mk=[];save();all();$("rm").textContent="Shob entry muche gechhe ✓";toast("Shob entry muche gechhe")});
+$("r2").onclick=()=>cbox("Apni ki nishchit PURA reset korben? Shob entry, notun product, pcs/ctn ar dam muche jabe.",()=>{keep();const nx=S.nx;S={custom:[],per:{},pr:{},cp:{},lv:{},log:[],mk:[],hs:[],hp:[],del:{},nx};save();all();$("rm").textContent="Pura reset hoyeche ✓";toast("Pura reset hoyeche")});
+$("r3").onclick=()=>{try{const x=JSON.parse(localStorage.getItem("stk1_prev")||"null");if(!x){$("rm").textContent="Ager kichu nei";return}S=Object.assign({custom:[],per:{},pr:{},log:[],del:{}},x);mig();save();all();$("rm").textContent="Ager obosthay ferot ashche ✓";toast("Undo hoyeche")}catch(e){$("rm").textContent="Ferot ana gelo na"}};
 
 document.querySelectorAll("#sm3 button").forEach(b=>b.onclick=()=>{SM=+b.dataset.m;document.querySelectorAll("#sm3 button").forEach(x=>x.className="");b.className="on";$("rg").style.display=SM?"flex":"none";$("d1w").style.display=SM===2?"":"none";$("d2l").textContent=SM===2?"Porjonto":"Tarikh porjonto";rs()});
 $("d1").oninput=$("d2").oninput=rs;
@@ -684,7 +970,7 @@ const lvc=()=>{const d=parseFloat($("sd").value)||0,l=parseFloat($("slv").value)
 $("sd").oninput=()=>{syncP();lvc()};$("sk").oninput=syncP;$("slv").oninput=lvc;
 $("skc").oninput=()=>{const d=parseFloat($("sd").value)||0,c=parseFloat($("skc").value);$("slv").value=d&&$("skc").value!==""?m2((d-c)/d*100):""};
 $("sp").oninput=()=>{const k=parseFloat($("sk").value)||0,p=parseFloat($("sp").value)||0;$("sd").value=k&&p?m2(p*k):""};
-$("ss").onclick=()=>{const k=parseInt($("sk").value);if(!(k>0)){$("sk").focus();return}S.per[SI]=k;S.pr[SI]=parseFloat($("sd").value)||0;S.cp[SI]=parseFloat($("skc").value)||0;S.lv[SI]=parseFloat($("slv").value)||0;save();closeCurrentModalOrBack("sm");all();if($("dm").style.display==="flex")det(DI)};
+$("ss").onclick=()=>{const k=parseInt($("sk").value);if(!(k>0)){$("sk").focus();return}S.per[SI]=k;S.pr[SI]=parseFloat($("sd").value)||0;S.cp[SI]=parseFloat($("skc").value)||0;S.lv[SI]=parseFloat($("slv").value)||0;save();closeCurrentModalOrBack("sm");all();if($("dm").style.display==="flex")det(DI);toast("Save hoyeche")};
 $("sx").onclick=()=>closeCurrentModalOrBack("sm");
 $("se").onclick=()=>setm(+$("pe").value);
 
@@ -693,18 +979,27 @@ const g=M.reduce((s,r)=>s+gq(r),0),f=M.reduce((s,r)=>s+fq(r),0),sv=M.reduce((s,r
 $("dh").textContent=P()[i][0];$("dr").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  1 ctn dam: "+mm2(PR(i))+" tk  |  1 pcs dam: "+mm2(PR(i)/k)+" tk":"");
 $("ds").innerHTML="Stock jog (prothom): <b>"+fmt(o,k)+"</b><br>Market e gelo: <b>"+dq(g,k)+"</b><br>Ferot: <b>"+dq(f,k)+"</b><br>Sell (gelo − ferot): <b>"+dq(g-f,k)+"</b>"+(sv?" = <b>"+mm2(sv)+" tk</b>":"")+"<br>Ekhon ache: <b>"+fmt(o-(g-f),k)+"</b> ("+rd(o-(g-f))+" pcs)";
 const A=L.map(e=>({d:e.d,id:e.id,h:`<td>${e.d}<br><span class="sub">${LB[e.t]}</span></td><td>${e.c} ctn ${e.p} pcs<br><span class="sub">${qty(e)} pcs</span></td><td><button class="x" data-id="${e.id}">✕</button></td>`})).concat(M.map(r=>({d:r.d,id:r.id,h:`<td>${r.d}<br><span class="sub">Market e gelo</span></td><td>Gelo ${dq(gq(r),k)}<br><span class="sub">Ferot ${dq(fq(r),k)}${r.r?" · dor "+mm2(r.r):""}</span></td><td><button class="x" data-mk="${r.id}">✕</button></td>`})));
-$("dl").innerHTML=A.sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(a=>"<tr>"+a.h+"</tr>").join("")||'<tr><td class="sub" style="text-align:center;padding:14px">Kono entry nei</td></tr>';
+$("dl").innerHTML=A.sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(a=>"<tr>"+a.h+"</tr>").join("")||'<tr><td colspan="3"><div class="empty"><div class="eico">📝</div><div class="etxt">Kono entry nei</div></div></td></tr>';
 openModal("dm");}
 $("de").onclick=()=>det(+$("pe").value);
 $("tb").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.i!==undefined)det(+b.dataset.i);else if(b.dataset.s!==undefined)setm(+b.dataset.s)};
 $("dc").onclick=()=>{closeCurrentModalOrBack("dm");all();};
-$("dl").onclick=e=>{const b=e.target.closest("[data-id],[data-mk]");if(!b)return;ask(b,()=>{if(b.dataset.mk)S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);else S.log=S.log.filter(x=>String(x.id)!==b.dataset.id);save();det(DI);rs();rk();prev();rsell()})};
+$("dl").onclick=e=>{const b=e.target.closest("[data-id],[data-mk]");if(!b)return;ask(b,()=>{if(b.dataset.mk)S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);else S.log=S.log.filter(x=>String(x.id)!==b.dataset.id);save();det(DI);rs();rk();prev();rsell();toast("Delete hoyeche")})};
 
-/* ===== Auto Summary ===== */
 const zin=d=>{const a=$("zs1").value,b=$("zs2").value;return(!a||d>=a)&&(!b||d<=b)};
 function zc(lab,v,col,sz){const t=money(v),big=sz>90,f=big?(t.length>9?14:t.length>7?16:19):(t.length>8?10:t.length>6?12:14);
 const bgTint = col.includes('bad') ? 'var(--bad-light)' : (col.includes('jm') ? 'var(--jm-light)' : 'var(--ac-light)');
-return`<div style="text-align:center"><div class="sub" style="font-size:${big?13:11.5}px;margin-bottom:6px;font-weight:600">${lab}</div><div style="width:${sz}px;height:${sz}px;border-radius:50%;border:2.5px solid ${col};background:${bgTint};color:${col};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${f}px;margin:0 auto;padding:4px;text-align:center;line-height:1.1;box-shadow:var(--sh-sm)">${t}</div></div>`}
+return`<div style="text-align:center"><div class="sub" style="font-size:${big?13:11.5}px;margin-bottom:6px;font-weight:600">${lab}</div><div class="zcirc" data-v="${v}" style="width:${sz}px;height:${sz}px;border-radius:50%;border:2.5px solid ${col};background:${bgTint};color:${col};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${f}px;margin:0 auto;padding:4px;text-align:center;line-height:1.1;box-shadow:var(--sh-sm)">${t}</div></div>`}
+function countUp(el,target,dur=600){
+  const start=performance.now(),from=0;
+  function step(now){
+    const p=Math.min(1,(now-start)/dur);
+    const v=from+(target-from)*p;
+    el.textContent=Math.round(v).toLocaleString("en-IN");
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
 function zdays(){const D={},get=d=>D[d]=D[d]||{d,sell:0,cost:0,lab:0,ln:0,j:0,k:0,R:[]};
 S.mk.forEach(r=>{if(!zin(r.d)||isDel(r.i))return;const o=get(r.d),k=K(r.i),net=nq(r);o.sell+=net/k*r.r;o.R.push({i:r.i,k,net,v:net/k*r.r})});
 S.hp.forEach(p=>p.t.forEach(e=>{if(!zin(e.d))return;const o=get(e.d);if(e.ty==="j")o.j+=e.a;else o.k+=e.a}));
@@ -713,31 +1008,28 @@ const G={sell:0,cost:0,lab:0,j:0,k:0,b:0,ln:0};L.forEach(o=>{G.sell+=o.sell;G.co
 const zlab=o=>o.ln?`Kroy dam ${mm2(o.cost)} · <b style="color:${sc(o.lab)}">Lab ${sg(o.lab)} tk</b>`:"";
 function zrender(){const{L,G}=zdays(),bc=v=>v<0?"var(--bad)":"var(--ac)";
 $("zg").innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:8px 0">`+zc("Total Sell",G.sell,"var(--ac)",104)+zc("Total Joma",G.j,"var(--jm)",104)+zc("Total Khoroch",G.k,"var(--bad)",104)+zc("Baki",G.b,bc(G.b),104)+`</div><div class="sub" style="margin-top:14px;text-align:center;font-weight:500">${L.length} din${zlab(G)?" · "+zlab(G):""}</div>`;
-$("zl").innerHTML=L.slice().reverse().map(o=>`<div class="card"><div style="font-weight:700;margin-bottom:10px;font-size:15px">${o.d}</div><div style="display:flex;justify-content:space-between;gap:6px">${zc("Sell",o.sell,"var(--ac)",68)}${zc("Joma",o.j,"var(--jm)",68)}${zc("Khoroch",o.k,"var(--bad)",68)}${zc("Baki",o.b,bc(o.b),68)}</div>${zlab(o)?`<div class="sub" style="margin-top:10px">${zlab(o)}</div>`:""}</div>`).join("")||'<div class="sub" style="text-align:center;padding:16px">Kono din nai</div>'}
+$("zl").innerHTML=L.slice().reverse().map(o=>`<div class="card"><div style="font-weight:700;margin-bottom:10px;font-size:15px">${o.d}</div><div style="display:flex;justify-content:space-between;gap:6px">${zc("Sell",o.sell,"var(--ac)",68)}${zc("Joma",o.j,"var(--jm)",68)}${zc("Khoroch",o.k,"var(--bad)",68)}${zc("Baki",o.b,bc(o.b),68)}</div>${zlab(o)?`<div class="sub" style="margin-top:10px">${zlab(o)}</div>`:""}</div>`).join("")||'<div class="empty"><div class="eico">📈</div><div class="etxt">Ei somoye kono din er data nai</div></div>';
+document.querySelectorAll(".zcirc").forEach(el=>{const v=parseFloat(el.dataset.v)||0;countUp(el,v,700)});}
 $("zs1").oninput=$("zs2").oninput=zrender;
 
-// Online/Offline Detection
 function updateNetStatus(){
-  const d=$("netDot"),t=$("netTx");
+  const d=$("netDot"),t=$("netTx"),ob=$("offbar");
   if(!d||!t)return;
-  if(navigator.onLine){d.className="dot";t.textContent="Online"}
-  else{d.className="dot off";t.textContent="Offline"}
+  if(navigator.onLine){d.className="dot";t.textContent="Online";if(ob)ob.classList.remove("show")}
+  else{d.className="dot off";t.textContent="Offline";if(ob)ob.classList.add("show")}
 }
 window.addEventListener("online",updateNetStatus);
 window.addEventListener("offline",updateNetStatus);
 updateNetStatus();
 
-// PWA Service Worker Registration
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 }
 
-/* ===== Product Picker Modal with Smooth Scroll & Long Press Delete ===== */
 function renderProductPicker(){
   const q=$("ppq").value.trim().toLowerCase();
   const list=P().map((p,i)=>({p,i})).filter(x=>!isDel(x.i));
   const filtered=list.filter(x=>!q||x.p[0].toLowerCase().includes(q));
-  
   $("ppl").innerHTML=filtered.map(x=>`
     <div class="prod-pick-item" data-idx="${x.i}">
       <div>
@@ -746,18 +1038,16 @@ function renderProductPicker(){
       </div>
       <span style="color:var(--ac);font-size:12px;font-weight:600">Select ➜</span>
     </div>
-  `).join("")||'<div class="sub" style="text-align:center;padding:16px">Kono product pawa jayni</div>';
+  `).join("")||'<div class="empty"><div class="eico">🔍</div><div class="etxt">Kono product pawa jayni</div></div>';
 
   document.querySelectorAll(".prod-pick-item").forEach(el=>{
     const i=+el.dataset.idx;
     let timer=null, isLong=false, isMoved=false, startX=0, startY=0;
     let touchActive=false;
-
     const start=e=>{
       if(e.type==='mousedown' && touchActive) return;
       if(e.type==='touchstart') touchActive=true;
-      isLong=false;
-      isMoved=false;
+      isLong=false; isMoved=false;
       const t=e.touches?e.touches[0]:e;
       startX=t.clientX; startY=t.clientY;
       timer=setTimeout(()=>{
@@ -767,41 +1057,26 @@ function renderProductPicker(){
         cbox(`Apni ki '${P()[i][0]}' product-ti list theke DELETE korte chan?`, ()=>{
           if(!S.del)S.del={};
           S.del[i]=true;
-          save();
-          all();
-          renderProductPicker();
+          save(); all(); renderProductPicker();
           $("ms").textContent=P()[i][0]+" delete hoyeche ✓";
+          toast(P()[i][0]+" delete hoyeche");
           setTimeout(()=>{$("ms").textContent=""},2500);
         });
       },650);
     };
-
     const move=e=>{
       const t=e.touches?e.touches[0]:e;
-      if(Math.abs(t.clientX-startX)>8 || Math.abs(t.clientY-startY)>8){
-        isMoved=true;
-        clearTimeout(timer);
-      }
+      if(Math.abs(t.clientX-startX)>8 || Math.abs(t.clientY-startY)>8){isMoved=true;clearTimeout(timer);}
     };
-
     const end=e=>{
       clearTimeout(timer);
-      if(e.type==='mouseup' && touchActive){
-        setTimeout(()=>{touchActive=false},400);
-        return;
-      }
+      if(e.type==='mouseup' && touchActive){setTimeout(()=>{touchActive=false},400);return;}
       if(!isLong && !isMoved){
-        $("pe").value=i;
-        updatePeBtn();
-        prev();
-        rrt();
+        $("pe").value=i;updatePeBtn();prev();rrt();
         closeCurrentModalOrBack("ppm");
       }
-      if(e.type==='touchend'){
-        setTimeout(()=>{touchActive=false},400);
-      }
+      if(e.type==='touchend'){setTimeout(()=>{touchActive=false},400);}
     };
-
     el.addEventListener("touchstart",start,{passive:true});
     el.addEventListener("touchmove",move,{passive:true});
     el.addEventListener("touchend",end);
@@ -824,7 +1099,6 @@ $("ppq").oninput=renderProductPicker;
 all();
 rrt();
 
-/* ===== Backup reminder + auto backup (alada block, ager code ke chhoy ni) ===== */
 (function(){
   const K_LAST="stk1_lastbk",K_FREQ="stk1_bkfreq",K_AUTO="stk1_bkauto",K_SNZ="stk1_bksnz";
   const g=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}};
@@ -837,43 +1111,39 @@ rrt();
     const d=Math.floor((Date.now()-l)/DAY);$("bklast").textContent="Shesh backup: "+new Date(l).toLocaleString()+(d>0?" ("+d+" din age)":" (aj)")}
   const mark=()=>{s(K_LAST,String(Date.now()));lastTxt()};
   async function doBackup(){await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));mark()}
-
-  // manual Backup button chaple-o shesh backup somoy save hobe
   $("bk").addEventListener("click",()=>setTimeout(mark,400));
-
-  // settings
   $("bkfreq").value=String(freq());$("bkauto").checked=g(K_AUTO,"1")==="1";lastTxt();
   $("bkfreq").onchange=()=>{s(K_FREQ,$("bkfreq").value);s(K_SNZ,"0")};
   $("bkauto").onchange=()=>{s(K_AUTO,$("bkauto").checked?"1":"0");if($("bkauto").checked&&!freq()){$("bkfreq").value="1";s(K_FREQ,"1")}};
-
-  // popup
   let pop=null;
   function showPop(){
     if(pop)return;
     const l=last(),d=l?Math.floor((Date.now()-l)/DAY):null;
     pop=document.createElement("div");pop.className="modal-wrap";pop.style.zIndex=99;
-    pop.innerHTML='<div style="background:#fff;border-radius:16px;padding:20px;max-width:340px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.25);text-align:center">'+
+    pop.innerHTML='<div style="background:var(--card);border-radius:16px;padding:20px;max-width:340px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.25);text-align:center;border:1px solid var(--bd)">'+
       '<div style="font-size:34px">💾</div>'+
-      '<div style="font-size:18px;font-weight:700;margin:6px 0;color:#0f172a">Backup nibar somoy hoyeche</div>'+
-      '<div style="font-size:14px;color:#475569;margin-bottom:14px">'+(l?"Shesh backup "+(d>0?d+" din age":"aj")+" neya hoyechilo.":"Ekhono kono backup neya hoy ni.")+' Data harale ferot ana jabe na.</div>'+
+      '<div style="font-size:18px;font-weight:700;margin:6px 0;color:var(--tx)">Backup nibar somoy hoyeche</div>'+
+      '<div style="font-size:14px;color:var(--mut);margin-bottom:14px">'+(l?"Shesh backup "+(d>0?d+" din age":"aj")+" neya hoyechilo.":"Ekhono kono backup neya hoy ni.")+' Data harale ferot ana jabe na.</div>'+
       '<button id="bkp_now" class="big" style="margin-top:0">Ekhoni Backup nao</button>'+
-      '<button id="bkp_later" style="width:100%;margin-top:8px;padding:11px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:14px">Ektu pore janao</button></div>';
+      '<button id="bkp_later" style="width:100%;margin-top:8px;padding:11px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:14px">Ektu pore janao</button></div>';
     document.body.appendChild(pop);
     const close=()=>{pop&&pop.remove();pop=null};
-    pop.querySelector("#bkp_now").onclick=async()=>{try{await doBackup();$("bm").textContent="Backup hoyeche ✓"}catch(e){}close()};
+    pop.querySelector("#bkp_now").onclick=async()=>{try{await doBackup();$("bm").textContent="Backup hoyeche ✓";toast("Backup download hoyeche")}catch(e){}close()};
     pop.querySelector("#bkp_later").onclick=()=>{s(K_SNZ,String(Date.now()+5*60000));close()};
   }
-
   async function check(){
     if(!isDue())return;
-    if(g(K_AUTO,"1")==="1"){
-      try{await doBackup();$("bm").textContent="Auto backup hoyeche ✓";return}catch(e){}
-    }
+    if(g(K_AUTO,"1")==="1"){try{await doBackup();$("bm").textContent="Auto backup hoyeche ✓";return}catch(e){}}
     showPop();
   }
   setTimeout(check,1500);setInterval(check,60000);
   document.addEventListener("visibilitychange",()=>{if(!document.hidden)setTimeout(check,500)});
 })();
+
+window.addEventListener("load",()=>{
+  setTimeout(()=>{const sp=$("splash");if(sp)sp.classList.add("hide")},700);
+});
+setTimeout(()=>{const sp=$("splash");if(sp&&!sp.classList.contains("hide"))sp.classList.add("hide")},2500);
 </script>
 </body>
-</html>
+  </html>
