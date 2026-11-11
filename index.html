@@ -128,9 +128,12 @@ details[open] summary::after{content:'−'}
 #hd .card > #hdpdf,
 #hd .card > #hdpmsg{flex:0 0 auto}
 #hd .card > .wrap{margin-top:12px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0}
-#dday{max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+/* Day details modal — scrollable body + fixed header/footer */
+#dday{align-items:flex-start;padding-top:calc(24px + env(safe-area-inset-top,0px))}
+#dday .card{max-height:90vh;display:flex;flex-direction:column;overflow:hidden;margin:0 auto;padding:16px}
 #dday .dhead{flex:0 0 auto}
-#dday .dbody{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0;margin-top:10px}
+#dday .dbody{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;margin-top:10px;padding-right:2px}
+#dday .dbody .wrap{overflow:visible;border-radius:12px;border:1px solid var(--bd)}
 #dday .dfoot{flex:0 0 auto;margin-top:12px}
 .prod-pick-item{padding:12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;transition:all .2s}
 .prod-pick-item:active{background:var(--ac-light);border-color:var(--ac);transform:scale(.98)}
@@ -393,7 +396,11 @@ details[open] summary::after{content:'−'}
         </table>
       </div>
     </div>
-    <div class="dfoot" id="ddayR"></div>
+    <div class="dfoot">
+      <div id="ddayR"></div>
+      <button class="big" id="ddayPdf" style="margin-top:10px">📄 Ei tarikher PDF</button>
+      <div id="ddayPMsg" class="sub" style="margin-top:8px;text-align:center;min-height:18px"></div>
+    </div>
   </div>
 </div>
 
@@ -691,9 +698,11 @@ function all(){opts();prev();rs();rk();rp();rsell();rcalc();hrender();zrender()}
 document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{T=b.dataset.t;document.querySelectorAll("[data-t]").forEach(x=>x.className="");b.className="on";prev()});
 ["c1","c2"].forEach(i=>$(i).oninput=prev);$("q").oninput=rs;$("pp").onchange=rp;
 
-/* ===== Day-wise entry viewer with total amount ===== */
+/* ===== Day-wise entry viewer with scrollable list + PDF ===== */
+let DAY_DATE=today();
 function openDayView(){
   const d=$("dt").value||today();
+  DAY_DATE=d;
   const entries=S.log.filter(e=>e.d===d&&e.t!=="out"&&e.t!=="bahir"&&e.t!=="ferot");
   $("ddayT").textContent="📅 "+d+" er entry";
   let totalPcs=0,totalCtn=0,totalAmt=0;
@@ -727,18 +736,90 @@ function openDayView(){
     </tr>`;
   }).join(""):'<tr><td colspan="5"><div class="empty"><div class="eico">📭</div><div class="etxt">Ei tarikhe kono entry nei</div></div></td></tr>';
   $("ddayR").innerHTML = entries.length
-    ? `<div class="dsum" style="grid-template-columns:1fr">
+    ? `<div class="dsum" style="grid-template-columns:1fr;margin-top:0">
          <div class="box" style="border:2px solid var(--ac);background:var(--ac-light)">
            <div class="lbl" style="color:var(--ac);font-weight:700">Ei tarikhe mot kroy</div>
            <div class="val" style="font-size:26px">${mm2(totalAmt)} tk</div>
          </div>
        </div>`
     : "";
+  $("ddayPdf").style.display=entries.length?"":"none";
+  $("ddayPMsg").textContent="";
   openModal("dday");
+  const w=$("dday").querySelector(".dbody");if(w)w.scrollTop=0;
 }
 $("viewDay").onclick=openDayView;
 $("ddayC").onclick=()=>closeCurrentModalOrBack("dday");
 $("ddayL").onclick=e=>{const b=e.target.closest("[data-ddel]");if(!b)return;ask(b,()=>{S.log=S.log.filter(x=>String(x.id)!==b.dataset.ddel);save();openDayView();rs();rk();prev();toast("Entry delete hoyeche")})};
+
+async function dayPdf(){
+  const d=DAY_DATE;
+  const entries=S.log.filter(e=>e.d===d&&e.t!=="out"&&e.t!=="bahir"&&e.t!=="ferot");
+  if(!entries.length){$("ddayPMsg").textContent="Kono entry nei";return}
+  $("ddayPMsg").textContent="PDF toiri hocche...";
+  try{
+    const rows=[];let totalPcs=0,totalCtn=0,totalAmt=0;
+    entries.forEach(e=>{
+      const k=K(e.i),pcs=qty(e),ctn=e.c||0;
+      let costPerCtn=0;
+      if(e.cp!==undefined && e.cp!==null && e.cp>0) costPerCtn=e.cp;
+      else costPerCtn=CP(e.i)||0;
+      if(!costPerCtn && PR(e.i)>0){
+        const lav=S.lv[e.i]||0;
+        costPerCtn=lav>0?Math.round(PR(e.i)*(1-lav/100)*100)/100:PR(e.i);
+      }
+      const amt=costPerCtn?(pcs/k)*costPerCtn:0;
+      totalPcs+=pcs;totalCtn+=ctn;totalAmt+=amt;
+      rows.push({e,k,pcs,ctn,costPerCtn,amt});
+    });
+    const W=1190,H=1684,top=250,RH=Math.max(28,Math.min(44,Math.floor((H-top-200)/Math.max(rows.length,1))));
+    const pp=Math.max(1,Math.floor((H-top-200)/RH));
+    const pg=Math.max(1,Math.ceil(rows.length/pp));
+    const fs=Math.min(26,RH-8);
+    const doc=new window.jspdf.jsPDF({unit:"pt",format:"a4"});
+    const fit=(x,t,w)=>{while(t.length>1&&x.measureText(t).width>w)t=t.slice(0,-1);return t};
+    for(let p=0;p<pg;p++){
+      const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+      x.fillStyle="#fff";x.fillRect(0,0,W,H);x.fillStyle="#000";
+      x.font="bold 46px sans-serif";x.fillText("Entry · "+d,60,85);
+      x.font="26px sans-serif";x.fillText("Total product: "+rows.length+"     Page "+(p+1)+"/"+pg,60,130);
+      // Summary
+      x.fillStyle="#f1f5f9";x.fillRect(50,160,W-100,60);
+      x.fillStyle="#000";x.font="bold 24px sans-serif";x.textAlign="left";
+      x.fillText("Ctn: "+rd(totalCtn),70,198);
+      x.fillText("Pcs: "+rd(totalPcs),350,198);
+      x.fillText("Mot kroy:", 640,198);
+      x.textAlign="right";x.fillStyle="#0d9488";x.font="bold 28px sans-serif";x.fillText(mm2(totalAmt)+" tk",1140,198);
+      // Table header
+      x.fillStyle="#e5e7eb";x.fillRect(50,230,W-100,44);x.fillStyle="#000";x.font="bold 22px sans-serif";
+      x.textAlign="left";x.fillText("No",60,258);x.fillText("Product",110,258);x.fillText("Ctn/Pcs",560,258);
+      x.textAlign="right";x.fillText("Kroy/ctn",820,258);x.fillText("Dam",1140,258);
+      x.font=fs+"px sans-serif";
+      rows.slice(p*pp,(p+1)*pp).forEach((r,j)=>{
+        const y=top+j*RH+Math.round(RH*0.72);
+        x.fillStyle="#000";x.textAlign="left";x.font=fs+"px sans-serif";
+        x.fillText(String(p*pp+j+1),60,y);
+        x.fillText(fit(x,P()[r.e.i][0],430),110,y);
+        x.fillText(r.ctn+" ctn "+ (r.e.p||0) +" pcs",560,y);
+        x.textAlign="right";
+        x.fillText(r.costPerCtn?mm2(r.costPerCtn):"-",820,y);
+        x.fillText(r.amt?mm2(r.amt):"-",1140,y);
+        x.fillStyle="#d1d5db";x.fillRect(50,top+j*RH+RH,W-100,1);
+      });
+      if(p===pg-1){
+        x.fillStyle="#000";x.fillRect(50,H-120,W-100,2);
+        x.font="bold 30px sans-serif";x.textAlign="left";x.fillText("Total ("+rows.length+" ta product)",60,H-80);
+        x.textAlign="right";x.fillStyle="#0d9488";x.font="bold 36px sans-serif";x.fillText("Mot kroy: "+mm2(totalAmt)+" tk",1140,H-80);
+      }
+      if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842);
+    }
+    await dlFile("entry-"+d+".pdf",doc.output("blob"));
+    $("ddayPMsg").textContent="PDF hoyeche ✓";toast("Tarikher PDF download hoyeche");
+  }catch(e){
+    $("ddayPMsg").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro";
+  }
+}
+$("ddayPdf").onclick=dayPdf;
 
 $("sv").onclick=()=>{const i=+$("pe").value,c=n("c1"),p=n("c2");if(!c&&!p){$("ms").textContent="Ctn ba pcs dao";return}
 const id=Date.now()*1000+Math.floor(Math.random()*1000),d=$("dt").value||today();
