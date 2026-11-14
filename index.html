@@ -15,67 +15,67 @@
   --c-duo1: #0A84FF;
   --c-duo2: #FF5E3A;
   --bg: #060913;
-  --card: rgba(22, 30, 48, 0.48);
-  --card-sub: rgba(255, 255, 255, 0.08);
-  --modal-bg: rgba(18, 25, 42, 0.80);
+  --card: rgba(22, 30, 48, 0.22);
+  --card-sub: rgba(255, 255, 255, 0.05);
+  --modal-bg: rgba(18, 25, 42, 0.56);
   --tx: #F5F7FA;
   --mut: #9BA5B8;
   --ac: #0A84FF;
   --ac-2: #FF5E3A;
   --ac-light: rgba(10, 132, 255, 0.18);
-  --bd: rgba(255, 255, 255, 0.18);
-  --bd-top: rgba(255, 255, 255, 0.34);
+  --bd: rgba(255, 255, 255, 0.16);
+  --bd-top: rgba(255, 255, 255, 0.36);
   --bad: #FF453A;
   --bad-light: rgba(255, 69, 58, 0.18);
   --jm: #30D158;
   --jm-light: rgba(48, 209, 88, 0.18);
-  --sh: 0 16px 40px -8px rgba(0, 0, 0, 0.52), inset 0 1px 0 0 var(--bd-top);
-  --sh-sm: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  --sh: 0 16px 40px -8px rgba(0, 0, 0, 0.48), inset 0 1px 0 0 var(--bd-top);
+  --sh-sm: 0 4px 14px rgba(0, 0, 0, 0.20), inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
   --radius: 24px;
   --grad: linear-gradient(135deg, #0A84FF 0%, #FF5E3A 100%);
-  --glass-blur: blur(28px) saturate(190%);
+  --glass-blur: blur(18px) saturate(180%);
   --spring: cubic-bezier(0.22, 1, 0.36, 1);
 }
 @media (prefers-color-scheme:light){
   :root:not([data-theme="dark"]){
     --bg: #EDF2F8;
-    --card: rgba(255, 255, 255, 0.60);
-    --card-sub: rgba(255, 255, 255, 0.58);
-    --modal-bg: rgba(248, 250, 254, 0.86);
+    --card: rgba(255, 255, 255, 0.30);
+    --card-sub: rgba(255, 255, 255, 0.26);
+    --modal-bg: rgba(248, 250, 254, 0.60);
     --tx: #0F172A;
     --mut: #5A657A;
     --ac: #007AFF;
     --ac-2: #FF4F28;
     --ac-light: rgba(0, 122, 255, 0.14);
-    --bd: rgba(15, 23, 42, 0.09);
-    --bd-top: rgba(255, 255, 255, 0.92);
+    --bd: rgba(15, 23, 42, 0.10);
+    --bd-top: rgba(255, 255, 255, 0.88);
     --bad: #FF3B30;
     --bad-light: rgba(255, 59, 48, 0.14);
     --jm: #16A34A;
     --jm-light: rgba(22, 163, 74, 0.14);
     --sh: 0 14px 36px -8px rgba(15, 23, 42, 0.10), inset 0 1.5px 0 0 var(--bd-top);
-    --sh-sm: 0 4px 12px rgba(15, 23, 42, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.85);
+    --sh-sm: 0 4px 12px rgba(15, 23, 42, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.78);
     --grad: linear-gradient(135deg, #007AFF 0%, #FF4F28 100%);
   }
 }
 :root[data-theme="light"]{
   --bg: #EDF2F8;
-  --card: rgba(255, 255, 255, 0.60);
-  --card-sub: rgba(255, 255, 255, 0.58);
-  --modal-bg: rgba(248, 250, 254, 0.86);
+  --card: rgba(255, 255, 255, 0.30);
+  --card-sub: rgba(255, 255, 255, 0.26);
+  --modal-bg: rgba(248, 250, 254, 0.60);
   --tx: #0F172A;
   --mut: #5A657A;
   --ac: #007AFF;
   --ac-2: #FF4F28;
   --ac-light: rgba(0, 122, 255, 0.14);
-  --bd: rgba(15, 23, 42, 0.09);
-  --bd-top: rgba(255, 255, 255, 0.92);
+  --bd: rgba(15, 23, 42, 0.10);
+  --bd-top: rgba(255, 255, 255, 0.88);
   --bad: #FF3B30;
   --bad-light: rgba(255, 59, 48, 0.14);
   --jm: #16A34A;
   --jm-light: rgba(22, 163, 74, 0.14);
   --sh: 0 14px 36px -8px rgba(15, 23, 42, 0.10), inset 0 1.5px 0 0 var(--bd-top);
-  --sh-sm: 0 4px 12px rgba(15, 23, 42, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.85);
+  --sh-sm: 0 4px 12px rgba(15, 23, 42, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.78);
   --grad: linear-gradient(135deg, #007AFF 0%, #FF4F28 100%);
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
@@ -179,8 +179,8 @@ select,input{
   border:1px solid var(--bd);border-radius:14px;
   background:var(--card-sub);color:var(--tx);outline:none;
   transition:border-color .2s,box-shadow .2s,background .2s;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  box-shadow:inset 0 1px 2px rgba(0,0,0,0.06);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,0.05);
 }
 select:focus,input:focus{
   border-color:var(--ac);
@@ -248,7 +248,7 @@ button{
   font-family:inherit;font-size:15px;font-weight:600;padding:13px 16px;
   border:1px solid var(--bd);border-radius:14px;
   background:var(--card-sub);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
   user-select:none;transition:transform .2s var(--spring), background .2s, box-shadow .2s;
   box-shadow:var(--sh-sm);
@@ -273,10 +273,10 @@ h2{font-size:18px;font-weight:700;margin:0 0 12px;display:flex;align-items:cente
 .wrap{
   overflow-x:auto;border-radius:16px;border:1px solid var(--bd);
   background:var(--card-sub);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 table{width:100%;border-collapse:collapse;font-size:14.5px;}
-th{background:rgba(128,128,128,0.08);color:var(--mut);font-weight:600;font-size:12.5px;padding:13px 12px;border-bottom:1px solid var(--bd);text-align:left;}
+th{background:rgba(128,128,128,0.06);color:var(--mut);font-weight:600;font-size:12.5px;padding:13px 12px;border-bottom:1px solid var(--bd);text-align:left;}
 th:nth-child(n+3){text-align:right;}
 td{padding:12px;border-bottom:1px solid var(--bd);vertical-align:middle;font-variant-numeric:tabular-nums;font-weight:500;}
 td:nth-child(n+3){text-align:right;white-space:nowrap}
@@ -294,8 +294,8 @@ details summary{font-size:16px;font-weight:600;cursor:pointer;list-style:none;di
 details summary::after{content:'+';font-size:22px;font-weight:500;color:var(--ac)}
 details[open] summary::after{content:'−'}
 .modal-wrap{
-  position:fixed;inset:0;background:rgba(0,0,0,0.48);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  position:fixed;inset:0;background:rgba(0,0,0,0.34);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   z-index:40;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));
   overflow-y:auto;display:flex;align-items:center;justify-content:center;
   animation:backdropIn .22s ease;
@@ -305,7 +305,7 @@ details[open] summary::after{content:'−'}
   width:100%;
   animation:modalIn .32s var(--spring);
   background:var(--modal-bg);
-  backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);
+  backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);
 }
 @keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(14px)}to{opacity:1;transform:scale(1) translateY(0)}}
 #hd{align-items:flex-start;padding-top:calc(24px + env(safe-area-inset-top,0px))}
@@ -1637,3 +1637,4 @@ try{all();rrt();}catch(err){console.error("Init error:",err);}
 </script>
 </body>
 </html>
+```
