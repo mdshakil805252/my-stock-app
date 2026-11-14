@@ -5,85 +5,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Stock Register</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1A332A">
+<meta name="theme-color" content="#121A16">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Courier+Prime:wght@400;700&family=Georgia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{
-  /* Color Palette - High Contrast */
-  --c-dark: #12221B;   /* Deep Dark Green for text/borders */
+  /* Classic Modern Palette */
+  --c-dark: #121A16;   /* Deep Green for text */
   --c-gold: #D89A2B;   /* Mustard Gold for accents */
-  --c-light: #F8F9FA;  /* Very Light Off-White for background */
   
   /* Light Theme */
-  --bg: #F8F9FA;
+  --bg: #F4F6F5;
   --card: #FFFFFF;
-  --card-sub: #F0F2F5;
-  --tx: #12221B;       /* Dark text */
-  --mut: #4A6356;      /* Muted green-grey */
-  --ac: #D89A2B;       /* Gold accent */
+  --card-sub: #F0F2F1;
+  --tx: #121A16;       
+  --mut: #5A6B62;      
+  --ac: #D89A2B;       
   --ac-light: rgba(216, 154, 43, 0.15);
   --ac-hover: #c28722;
-  --bd: #12221B;       /* Strong dark borders */
-  --bad: #d32f2f;
-  --bad-light: rgba(211, 47, 47, 0.15);
-  --jm: #1976d2;
-  --jm-light: rgba(25, 118, 210, 0.15);
+  --bd: #E2E8E4;
+  --bad: #E53935;
+  --bad-light: rgba(229, 57, 53, 0.1);
+  --jm: #1E88E5;
+  --jm-light: rgba(30, 136, 229, 0.1);
   
-  /* Retro Shadows */
-  --sh: 4px 4px 0px var(--c-dark);
-  --sh-sm: 2px 2px 0px var(--c-dark);
-  --radius: 4px;
-  --grad: linear-gradient(135deg, #D89A2B, #12221B);
+  /* Modern Soft Shadows */
+  --sh: 0 4px 12px rgba(18, 26, 22, 0.05), 0 1px 3px rgba(18, 26, 22, 0.02);
+  --sh-sm: 0 2px 6px rgba(18, 26, 22, 0.04);
+  --sh-hover: 0 8px 24px rgba(18, 26, 22, 0.08);
+  --radius: 16px;
   
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
+  --grad: linear-gradient(135deg, #D89A2B, #121A16);
 }
 
 /* Dark Theme */
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg: #0a110e;     /* Almost black-green */
-    --card: #14231d;
-    --card-sub: #1a2c24;
-    --tx: #F8F9FA;     /* Light text */
-    --mut: #9bb3a7;
-    --ac: #E6A833;     /* Bright Gold */
-    --ac-light: rgba(230, 168, 51, 0.2);
+    --bg: #090D0B;
+    --card: #121A16;
+    --card-sub: #1A251F;
+    --tx: #F4F6F5;
+    --mut: #8E9F96;
+    --ac: #E6A833;
+    --ac-light: rgba(230, 168, 51, 0.15);
     --ac-hover: #d19529;
-    --bd: #E6A833;     /* Gold borders for dark mode */
-    --bad: #f87171;
-    --bad-light: rgba(248, 113, 113, 0.2);
-    --jm: #60a5fa;
-    --jm-light: rgba(96, 165, 250, 0.15);
-    --grad: linear-gradient(135deg, #E6A833, #2d5a49);
-    --sh: 4px 4px 0px var(--c-gold);
-    --sh-sm: 2px 2px 0px var(--c-gold);
+    --bd: #22332A;
+    --bad: #ef5350;
+    --bad-light: rgba(239, 83, 80, 0.15);
+    --jm: #42A5F5;
+    --jm-light: rgba(66, 165, 245, 0.15);
+    --sh: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --sh-sm: 0 2px 6px rgba(0, 0, 0, 0.3);
+    --sh-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
   }
 }
 :root[data-theme="dark"]{
-  --bg: #0a110e;
-  --card: #14231d;
-  --card-sub: #1a2c24;
-  --tx: #F8F9FA;
-  --mut: #9bb3a7;
+  --bg: #090D0B;
+  --card: #121A16;
+  --card-sub: #1A251F;
+  --tx: #F4F6F5;
+  --mut: #8E9F96;
   --ac: #E6A833;
-  --ac-light: rgba(230, 168, 51, 0.2);
+  --ac-light: rgba(230, 168, 51, 0.15);
   --ac-hover: #d19529;
-  --bd: #E6A833;
-  --bad: #f87171;
-  --bad-light: rgba(248, 113, 113, 0.2);
-  --jm: #60a5fa;
-  --jm-light: rgba(96, 165, 250, 0.15);
-  --grad: linear-gradient(135deg, #E6A833, #2d5a49);
-  --sh: 4px 4px 0px var(--c-gold);
-  --sh-sm: 2px 2px 0px var(--c-gold);
+  --bd: #22332A;
+  --bad: #ef5350;
+  --bad-light: rgba(239, 83, 80, 0.15);
+  --jm: #42A5F5;
+  --jm-light: rgba(66, 165, 245, 0.15);
+  --sh: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --sh-sm: 0 2px 6px rgba(0, 0, 0, 0.3);
+  --sh-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
-*{box-sizing:border-box}
+*{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
 
 /* Background Animation */
 #bg-anim {
@@ -105,8 +102,8 @@ body{
   margin:0;
   background:transparent;
   color:var(--tx);
-  font-family: 'Courier Prime', 'Hind Siliguri', monospace, sans-serif;
-  padding:12px;
+  font-family: 'Inter', 'Hind Siliguri', system-ui, sans-serif;
+  padding:14px;
   max-width:620px;
   margin:0 auto;
   -webkit-font-smoothing:antialiased;
@@ -117,94 +114,93 @@ body{
 #splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--tx);transition:opacity .5s,visibility .5s}
 #splash.hide{opacity:0;visibility:hidden}
 #splash .logo{font-size:64px;animation:bounce 1.2s infinite; font-weight: bold;}
-#splash h1{margin:12px 0 4px;font-size:28px;font-weight:800;letter-spacing:.5px;color:var(--tx); font-family: Georgia, serif;}
+#splash h1{margin:12px 0 4px;font-size:26px;font-weight:700;letter-spacing:-0.5px;}
 #splash p{margin:0;opacity:.85;font-size:14px}
-#splash .bar{margin-top:24px;width:160px;height:8px;border-radius:0;border: 2px solid var(--bd);background:transparent;overflow:hidden; box-shadow: var(--sh-sm);}
-#splash .bar i{display:block;height:100%;width:40%;background:var(--ac);border-radius:0;animation:load 1.2s ease-in-out infinite}
+#splash .bar{margin-top:24px;width:160px;height:6px;border-radius:3px;background:var(--card-sub);overflow:hidden;}
+#splash .bar i{display:block;height:100%;width:40%;background:var(--ac);border-radius:3px;animation:load 1.2s ease-in-out infinite}
 @keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
 #offbar{position:fixed;top:0;left:0;right:0;background:var(--bad);color:#fff;text-align:center;font-size:12.5px;font-weight:600;padding:4px;z-index:1000;transform:translateY(-100%);transition:transform .3s}
 #offbar.show{transform:translateY(0)}
 
-.top-bar{position:sticky;top:0;z-index:20;display:flex;justify-content:flex-end;align-items:center;padding:10px 14px;margin:0 -12px 12px;background:var(--card);border-bottom: 2px solid var(--bd);color:var(--tx);transition:padding .25s;gap:8px;}
+.top-bar{position:sticky;top:0;z-index:20;display:flex;justify-content:flex-end;align-items:center;padding:12px 14px;margin:0 -14px 14px;background:var(--bg);color:var(--tx);transition:padding .25s;gap:8px; opacity: 0.95; backdrop-filter: blur(10px); border-bottom: 1px solid var(--bd);}
+.top-bar .right{display:flex;align-items:center;gap:10px}
+.theme-btn{background:var(--card);border:1px solid var(--bd);color:var(--tx);font-weight:600;font-size:16px;padding:8px 12px;border-radius:12px;cursor:pointer;line-height:1;box-shadow:var(--sh-sm); transition: transform .1s;}
+.theme-btn:active{transform: scale(0.95);}
+.net-status{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:12px;background:var(--card);border:1px solid var(--bd);font-size:12px;font-weight:600; box-shadow: var(--sh-sm);}
+.dot{width:8px;height:8px;border-radius:50%;background:#10B981; animation:pulse 2s infinite}
+.dot.off{background:#F59E0B;animation:none;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.4)}70%{box-shadow:0 0 0 6px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
 
-.top-bar .right{display:flex;align-items:center;gap:8px}
-.theme-btn{background:var(--ac);border:2px solid var(--bd);color:var(--tx);font-weight:bold;font-size:16px;padding:6px 12px;border-radius:var(--radius);cursor:pointer;line-height:1;box-shadow:var(--sh-sm); transition: all .1s;}
-.theme-btn:active{transform: translate(2px, 2px); box-shadow: none;}
-.net-status{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--radius);background:var(--card-sub);border:2px solid var(--bd);font-size:12px;font-weight:bold; box-shadow: var(--sh-sm);}
-.dot{width:10px;height:10px;border-radius:0;border:1px solid var(--tx); background:#22c55e; animation:pulse 2s infinite}
-.dot.off{background:#eab308;animation:none;}
-@keyframes pulse{0%{opacity: 1}50%{opacity: .5}100%{opacity: 1}}
-
-.card{background:var(--card);border:2px solid var(--bd);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--sh);animation:fadeUp .4s ease both;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:var(--ac);opacity:1}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--radius);padding:18px;margin-bottom:16px;box-shadow:var(--sh);animation:fadeUp .4s ease both;position:relative;overflow:hidden}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-details.card::before{display:none}
 
-label{font-size:13.5px;font-weight:bold;color:var(--tx);display:block;margin:12px 0 6px}
-select,input{width:100%;font-size:16px;font-family:inherit;padding:12px 14px;border:2px solid var(--bd);border-radius:var(--radius);background:var(--card-sub);color:var(--tx);outline:none;transition:border-color .2s,box-shadow .2s; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.05); font-weight: bold;}
-select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shadow: 3px 3px 0 var(--ac-light);}
-.row{display:flex;gap:10px}.row>*{flex:1}
+label{font-size:13px;font-weight:600;color:var(--mut);display:block;margin:14px 0 6px}
+select,input{width:100%;font-size:15px;font-family:inherit;padding:14px;border:1.5px solid var(--bd);border-radius:12px;background:var(--card-sub);color:var(--tx);outline:none;transition:border-color .2s,box-shadow .2s;}
+select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shadow: 0 0 0 3px var(--ac-light);}
+.row{display:flex;gap:12px}.row>*{flex:1}
 
-/* HOME GRID - Retro Buttons */
-.home-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px;margin-top:4px}
-.tile{background:var(--card);border:2px solid var(--bd);border-radius:var(--radius);padding:20px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;box-shadow:var(--sh);transition:transform .1s,box-shadow .1s;position:relative;overflow:hidden;animation:fadeUp .4s ease both;user-select:none;-webkit-tap-highlight-color:transparent;}
-.tile::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:var(--tileColor,var(--ac));opacity:1}
-.tile:active{transform:translate(4px, 4px); box-shadow: none;}
-.tile .tname{font-size:16px;font-weight:800;color:var(--tx);text-align:center; font-family: Georgia, serif; text-transform: uppercase; letter-spacing: 1px;}
-.tile .tsub{font-size:11.5px;color:var(--mut);font-weight:bold;text-align:center;line-height:1.3}
-.tile[data-color="1"]{--tileColor:#12221B}
+/* HOME GRID - Full Width (1 Column) Classic Style */
+.home-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;margin-top:4px}
+.tile{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:20px 18px;display:flex;flex-direction:row;align-items:center;justify-content:space-between;cursor:pointer;box-shadow:var(--sh);transition:transform .2s, box-shadow .2s;position:relative;overflow:hidden;user-select:none;}
+.tile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--tileColor,var(--ac));}
+.tile:active{transform:scale(0.98); box-shadow:var(--sh-sm);}
+.tile:hover{box-shadow:var(--sh-hover); transform:translateY(-2px);}
+.tile .t-content { display: flex; flex-direction: column; gap: 4px; padding-left: 8px; }
+.tile .tname{font-size:18px;font-weight:700;color:var(--tx); letter-spacing: -0.3px;}
+.tile .tsub{font-size:13px;color:var(--mut);font-weight:500;}
+.tile .arrow { color: var(--mut); font-size: 20px; font-weight: bold; }
+
+/* Tiles colors */
+.tile[data-color="1"]{--tileColor:#121A16}
 .tile[data-color="2"]{--tileColor:#D89A2B}
-.tile[data-color="3"]{--tileColor:#2563eb}
-.tile[data-color="4"]{--tileColor:#8b5cf6}
-.tile[data-color="5"]{--tileColor:#ec4899}
-.tile[data-color="6"]{--tileColor:#10b981}
-.tile[data-color="7"]{--tileColor:#ef4444}
-.tile[data-color="8"]{--tileColor:#06b6d4}
+.tile[data-color="3"]{--tileColor:#1E88E5}
+.tile[data-color="4"]{--tileColor:#8E24AA}
+.tile[data-color="5"]{--tileColor:#E91E63}
+.tile[data-color="6"]{--tileColor:#43A047}
+.tile[data-color="7"]{--tileColor:#E53935}
+.tile[data-color="8"]{--tileColor:#00ACC1}
 
 .page-wrap{display:none}
 .page-wrap.on{display:block;animation:fadeUp .35s ease}
-.page-back{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:2px solid var(--bd);border-radius:var(--radius);font-size:14px;font-weight:bold;color:var(--tx);cursor:pointer;margin-bottom:14px;box-shadow:var(--sh-sm);transition:transform .1s,box-shadow .1s;user-select:none;-webkit-tap-highlight-color:transparent;}
-.page-back:active{transform: translate(2px, 2px); box-shadow: none;}
-.page-title{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:800;margin:0 0 14px;color:var(--tx); font-family: Georgia, serif; text-transform: uppercase; letter-spacing: 1px;}
+.page-back{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:var(--card);border:1px solid var(--bd);border-radius:30px;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;margin-bottom:16px;box-shadow:var(--sh-sm);transition:transform .1s;}
+.page-back:active{transform:scale(0.95);}
+.page-title{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:700;margin:0 0 16px;color:var(--tx); letter-spacing: -0.5px;}
 
-button{font-family:inherit;font-size:15px;font-weight:700;padding:12px 16px;border:2px solid var(--bd);border-radius:var(--radius);background:var(--card);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .1s,box-shadow .1s;position:relative; box-shadow: var(--sh-sm);}
-button:active{transform:translate(2px, 2px); box-shadow: none;}
-button.on{background:var(--ac);color:var(--tx);border-color:var(--bd); box-shadow: var(--sh-sm);}
+button{font-family:inherit;font-size:15px;font-weight:600;padding:14px 18px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;user-select:none;transition:transform .1s, background .2s; box-shadow: var(--sh-sm);}
+button:active{transform:scale(0.96); box-shadow: none;}
+button.on{background:var(--ac);color:#fff;border-color:var(--ac); box-shadow: var(--sh-sm);}
 
-.big{width:100%;background:var(--ac);color:var(--tx)!important;border:2px solid var(--bd);font-size:18px;font-weight:800;padding:14px;border-radius:var(--radius);box-shadow:var(--sh);margin-top:16px; font-family: Georgia, serif; text-transform: uppercase; letter-spacing: 1px;}
-.big:active{transform:translate(4px, 4px); box-shadow: none;}
-.big.success{background:#22c55e!important; color:#fff !important;}
+.big{width:100%;background:var(--grad);color:#fff!important;border:0;font-size:16px;font-weight:700;padding:16px;border-radius:12px;box-shadow:0 4px 12px rgba(216, 154, 43, 0.3);margin-top:18px;}
+.big:active{transform:scale(0.98); box-shadow: 0 2px 6px rgba(216, 154, 43, 0.2);}
+.big.success{background:linear-gradient(135deg,#10B981,#059669)!important;}
 
-.sub{color:var(--mut);font-size:13.5px;line-height:1.5; font-weight: bold;}
-.res{color:var(--tx);font-weight:800;font-size:22px;margin-top:10px; border-bottom: 2px dashed var(--bd); padding-bottom: 4px;}
-h2{font-size:18px;font-weight:800;margin:0 0 10px;display:flex;align-items:center;gap:6px; font-family: Georgia, serif; text-transform: uppercase; letter-spacing: 1px;}
+.sub{color:var(--mut);font-size:13.5px;line-height:1.5;}
+.res{color:var(--tx);font-weight:700;font-size:22px;margin-top:12px;}
+h2{font-size:18px;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:8px; letter-spacing: -0.3px;}
 
-.wrap{overflow-x:auto;border-radius:var(--radius);border:2px solid var(--bd); background: var(--card);}
+.wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--bd); background: var(--card);}
 table{width:100%;border-collapse:collapse;font-size:14.5px;}
-th{background:var(--card-sub);color:var(--tx);font-weight:bold;font-size:13px;padding:12px 8px;border-bottom:2px solid var(--bd); text-transform: uppercase;}
-td{padding:10px 8px;border-bottom:1.5px solid var(--bd);vertical-align:middle;font-variant-numeric:tabular-nums; font-weight: bold;}
+th{background:var(--card-sub);color:var(--mut);font-weight:600;font-size:13px;padding:14px 12px;border-bottom:1px solid var(--bd);}
+td{padding:12px;border-bottom:1px solid var(--bd);vertical-align:middle;font-variant-numeric:tabular-nums; font-weight:500;}
 td:nth-child(n+3){text-align:right;white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
-tbody tr{transition: background .2s;}
-tbody tr:hover{background:var(--ac-light)}
+tbody tr:hover{background:var(--card-sub)}
 
-.x{color:var(--bad);background:var(--bad-light);border:2px solid var(--bad);border-radius:var(--radius);padding:4px 10px;font-weight:bold;font-size:14px; box-shadow: 1px 1px 0 var(--bd);}
-.x:active{transform: translate(1px, 1px); box-shadow: none;}
-.dt{font-size:13px;padding:6px 12px;margin-top:6px;border-radius:var(--radius);background:var(--card-sub);border:1px solid var(--bd);transition:background .2s; font-weight: bold;}
-.dt:hover{background:var(--ac-light)}
-#ms{color:var(--ac);font-weight:bold;font-size:15px;min-height:20px;margin-top:10px;text-align:center}
+.x{color:var(--bad);background:var(--bad-light);border:none;border-radius:8px;padding:6px 12px;font-weight:600;font-size:13px;}
+.dt{font-size:13px;padding:8px 14px;margin-top:8px;border-radius:8px;background:var(--card-sub);border:1px solid var(--bd); font-weight:600;}
+#ms{color:var(--ac);font-weight:600;font-size:14px;min-height:20px;margin-top:12px;text-align:center}
 
-details{border:2px solid var(--bd);border-radius:var(--radius);padding:16px;background:var(--card);box-shadow:var(--sh-sm); margin-bottom: 16px;}
-details summary{font-size:16px;font-weight:bold;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between; font-family: Georgia, serif;}
-details summary::after{content:'+';font-size:24px;font-weight:bold;color:var(--tx)}
+details{border:1px solid var(--bd);border-radius:16px;padding:18px;background:var(--card);box-shadow:var(--sh-sm); margin-bottom: 16px;}
+details summary{font-size:16px;font-weight:600;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;}
+details summary::after{content:'+';font-size:22px;font-weight:500;color:var(--mut)}
 details[open] summary::after{content:'−'}
 
-.modal-wrap{position:fixed;inset:0;background:rgba(18,34,27,.85);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:40;padding:14px;padding-top:calc(14px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center;animation:backdropIn .2s}
+.modal-wrap{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:40;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center;animation:backdropIn .2s}
 @keyframes backdropIn{from{opacity:0}to{opacity:1}}
-.modal-wrap>.card{width:100%;animation:modalIn .3s cubic-bezier(.34,1.56,.64,1)}
-@keyframes modalIn{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-wrap>.card{width:100%;animation:modalIn .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 
 #hd{align-items:flex-start;padding-top:calc(24px + env(safe-area-inset-top,0px))}
 #hd .card{max-height:90vh;display:flex;flex-direction:column;overflow:hidden;margin:0 auto}
@@ -221,26 +217,26 @@ details[open] summary::after{content:'−'}
 #hd .card > .wrap{margin-top:12px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0}
 
 #dday{align-items:flex-start;padding-top:calc(24px + env(safe-area-inset-top,0px))}
-#dday .card{max-height:90vh;display:flex;flex-direction:column;overflow:hidden;margin:0 auto;padding:16px}
+#dday .card{max-height:90vh;display:flex;flex-direction:column;overflow:hidden;margin:0 auto;padding:18px}
 #dday .dhead{flex:0 0 auto}
-#dday .dbody{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;margin-top:10px;padding-right:2px}
-#dday .dbody .wrap{overflow:visible;border-radius:var(--radius);border:2px solid var(--bd)}
-#dday .dfoot{flex:0 0 auto;margin-top:14px}
+#dday .dbody{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;margin-top:12px;padding-right:2px}
+#dday .dbody .wrap{overflow:visible;border-radius:12px;border:1px solid var(--bd)}
+#dday .dfoot{flex:0 0 auto;margin-top:16px}
 
-.prod-pick-item{padding:14px;border:2px solid var(--bd);border-radius:var(--radius);background:var(--card-sub);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;transition:all .1s; box-shadow: 2px 2px 0 var(--bd); margin-bottom: 8px;}
-.prod-pick-item:active{background:var(--ac-light);transform:translate(2px, 2px); box-shadow: none;}
+.prod-pick-item{padding:16px;border:1px solid var(--bd);border-radius:12px;background:var(--card-sub);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;transition:all .1s; margin-bottom: 8px;}
+.prod-pick-item:active{background:var(--ac-light);transform:scale(0.98);}
 
-.empty{display:flex;flex-direction:column;align-items:center;padding:32px 12px;gap:10px;color:var(--mut)}
-.empty .etxt{font-size:15px;font-weight:bold; font-family: Georgia, serif;}
+.empty{display:flex;flex-direction:column;align-items:center;padding:32px 16px;gap:12px;color:var(--mut)}
+.empty .etxt{font-size:15px;font-weight:500; text-align: center;}
 
-#toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-30px);background:var(--c-dark);color:#fff;padding:12px 24px;border-radius:var(--radius);border: 2px solid #fff;font-size:15px;font-weight:bold;box-shadow:4px 4px 0 rgba(0,0,0,.3);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;display:flex;align-items:center;gap:8px;max-width:90%}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--tx);color:var(--bg);padding:14px 24px;border-radius:30px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;display:flex;align-items:center;gap:8px;max-width:90%}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#toast.bad{background:var(--bad)}
+#toast.bad{background:var(--bad); color:#fff;}
 
-.dsum{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.dsum .box{background:var(--card-sub);border:2px solid var(--bd);border-radius:var(--radius);padding:12px;text-align:center; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.05);}
-.dsum .box .lbl{font-size:12px;color:var(--tx);font-weight:bold; text-transform: uppercase;}
-.dsum .box .val{font-size:22px;color:var(--tx);font-weight:bold;margin-top:4px; font-family: Georgia, serif;}
+.dsum{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.dsum .box{background:var(--card-sub);border:1px solid var(--bd);border-radius:12px;padding:14px;text-align:center;}
+.dsum .box .lbl{font-size:12px;color:var(--mut);font-weight:600;}
+.dsum .box .val{font-size:20px;color:var(--tx);font-weight:700;margin-top:6px;}
 .dsum .box .val.bad{color:var(--bad)}
 
 @media (prefers-reduced-motion:reduce){
@@ -254,7 +250,7 @@ details[open] summary::after{content:'−'}
 
 <div id="splash">
   <div class="logo">SR</div>
-  <h1>STOCK REGISTER</h1>
+  <h1>Stock Register</h1>
   <p>Loading your data…</p>
   <div class="bar"><i></i></div>
 </div>
@@ -264,7 +260,7 @@ details[open] summary::after{content:'−'}
 
 <div class="top-bar" id="topBar">
   <div class="right">
-    <div class="net-status"><span id="netDot" class="dot"></span><span id="netTx">ONLINE</span></div>
+    <div class="net-status"><span id="netDot" class="dot"></span><span id="netTx">Online</span></div>
     <button class="theme-btn" id="themeBtn" title="Theme">🌙</button>
   </div>
 </div>
@@ -272,205 +268,253 @@ details[open] summary::after{content:'−'}
 <!-- ================= HOME ================= -->
 <div class="page-wrap on" id="pgHome">
   <div class="home-grid">
-    <div class="tile" data-color="1" data-page="0"><div class="tname">Entry</div><div class="tsub">Stock jog koro</div></div>
-    <div class="tile" data-color="2" data-page="1"><div class="tname">Stock</div><div class="tsub">Stock dekho & PDF</div></div>
-    <div class="tile" data-color="3" data-page="4"><div class="tname">Market</div><div class="tsub">Mal ber & ferot</div></div>
-    <div class="tile" data-color="4" data-page="5"><div class="tname">Calc</div><div class="tsub">Quick hisab</div></div>
-    <div class="tile" data-color="5" data-page="2"><div class="tname">Khata</div><div class="tsub">Shesh entry gulo</div></div>
-    <div class="tile" data-color="6" data-page="3"><div class="tname">Product</div><div class="tsub">Pcs/ctn & dam</div></div>
-    <div class="tile" data-color="7" data-page="6"><div class="tname">Hisab</div><div class="tsub">Bekti wise hisab</div></div>
-    <div class="tile" data-color="8" data-page="7"><div class="tname">Summary</div><div class="tsub">Total sell/baki</div></div>
+    <div class="tile" data-color="1" data-page="0">
+      <div class="t-content">
+        <div class="tname">Entry</div>
+        <div class="tsub">Stock jog koro</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="tile" data-color="2" data-page="1">
+      <div class="t-content">
+        <div class="tname">Stock</div>
+        <div class="tsub">Stock dekho & PDF</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="tile" data-color="3" data-page="4">
+      <div class="t-content">
+        <div class="tname">Market</div>
+        <div class="tsub">Mal ber & ferot</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="tile" data-color="4" data-page="5">
+      <div class="t-content">
+        <div class="tname">Calc</div>
+        <div class="tsub">Quick hisab</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="tile" data-color="5" data-page="2">
+      <div class="t-content">
+        <div class="tname">Khata</div>
+        <div class="tsub">Shesh entry gulo</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="tile" data-color="6" data-page="3">
+      <div class="t-content">
+        <div class="tname">Product</div>
+        <div class="tsub">Pcs/ctn & dam</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="tile" data-color="7" data-page="6">
+      <div class="t-content">
+        <div class="tname">Hisab</div>
+        <div class="tsub">Bekti wise hisab</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="tile" data-color="8" data-page="7">
+      <div class="t-content">
+        <div class="tname">Summary</div>
+        <div class="tsub">Total sell/baki</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
   </div>
 </div>
 
 <!-- ================= PAGE 0: Entry ================= -->
 <div class="page-wrap" id="pg0">
-  <div class="page-back" data-home>← BACK TO HOME</div>
-  <div class="page-title">ENTRY</div>
+  <div class="page-back" data-home>← Back to Home</div>
+  <div class="page-title">Entry</div>
   <div class="card">
     <div style="display:none"><button data-t="open" class="on">Prothom stock +</button><button data-t="mk">Market e gelo −</button></div>
     <div class="sub" style="margin-top:2px">Ekhane shudhu stock jog hoy (Prothom stock), jekono tarikhe. Market er mal ber/ferot Market tab e.</div>
-    <label>TARIKH</label><input id="dt" type="date">
-    <button id="viewDay" style="width:100%;margin-top:12px;background:var(--card-sub);color:var(--tx);border:2px dashed var(--bd);font-weight:bold">EI TARIKHER ENTRY DEKHO</button>
-    <label>PRODUCT</label>
-    <div style="display:flex;gap:6px">
-      <button id="pv0" style="flex:0 0 44px;padding:0;font-size:18px">◀</button>
+    <label>Tarikh</label><input id="dt" type="date">
+    <button id="viewDay" style="width:100%;margin-top:12px;background:var(--card-sub);color:var(--tx);border:1px solid var(--bd);font-weight:600">Ei tarikher entry dekho</button>
+    <label>Product</label>
+    <div style="display:flex;gap:8px">
+      <button id="pv0" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">‹</button>
       <select id="pe" style="display:none"></select>
-      <button id="pe_btn" type="button" style="flex:1;min-width:0;text-align:left;font-size:16px;font-weight:bold;padding:12px 14px;background:var(--card-sub);border:2px solid var(--bd);border-radius:var(--radius);display:flex;justify-content:space-between;align-items:center; box-shadow: var(--sh-sm);">
+      <button id="pe_btn" type="button" style="flex:1;min-width:0;text-align:left;font-size:15px;font-weight:600;padding:14px;background:var(--card-sub);border:1.5px solid var(--bd);border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
         <span id="pe_name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Product baachun</span>
-        <span style="font-size:14px;color:var(--tx);flex:0 0 auto;margin-left:6px; font-weight:bold;">▼</span>
+        <span style="font-size:12px;color:var(--mut);flex:0 0 auto;margin-left:6px;">▼</span>
       </button>
-      <button id="nx0" style="flex:0 0 44px;padding:0;font-size:18px">▶</button>
+      <button id="nx0" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">›</button>
     </div>
-    <div class="row" style="margin-top:12px"><button id="de">DETAILS</button><button id="se">PCS/CTN</button></div>
+    <div class="row" style="margin-top:12px"><button id="de" style="background:var(--card-sub); border:1px solid var(--bd);">Details</button><button id="se" style="background:var(--card-sub); border:1px solid var(--bd);">Pcs/Ctn</button></div>
     <div class="row"><div><label>CTN</label><input id="c1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="c2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div></div>
-    <label>KROY DOR (DEALER PRICE), 1 CTN = ___ TK</label><input id="ec" type="number" inputmode="decimal" step="any" min="0">
-    <div id="rtw" style="display:none"><label>CTN DOR (TK), PRODUCT ER DAM THEKE ASHE</label><input id="rt" type="number" inputmode="decimal" step="any" min="0"></div>
-    <div class="sub" id="pv" style="margin-top:12px;font-weight:bold; border-top: 1px dashed var(--bd); padding-top: 8px;"></div>
-    <label style="display:flex;gap:8px;align-items:center;margin-top:12px;color:var(--tx);cursor:pointer"><input type="checkbox" id="nx" style="width:auto;accent-color:var(--ac); transform: scale(1.5); margin-right: 8px;"> SAVE KORLE PORER PRODUCT E JABE</label>
-    <button class="big" id="sv">SAVE KORO</button><div id="ms"></div>
-    <button id="gb" style="display:none;width:100%;margin-top:12px">FEROT DAO / BIKRI HISAB DEKHO →</button>
+    <label>Kroy dor (dealer price), 1 ctn = ___ tk</label><input id="ec" type="number" inputmode="decimal" step="any" min="0">
+    <div id="rtw" style="display:none"><label>Ctn dor (tk), product er dam theke ashe</label><input id="rt" type="number" inputmode="decimal" step="any" min="0"></div>
+    <div class="sub" id="pv" style="margin-top:14px;font-weight:500; border-top: 1px solid var(--bd); padding-top: 12px;"></div>
+    <label style="display:flex;gap:10px;align-items:center;margin-top:16px;color:var(--tx);cursor:pointer"><input type="checkbox" id="nx" style="width:20px;height:20px;accent-color:var(--ac); margin:0;"> Save korle porer product e jabe</label>
+    <button class="big" id="sv">Save koro</button><div id="ms"></div>
+    <button id="gb" style="display:none;width:100%;margin-top:12px">Ferot dao / Bikri hishab dekho →</button>
   </div>
-  <details class="card" id="ad"><summary>NOTUN PRODUCT ADD</summary>
-    <div style="margin-top:12px">
-      <label>NAM</label><input id="nn" type="text" placeholder="Product er nam">
-      <div class="row"><div><label>1 CTN E PCS</label><input id="nk" type="number" inputmode="numeric" min="1" placeholder="1"></div><div><label>1 CTN DAM (TK)</label><input id="np" type="number" inputmode="decimal" min="0" placeholder="0"></div></div>
-      <button class="big" id="na">+ ADD KORO</button>
+  <details class="card" id="ad"><summary>Notun product add</summary>
+    <div style="margin-top:16px">
+      <label>Nam</label><input id="nn" type="text" placeholder="Product er nam">
+      <div class="row"><div><label>1 ctn e pcs</label><input id="nk" type="number" inputmode="numeric" min="1" placeholder="1"></div><div><label>1 ctn dam (tk)</label><input id="np" type="number" inputmode="decimal" min="0" placeholder="0"></div></div>
+      <button class="big" id="na">+ Add koro</button>
     </div>
   </details>
 </div>
 
 <!-- ================= PAGE 1: Stock ================= -->
 <div class="page-wrap" id="pg1">
-  <div class="page-back" data-home>← BACK TO HOME</div>
-  <div class="page-title">STOCK</div>
+  <div class="page-back" data-home>← Back to Home</div>
+  <div class="page-title">Stock</div>
   <div class="card">
-    <div class="row" id="sm3"><button data-m="0" class="on">EKHON</button><button data-m="1">TARIKH OBDHI</button><button data-m="2">LENDEN</button></div>
-    <div class="row" id="rg" style="display:none;margin-top:12px"><div id="d1w"><label>THEKE</label><input id="d1" type="date"></div><div><label id="d2l">TARIKH PORJONTO</label><input id="d2" type="date"></div></div>
+    <div class="row" id="sm3" style="background:var(--card-sub); padding:6px; border-radius:12px;"><button data-m="0" class="on" style="border:none; box-shadow:none; padding:10px;">Ekhon</button><button data-m="1" style="border:none; box-shadow:none; padding:10px;">Tarikh obdhi</button><button data-m="2" style="border:none; box-shadow:none; padding:10px;">Lenden</button></div>
+    <div class="row" id="rg" style="display:none;margin-top:16px"><div id="d1w"><label>Theke</label><input id="d1" type="date"></div><div><label id="d2l">Tarikh porjonto</label><input id="d2" type="date"></div></div>
     <input id="q" placeholder="🔍 Product khujo..." style="margin-top:16px">
     <div class="wrap" style="margin-top:16px"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
     <div class="res" id="tv"></div>
-    <button class="big" id="pdf">PDF DOWNLOAD</button><div id="pm" class="sub" style="margin-top:10px;text-align:center"></div>
+    <button class="big" id="pdf">PDF download</button><div id="pm" class="sub" style="margin-top:12px;text-align:center"></div>
   </div>
 </div>
 
 <!-- ================= PAGE 4: Market ================= -->
 <div class="page-wrap" id="pg4">
-  <div class="page-back" data-home>← BACK TO HOME</div>
-  <div class="page-title">MARKET</div>
-  <div class="card"><label>MARKET ER TARIKH</label><input id="mdt" type="date"></div>
-  <div class="card"><h2>1. BAHIR (MAL GELO)</h2>
-    <div style="display:flex;gap:6px"><button id="mbv" style="flex:0 0 44px;padding:0;font-size:18px">◀</button><select id="mb" style="flex:1;min-width:0"></select><button id="mbx" style="flex:0 0 44px;padding:0;font-size:18px">▶</button></div>
-    <div class="row" style="margin-top:10px;"><div><label>CTN</label><input id="mb1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="mb2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>DOR / CTN</label><input id="mbr" type="number" inputmode="decimal" step="any" min="0"></div></div>
-    <label style="display:flex;gap:8px;align-items:center;margin-top:12px;color:var(--tx);cursor:pointer"><input type="checkbox" id="mbc" checked style="width:auto;accent-color:var(--ac); transform: scale(1.5); margin-right: 8px;"> ADD KORLE PORER PRODUCT E JABE</label>
-    <button class="big" id="mba">+ BAHIR E JOG KORO</button><div id="mbm" class="sub" style="min-height:20px;margin-top:8px;text-align:center"></div>
+  <div class="page-back" data-home>← Back to Home</div>
+  <div class="page-title">Market</div>
+  <div class="card"><label>Market er tarikh</label><input id="mdt" type="date"></div>
+  <div class="card"><h2>1. Bahir (mal gelo)</h2>
+    <div style="display:flex;gap:8px"><button id="mbv" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">‹</button><select id="mb" style="flex:1;min-width:0"></select><button id="mbx" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">›</button></div>
+    <div class="row" style="margin-top:16px;"><div><label>CTN</label><input id="mb1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="mb2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>Dor / ctn</label><input id="mbr" type="number" inputmode="decimal" step="any" min="0"></div></div>
+    <label style="display:flex;gap:10px;align-items:center;margin-top:16px;color:var(--tx);cursor:pointer"><input type="checkbox" id="mbc" checked style="width:20px;height:20px;accent-color:var(--ac); margin:0;"> Add korle porer product e jabe</label>
+    <button class="big" id="mba">+ Bahir e jog koro</button><div id="mbm" class="sub" style="min-height:20px;margin-top:10px;text-align:center"></div>
     <div id="mbl"></div>
   </div>
-  <div class="card"><h2>2. FEROT</h2>
-    <div style="display:flex;gap:6px"><button id="mfv" style="flex:0 0 44px;padding:0;font-size:18px">◀</button><select id="mf" style="flex:1;min-width:0"></select><button id="mfx" style="flex:0 0 44px;padding:0;font-size:18px">▶</button></div>
-    <div id="mfb" style="margin-top:10px;"><div class="row"><div><label>FEROT CTN</label><input id="mf1" type="number" inputmode="decimal" step="any" min="0"></div><div><label>FEROT PCS</label><input id="mf2" type="number" inputmode="decimal" step="any" min="0"></div><div><label>DOR / CTN</label><input id="mfr" type="number" inputmode="decimal" step="any" min="0"></div></div></div>
-    <div id="mfi" style="margin-top:12px;line-height:1.7; font-weight: bold;"></div>
+  <div class="card"><h2>2. Ferot</h2>
+    <div style="display:flex;gap:8px"><button id="mfv" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">‹</button><select id="mf" style="flex:1;min-width:0"></select><button id="mfx" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">›</button></div>
+    <div id="mfb" style="margin-top:16px;"><div class="row"><div><label>Ferot CTN</label><input id="mf1" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Ferot PCS</label><input id="mf2" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Dor / ctn</label><input id="mfr" type="number" inputmode="decimal" step="any" min="0"></div></div></div>
+    <div id="mfi" style="margin-top:14px;line-height:1.7; font-weight:500;"></div>
   </div>
-  <button class="big" id="mfin" style="margin-bottom:16px">FINISH: PURA MARKET SHEET DEKHO</button>
+  <button class="big" id="mfin" style="margin-bottom:16px">Finish: pura Market Sheet dekho</button>
   <div id="msheet"></div>
-  <div class="card"><h2>HISTORY (TARIKH ONUJAYI)</h2><div class="row"><div><label>THEKE</label><input id="hy1" type="date"></div><div><label>PORJONTO</label><input id="hy2" type="date"></div></div>
-    <div class="sub" style="margin-top:8px">Tarikh na dile shob market ashbe.</div><div id="hys" style="margin-top:12px;line-height:1.8"></div>
-    <button class="big" id="hypdf">HISTORY PDF</button><div id="hym" class="sub" style="margin-top:10px;text-align:center"></div>
+  <div class="card"><h2>History (tarikh onujayi)</h2><div class="row"><div><label>Theke</label><input id="hy1" type="date"></div><div><label>Porjonto</label><input id="hy2" type="date"></div></div>
+    <div class="sub" style="margin-top:8px">Tarikh na dile shob market ashbe.</div><div id="hys" style="margin-top:14px;line-height:1.8"></div>
+    <button class="big" id="hypdf">History PDF</button><div id="hym" class="sub" style="margin-top:12px;text-align:center"></div>
   </div>
 </div>
 
 <!-- ================= PAGE 5: Calc ================= -->
 <div class="page-wrap" id="pg5">
-  <div class="page-back" data-home>← BACK TO HOME</div>
-  <div class="page-title">CALC</div>
-  <div class="card"><label>PRODUCT</label><div style="display:flex;gap:6px"><button id="cpv" style="flex:0 0 44px;padding:0;font-size:18px">◀</button><select id="cp" style="flex:1;min-width:0"></select><button id="cnx" style="flex:0 0 44px;padding:0;font-size:18px">▶</button></div>
-    <div class="sub" id="ci" style="margin-top:10px; font-weight: bold;"></div>
-    <h2 style="margin-top:16px; border-bottom: 2px solid var(--bd); padding-bottom: 6px;">PROTHOM</h2>
+  <div class="page-back" data-home>← Back to Home</div>
+  <div class="page-title">Calc</div>
+  <div class="card"><label>Product</label><div style="display:flex;gap:8px"><button id="cpv" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">‹</button><select id="cp" style="flex:1;min-width:0"></select><button id="cnx" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">›</button></div>
+    <div class="sub" id="ci" style="margin-top:12px; font-weight:500;"></div>
+    <h2 style="margin-top:20px; border-top: 1px solid var(--bd); padding-top: 16px;">Prothom</h2>
     <div class="row"><div><label>CTN</label><input id="ca1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="ca2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
-    <div class="row" style="margin-top:16px"><button id="cm0" class="on">− BIYOG</button><button id="cp0">+ JOG</button></div>
+    <div class="row" style="margin-top:16px; background:var(--card-sub); padding:6px; border-radius:12px;"><button id="cm0" class="on" style="border:none; box-shadow:none;">− Biyog</button><button id="cp0" style="border:none; box-shadow:none;">+ Jog</button></div>
     <div class="row"><div><label>CTN</label><input id="cb1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="cb2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
-    <div class="res" id="cr">0 CTN 0 PCS</div><div class="sub" id="ct" style="font-weight: bold;"></div><div class="res" id="cd" style="font-size:22px"></div>
+    <div class="res" id="cr">0 ctn 0 pcs</div><div class="sub" id="ct" style="font-weight: 500;"></div><div class="res" id="cd" style="font-size:22px"></div>
   </div>
 </div>
 
 <!-- ================= PAGE 2: Khata ================= -->
 <div class="page-wrap" id="pg2">
-  <div class="page-back" data-home>← BACK TO HOME</div>
-  <div class="page-title">KHATA</div>
-  <div class="card"><h2>SHESH 150 TA ENTRY</h2><div class="wrap"><table><tbody id="kh"></tbody></table></div></div>
+  <div class="page-back" data-home>← Back to Home</div>
+  <div class="page-title">Khata</div>
+  <div class="card"><h2>Shesh 150 ta entry</h2><div class="wrap"><table><tbody id="kh"></tbody></table></div></div>
 </div>
 
 <!-- ================= PAGE 3: Product ================= -->
 <div class="page-wrap" id="pg3">
-  <div class="page-back" data-home>← BACK TO HOME</div>
-  <div class="page-title">PRODUCT</div>
-  <div class="card"><h2>PRODUCT ER PCS/CTN AR DAM</h2>
-    <div style="display:flex;gap:6px"><button id="ppv" style="flex:0 0 44px;padding:0;font-size:18px">◀</button><select id="pp" style="flex:1;min-width:0"></select><button id="pnx" style="flex:0 0 44px;padding:0;font-size:18px">▶</button></div>
-    <div class="row" style="margin-top:12px;"><div><label>1 CTN = ___ PCS</label><input id="pk" type="number" inputmode="numeric" min="1"></div><div><label>1 CTN DAM (TK)</label><input id="pd" type="number" inputmode="decimal" min="0"></div></div>
-    <label>LAV % (BIKRI DAM THEKE KOTO % LAV PAO)</label><input id="plv" type="number" inputmode="decimal" step="any" min="0"><label>KROY DOR (DEALER PRICE): 1 CTN = ___ TK</label><input id="pcr" type="number" inputmode="decimal" min="0">
+  <div class="page-back" data-home>← Back to Home</div>
+  <div class="page-title">Product</div>
+  <div class="card"><h2>Product er pcs/ctn ar dam</h2>
+    <div style="display:flex;gap:8px"><button id="ppv" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">‹</button><select id="pp" style="flex:1;min-width:0"></select><button id="pnx" style="flex:0 0 48px;padding:0;font-size:18px; background:var(--card-sub); border:1px solid var(--bd);">›</button></div>
+    <div class="row" style="margin-top:16px;"><div><label>1 ctn = ___ pcs</label><input id="pk" type="number" inputmode="numeric" min="1"></div><div><label>1 ctn dam (tk)</label><input id="pd" type="number" inputmode="decimal" min="0"></div></div>
+    <label>Lav % (bikri dam theke koto % lav pao)</label><input id="plv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk</label><input id="pcr" type="number" inputmode="decimal" min="0">
   </div>
-  <details class="card" id="bkd"><summary>BACKUP (DATA NIRAPOD RAKHTE)</summary>
-    <div style="margin-top:12px"><div class="row"><button id="bk">BACKUP DOWNLOAD</button><button id="rs0">RESTORE</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:12px"></div>
-    <div id="bkset" style="margin-top:12px;padding-top:12px;border-top:2px dashed var(--bd)">
+  <details class="card" id="bkd"><summary>Backup (data nirapod rakhte)</summary>
+    <div style="margin-top:16px"><div class="row"><button id="bk">Backup download</button><button id="rs0">Restore</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:12px"></div>
+    <div id="bkset" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd)">
     <div class="sub" id="bklast" style="margin-bottom:12px"></div>
-    <div class="row" style="align-items:center;gap:8px"><span class="sub">REMAINDER:</span>
-    <select id="bkfreq"><option value="1">PROTIDIN</option><option value="3">3 DIN POR POR</option><option value="7">7 DIN POR POR</option><option value="0">BONDHO</option></select></div>
-    <label class="sub" style="display:flex;align-items:center;gap:8px;margin-top:12px"><input type="checkbox" id="bkauto"> AUTO BACKUP (APP KHULLE NIJEI DOWNLOAD HOBE)</label>
+    <div class="row" style="align-items:center;gap:10px"><span class="sub" style="flex:0 0 auto;">Remainder:</span>
+    <select id="bkfreq"><option value="1">Protidin</option><option value="3">3 din por por</option><option value="7">7 din por por</option><option value="0">Bondho</option></select></div>
+    <label class="sub" style="display:flex;align-items:center;gap:10px;margin-top:16px; cursor:pointer;"><input type="checkbox" id="bkauto" style="width:20px;height:20px;accent-color:var(--ac); margin:0;"> Auto backup (app khulle nijei download hobe)</label>
     </div></div>
   </details>
-  <details class="card" id="rsd"><summary>RESET</summary>
-    <div style="margin-top:12px">
+  <details class="card" id="rsd"><summary>Reset</summary>
+    <div style="margin-top:16px">
       <div class="sub" style="margin:12px 0">Reset korar age Backup nao. Protita button 2 bar chapte hobe.</div>
-      <button id="r1" style="width:100%;margin-bottom:12px">SHOB ENTRY MUCHE FELO</button>
-      <button id="r2" style="width:100%;margin-bottom:12px">PURA RESET (PRODUCT SHOHO)</button>
-      <button id="r3" style="width:100%">RESET UNDO</button>
-      <div class="sub" id="rm" style="margin-top:12px"></div>
+      <button id="r1" style="width:100%;margin-bottom:12px; background:var(--bad-light); color:var(--bad); border:none;">Shob entry muche felo (product shoho thakbe)</button>
+      <button id="r2" style="width:100%;margin-bottom:12px; background:var(--bad); color:#fff; border:none;">Pura reset (product, pcs/ctn, dam shoho)</button>
+      <button id="r3" style="width:100%; background:var(--card-sub); border:1px solid var(--bd);">Reset undo (ager obosthay ferot)</button>
+      <div class="sub" id="rm" style="margin-top:12px; text-align:center;"></div>
     </div>
   </details>
 </div>
 
 <!-- ================= PAGE 6: Hisab ================= -->
 <div class="page-wrap" id="pg6">
-  <div class="page-back" data-home>← BACK TO HOME</div>
-  <div class="page-title">HISAB</div>
-  <div class="card"><button class="big" id="hadd" style="margin-top:0">+ NOTUN BEKTI ADD</button>
-    <div class="wrap" style="margin-top:16px"><table><thead><tr><th>NAM</th><th style="text-align:right">JOMA</th><th style="text-align:right">KHOROCH</th><th style="text-align:right">BAKI</th><th></th></tr></thead><tbody id="hb"></tbody></table></div>
-    <div id="ht" style="margin-top:16px;line-height:1.8; font-weight: bold;"></div>
-    <label style="display:flex;gap:8px;align-items:center;color:var(--tx);margin-top:16px;cursor:pointer"><input type="checkbox" id="hdet" style="width:auto;accent-color:var(--ac); transform: scale(1.5); margin-right: 8px;"> PDF E PROTITA ENTRY-O DEKHAO</label>
-    <button class="big" id="hpdf" style="margin-top:12px">PDF DOWNLOAD</button><div id="hpm" class="sub" style="margin-top:10px;text-align:center"></div>
+  <div class="page-back" data-home>← Back to Home</div>
+  <div class="page-title">Hisab</div>
+  <div class="card"><button class="big" id="hadd" style="margin-top:0">+ Notun bekti Add</button>
+    <div class="wrap" style="margin-top:16px"><table><thead><tr><th>Nam</th><th style="text-align:right">Joma</th><th style="text-align:right">Khoroch</th><th style="text-align:right">Baki</th><th></th></tr></thead><tbody id="hb"></tbody></table></div>
+    <div id="ht" style="margin-top:16px;line-height:1.8; font-weight: 500;"></div>
+    <label style="display:flex;gap:10px;align-items:center;color:var(--tx);margin-top:16px;cursor:pointer"><input type="checkbox" id="hdet" style="width:20px;height:20px;accent-color:var(--ac); margin:0;"> PDF e protita entry-o dekhao</label>
+    <button class="big" id="hpdf" style="margin-top:16px">PDF download</button><div id="hpm" class="sub" style="margin-top:12px;text-align:center"></div>
   </div>
 </div>
 
 <!-- ================= PAGE 7: Summary ================= -->
 <div class="page-wrap" id="pg7">
-  <div class="page-back" data-home>← BACK TO HOME</div>
-  <div class="page-title">SUMMARY</div>
-  <div class="card"><h2>TARIKH PORISIMA</h2><div class="row"><div><label>THEKE</label><input id="zs1" type="date"></div><div><label>PORJONTO</label><input id="zs2" type="date"></div></div><div class="sub" style="margin-top:10px">Tarikh na dile shob din. Sell Market theke, Joma/Khoroch Hisab theke auto ashe.</div></div>
-  <div class="card"><h2>TOTAL</h2><div id="zg"></div></div>
+  <div class="page-back" data-home>← Back to Home</div>
+  <div class="page-title">Summary</div>
+  <div class="card"><h2>Tarikh porisima</h2><div class="row"><div><label>Theke</label><input id="zs1" type="date"></div><div><label>Porjonto</label><input id="zs2" type="date"></div></div><div class="sub" style="margin-top:10px">Tarikh na dile shob din. Sell Market theke, Joma/Khoroch Hisab theke auto ashe.</div></div>
+  <div class="card"><h2>Total</h2><div id="zg"></div></div>
   <div id="zl"></div>
 </div>
 
 <!-- ================= MODALS ================= -->
 <div id="ppm" class="modal-wrap" style="display:none">
   <div class="card" style="max-width:540px;max-height:85vh;display:flex;flex-direction:column;padding:20px;">
-    <div class="row" style="align-items:center;margin-bottom:12px">
-      <h2 style="flex:1;margin:0">PRODUCT LIST</h2>
-      <button id="ppmc" style="flex:0 0 auto;padding:8px 16px">BONDHO</button>
+    <div class="row" style="align-items:center;margin-bottom:16px">
+      <h2 style="flex:1;margin:0">Product List</h2>
+      <button id="ppmc" style="flex:0 0 auto;padding:8px 16px; background:var(--card-sub); border:1px solid var(--bd);">Bondho</button>
     </div>
-    <div class="sub" style="margin-bottom:12px;font-size:13px;">TAP KORLE SELECT HOBE · CHEPE DHORE RAKHLE DELETE OPTION ASHBE</div>
+    <div class="sub" style="margin-bottom:12px;font-size:12.5px;">Tap korle select hobe · Chepe dhore rakhle delete option ashbe</div>
     <input id="ppq" placeholder="Product khujo..." style="margin-bottom:16px">
-    <div id="ppl" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px;max-height:55vh;padding-right:2px;-webkit-overflow-scrolling:touch;"></div>
+    <div id="ppl" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:8px;max-height:55vh;padding-right:2px;-webkit-overflow-scrolling:touch;"></div>
   </div>
 </div>
 
-<div id="dm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><div class="row" style="align-items:center"><h2 id="dh" style="flex:1;margin:0"></h2><button id="dc" style="flex:0 0 auto">BONDHO</button></div><div class="sub" id="dr" style="margin-top:10px; font-weight: bold;"></div><div id="ds" style="margin:12px 0;line-height:1.8; font-weight: bold;"></div><div class="wrap"><table><tbody id="dl"></tbody></table></div></div></div>
+<div id="dm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><div class="row" style="align-items:center"><h2 id="dh" style="flex:1;margin:0"></h2><button id="dc" style="flex:0 0 auto; background:var(--card-sub); border:1px solid var(--bd);">Bondho</button></div><div class="sub" id="dr" style="margin-top:10px; font-weight: 500;"></div><div id="ds" style="margin:16px 0;line-height:1.8; font-weight: 500;"></div><div class="wrap"><table><tbody id="dl"></tbody></table></div></div></div>
 
-<div id="hm" class="modal-wrap" style="display:none"><div class="card" style="max-width:520px;margin:0 auto"><h2>+ NOTUN BEKTI ADD</h2><label>BEKTIR NAM</label><input id="hmn" type="text" placeholder="Nam likhun"><div id="hmp" class="sub" style="margin-top:10px;min-height:20px"></div><div class="row" style="margin-top:20px"><button id="hmx">BONDHO</button><button class="on" id="hms">ADD</button></div></div></div>
+<div id="hm" class="modal-wrap" style="display:none"><div class="card" style="max-width:520px;margin:0 auto"><h2>Notun bekti add</h2><label>Bektir nam</label><input id="hmn" type="text" placeholder="Nam likhun"><div id="hmp" class="sub" style="margin-top:10px;min-height:20px"></div><div class="row" style="margin-top:20px"><button id="hmx" style="background:var(--card-sub); border:1px solid var(--bd);">Bondho</button><button class="on" id="hms">Add</button></div></div></div>
 
 <div id="hd" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto;max-height:90vh;display:flex;flex-direction:column;overflow:hidden">
-<div class="row" style="align-items:center"><input id="hdn" type="text" style="flex:1;font-weight:bold; font-size: 18px;"><button id="hdc" style="flex:0 0 auto">BONDHO</button></div>
-<div id="hds" style="margin:12px 0;line-height:1.8; font-weight: bold;"></div>
-<div class="row"><button id="hdj" class="on">+ JOMA</button><button id="hdk">− KHOROCH</button></div>
-<div class="row" style="margin-top:12px;"><div><label>TAKA (200+300 likhte paro)</label><input id="hda" type="text"></div><div><label>TARIKH</label><input id="hdd" type="date"></div></div>
-<label>NOTE</label><input id="hdt" type="text" placeholder="Bistarito...">
-<div id="hdp" style="margin:10px 0;min-height:20px; font-weight: bold;"></div>
-<button class="big" id="hdv" style="margin-top:4px">SAVE</button>
-<button class="big" id="hdpdf" style="background:var(--c-dark); color: #fff !important; margin-top:12px;">EI BEKTIR PDF</button>
-<div id="hdpmsg" class="sub" style="margin-top:10px;text-align:center;min-height:20px"></div>
+<div class="row" style="align-items:center"><input id="hdn" type="text" style="flex:1;font-weight:700; font-size: 18px; background:transparent; border:none; padding-left:0; box-shadow:none;"><button id="hdc" style="flex:0 0 auto; background:var(--card-sub); border:1px solid var(--bd);">Bondho</button></div>
+<div id="hds" style="margin:16px 0;line-height:1.8; font-weight: 500;"></div>
+<div class="row" style="background:var(--card-sub); padding:6px; border-radius:12px;"><button id="hdj" class="on" style="border:none; box-shadow:none;">+ Joma</button><button id="hdk" style="border:none; box-shadow:none;">− Khoroch</button></div>
+<div class="row" style="margin-top:16px;"><div><label>Taka (200+300 likhte paro)</label><input id="hda" type="text"></div><div><label>Tarikh</label><input id="hdd" type="date"></div></div>
+<label>Note (na dileo hoy)</label><input id="hdt" type="text" placeholder="Bistarito...">
+<div id="hdp" style="margin:12px 0;min-height:20px; font-weight: 500;"></div>
+<button class="big" id="hdv" style="margin-top:4px">Save</button>
+<button class="big" id="hdpdf" style="background:linear-gradient(135deg,#1E88E5,#1565C0);margin-top:12px">Ei bektir PDF</button>
+<div id="hdpmsg" class="sub" style="margin-top:12px;text-align:center;min-height:20px"></div>
 <div class="wrap" style="margin-top:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0"><table><tbody id="hdl"></tbody></table></div></div></div>
 
-<div id="cm" class="modal-wrap" style="display:none"><div class="card" style="max-width:420px;margin:0 auto"><h2 style="color:var(--bad)">DELETE KORBEN?</h2><div id="cmt" style="margin:12px 0 20px;line-height:1.6; font-weight: bold;"></div><div class="sub" style="margin-bottom:16px">Vul hole pore "RESET UNDO" diye ferot ante parben.</div><div class="row"><button id="cn">NA, BONDHO</button><button id="cy" style="background:var(--bad);color:#fff;border-color:var(--bd)">HAA, DELETE KORO</button></div></div></div>
+<div id="cm" class="modal-wrap" style="display:none"><div class="card" style="max-width:420px;margin:0 auto"><h2 style="color:var(--bad)">Delete korben?</h2><div id="cmt" style="margin:16px 0 20px;line-height:1.6; font-weight: 500;"></div><div class="sub" style="margin-bottom:20px">Vul hole pore "Reset undo" diye ferot ante parben.</div><div class="row"><button id="cn" style="background:var(--card-sub); border:1px solid var(--bd);">Na, bondho</button><button id="cy" style="background:var(--bad);color:#fff;border-color:var(--bad)">Haa, delete koro</button></div></div></div>
 
-<div id="sm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><h2 id="sh"></h2><label>EI PRODUCT 1 CTN E KOTO PCS?</label><input id="sk" type="number" inputmode="numeric" min="1"><label>1 CTN ER DAM (TK)</label><input id="sd" type="number" inputmode="decimal" min="0"><label>1 PCS ER DAM (TK)</label><input id="sp" type="number" inputmode="decimal" min="0"><label>LAV %</label><input id="slv" type="number" inputmode="decimal" step="any" min="0"><label>KROY DOR (DEALER PRICE): 1 CTN</label><input id="skc" type="number" inputmode="decimal" min="0"><div class="row" style="margin-top:20px"><button id="sx">BONDHO</button><button class="on" id="ss">SAVE</button></div></div></div>
+<div id="sm" class="modal-wrap" style="display:none"><div class="card" style="max-width:560px;margin:0 auto"><h2 id="sh"></h2><label>Ei product 1 ctn e koto pcs?</label><input id="sk" type="number" inputmode="numeric" min="1"><label>1 ctn er dam (tk)</label><input id="sd" type="number" inputmode="decimal" min="0"><label>1 pcs er dam (tk)</label><input id="sp" type="number" inputmode="decimal" min="0"><label>Lav %</label><input id="slv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn</label><input id="skc" type="number" inputmode="decimal" min="0"><div class="row" style="margin-top:20px"><button id="sx" style="background:var(--card-sub); border:1px solid var(--bd);">Bondho</button><button class="on" id="ss">Save</button></div></div></div>
 
 <div id="dday" class="modal-wrap" style="display:none">
   <div class="card" style="max-width:600px;margin:0 auto">
     <div class="dhead">
       <div class="row" style="align-items:center">
-        <h2 id="ddayT" style="flex:1;margin:0">TARIKHER ENTRY</h2>
-        <button id="ddayC" style="flex:0 0 auto">BONDHO</button>
+        <h2 id="ddayT" style="flex:1;margin:0">Tarikher entry</h2>
+        <button id="ddayC" style="flex:0 0 auto; background:var(--card-sub); border:1px solid var(--bd);">Bondho</button>
       </div>
-      <div class="sub" id="ddayS" style="margin-top:10px; font-weight: bold;"></div>
+      <div class="sub" id="ddayS" style="margin-top:10px; font-weight: 500;"></div>
       <div class="dsum" id="ddaySum"></div>
     </div>
     <div class="dbody">
@@ -478,10 +522,10 @@ details[open] summary::after{content:'−'}
         <table>
           <thead>
             <tr>
-              <th>PRODUCT</th>
-              <th style="text-align:right">CTN/PCS</th>
-              <th style="text-align:right">KROY/CTN</th>
-              <th style="text-align:right">DAM</th>
+              <th>Product</th>
+              <th style="text-align:right">Ctn/Pcs</th>
+              <th style="text-align:right">Kroy/ctn</th>
+              <th style="text-align:right">Dam</th>
               <th></th>
             </tr>
           </thead>
@@ -491,8 +535,8 @@ details[open] summary::after{content:'−'}
     </div>
     <div class="dfoot">
       <div id="ddayR"></div>
-      <button class="big" id="ddayPdf" style="margin-top:12px">EI TARIKHER PDF</button>
-      <div id="ddayPMsg" class="sub" style="margin-top:10px;text-align:center;min-height:20px"></div>
+      <button class="big" id="ddayPdf" style="margin-top:16px">Ei tarikher PDF</button>
+      <div id="ddayPMsg" class="sub" style="margin-top:12px;text-align:center;min-height:20px"></div>
     </div>
   </div>
 </div>
@@ -620,13 +664,13 @@ else{const v=M.reduce((s,r)=>s+nq(r)/k*r.r,0);tv+=v;R.push({i,k,c:[fmt(j,k),fmt(
 return{R,tv}}
 
 function rs(){const{R,tv}=getData();$("th").innerHTML="<tr><th>Product</th>"+heads().map(x=>"<th>"+x+"</th>").join("")+"</tr>";
-$("tb").innerHTML=R.map((r,idx)=>`<tr style="animation-delay:${Math.min(idx*20,300)}ms"><td>${esc(P()[r.i][0])}<br><span class="sub">1 ctn = ${r.k} pcs<br>${rcst(r.i)?"Kroy dor: "+mm2(rcst(r.i))+" tk/ctn (pcs "+mm2(rcst(r.i)/r.k)+")":"<span style='color:var(--bad)'>kroy dor deya nai</span>"}<br>Bikri dam: ${PR(r.i)?mm2(PR(r.i))+" tk/ctn":"nai"}${S.lv[r.i]?" · Lav "+S.lv[r.i]+"%":""}</span><br><button class="dt" data-i="${r.i}">Details</button> <button class="dt" data-s="${r.i}">Pcs/Ctn set</button></td>${r.c.map(c=>"<td>"+c+"</td>").join("")}</tr>`).join("")||'<tr><td colspan="4"><div class="empty"><div class="etxt">KONO ENTRY NEI. ENTRY TAB THEKE STOCK JOG KORO.</div></div></td></tr>';
+$("tb").innerHTML=R.map((r,idx)=>`<tr style="animation-delay:${Math.min(idx*20,300)}ms"><td>${esc(P()[r.i][0])}<br><span class="sub">1 ctn = ${r.k} pcs<br>${rcst(r.i)?"Kroy dor: "+mm2(rcst(r.i))+" tk/ctn":"<span style='color:var(--bad)'>kroy dor deya nai</span>"}<br>Bikri dam: ${PR(r.i)?mm2(PR(r.i))+" tk/ctn":"nai"}</span><br><button class="dt" data-i="${r.i}">Details</button> <button class="dt" data-s="${r.i}">Pcs/Ctn set</button></td>${r.c.map(c=>"<td>"+c+"</td>").join("")}</tr>`).join("")||'<tr><td colspan="4"><div class="empty"><div class="etxt">Kono entry nei. Entry tab theke stock jog koro.</div></div></td></tr>';
 $("tv").textContent=R.length?(SM===2?"Total bikri dam: ":"Total stock dam (kroy dor): ")+money(tv)+" tk":""}
 
 function rk(){const A=S.log.map(e=>({k:"l",e})).concat(S.mk.map(r=>({k:"m",e:r}))).sort((a,b)=>b.e.d.localeCompare(a.e.d)||b.e.id-a.e.id).slice(0,150);
 $("kh").innerHTML=A.map(({k,e})=>{const p=P()[e.i],nm=p?esc(p[0]):"?";
 return k==="l"?`<tr><td>${e.d}<br><span class="sub">${LB[e.t]}</span></td><td>${nm}</td><td>${e.c} ctn ${e.p} pcs</td><td><button class="x" data-id="${e.id}">✕</button></td></tr>`
-:`<tr><td>${e.d}<br><span class="sub">Market e gelo</span></td><td>${nm}</td><td>Gelo ${e.gc} ctn ${e.gp} pcs<br><span class="sub">Ferot ${e.fc} ctn ${e.fp} pcs</span></td><td><button class="x" data-mk="${e.id}">✕</button></td></tr>`}).join("")||'<tr><td><div class="empty"><div class="etxt">KONO ENTRY NEI</div></div></td></tr>'}
+:`<tr><td>${e.d}<br><span class="sub">Market e gelo</span></td><td>${nm}</td><td>Gelo ${e.gc} ctn ${e.gp} pcs<br><span class="sub">Ferot ${e.fc} ctn ${e.fp} pcs</span></td><td><button class="x" data-mk="${e.id}">✕</button></td></tr>`}).join("")||'<tr><td><div class="empty"><div class="etxt">Kono entry nei</div></div></td></tr>'}
 
 function rp(){const i=+$("pp").value;$("pk").value=K(i);$("pd").value=PR(i)||"";$("pcr").value=CP(i)||"";$("plv").value=S.lv[i]||""}
 const mdate=()=>$("mdt").value||today();
@@ -640,7 +684,7 @@ function opts2(){const{R}=sellData();const a=$("mb").value,b=$("mf").value;
 const valid=P().map((p,i)=>({p,i})).filter(x=>!isDel(x.i));
 $("mb").innerHTML=valid.map(x=>`<option value="${x.i}">${x.i+1}. ${esc(x.p[0])}</option>`).join("");if(a)$("mb").value=a;
 $("mf").innerHTML=R.map(x=>`<option value="${x.i}">${esc(P()[x.i][0])}</option>`).join("");if(b&&R.some(x=>String(x.i)===b))$("mf").value=b}
-function rlist(){const{R}=sellData();$("mbl").innerHTML=R.length?'<div class="sub" style="margin-top:12px">Ei tarikhe bahir:</div>'+R.map(x=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)"><span>${esc(P()[x.i][0])} · <b>${dq(x.g,x.k)}</b></span><button class="x" data-mk="${x.r.id}">✕</button></div>`).join(""):""}
+function rlist(){const{R}=sellData();$("mbl").innerHTML=R.length?'<div class="sub" style="margin-top:16px">Ei tarikhe bahir:</div>'+R.map(x=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--bd)"><span>${esc(P()[x.i][0])} · <b>${dq(x.g,x.k)}</b></span><button class="x" data-mk="${x.r.id}">✕</button></div>`).join(""):""}
 $("mbl").onclick=e=>{const b=e.target.closest("[data-mk]");if(!b)return;ask(b,()=>{S.mk=S.mk.filter(x=>String(x.id)!==b.dataset.mk);save();rsell()})};
 function fshow(r){const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f),v=net/k*r.r;
 $("mfi").innerHTML=`Gelo ${dq(g,k)} − Ferot ${dq(f,k)} = <b>Bikri ${dq(net,k)}</b><br>${r.r?rd(net/k)+" ctn × "+mm2(r.r)+" = <b style='color:var(--ac)'>"+mm2(v)+" tk</b>":"<span class='sub'>dor deya nai</span>"}`;if(FM)rsheet()}
@@ -651,7 +695,7 @@ const ffe=()=>{const r=S.mk.find(y=>y.d===mdate()&&String(y.i)===$("mf").value);
 function labOf(R,d){const lc=R.filter(x=>acost(x.i,d)>0);return{cost:lc.reduce((s,x)=>s+x.net/x.k*acost(x.i,d),0),lab:lc.reduce((s,x)=>s+x.v-x.net/x.k*acost(x.i,d),0),n:lc.length}}
 function LAB(R,d){const o=labOf(R,d);return o.n?`Kroy dam: ${mm2(o.cost)} tk · <b style="color:${sc(o.lab)}">Lab: ${sg(o.lab)} tk</b>`+(o.n<R.length?" (kichu product e kroy dor nai)":""):"Kroy dor deya nai, lab dekhano jachche na"}
 function rsheet(){if(!FM){$("msheet").innerHTML="";return}const{R,tv}=sellData();
-$("msheet").innerHTML=`<div class="card"><h2>MARKET SHEET · ${mdate()}</h2><div class="wrap"><table><thead><tr><th>Product</th><th>Gelo</th><th>Ferot</th><th>Bikri</th><th>Dam</th></tr></thead><tbody>${R.map(x=>`<tr><td>${esc(P()[x.i][0])}<br><span class="sub">dor ${x.r.r?mm2(x.r.r):"?"}</span></td><td>${dq(x.g,x.k)}</td><td>${dq(x.f,x.k)}</td><td><b>${dq(x.net,x.k)}</b></td><td>${x.r.r?mm2(x.v):""}</td></tr>`).join("")||'<tr><td colspan="5"><div class="empty"><div class="etxt">KONO BAHIR ENTRY NEI</div></div></td></tr>'}</tbody><tfoot><tr><td colspan="4"><b>Total dam</b></td><td style="text-align:right"><b>${mm2(tv)}</b></td></tr></tfoot></table></div><div class="res">Total: ${mm2(tv)} tk</div><div class="sub" style="margin-top:8px">${LAB(R,mdate())}</div><button class="big" id="spdf">PDF DOWNLOAD</button><div id="spm" class="sub" style="margin-top:10px;text-align:center"></div></div>`;$("spdf").onclick=pdfSheet}
+$("msheet").innerHTML=`<div class="card"><h2>Market Sheet · ${mdate()}</h2><div class="wrap"><table><thead><tr><th>Product</th><th>Gelo</th><th>Ferot</th><th>Bikri</th><th>Dam</th></tr></thead><tbody>${R.map(x=>`<tr><td>${esc(P()[x.i][0])}<br><span class="sub">dor ${x.r.r?mm2(x.r.r):"?"}</span></td><td>${dq(x.g,x.k)}</td><td>${dq(x.f,x.k)}</td><td><b>${dq(x.net,x.k)}</b></td><td>${x.r.r?mm2(x.v):""}</td></tr>`).join("")||'<tr><td colspan="5"><div class="empty"><div class="etxt">Kono bahir entry nei</div></div></td></tr>'}</tbody><tfoot><tr><td colspan="4"><b>Total dam</b></td><td style="text-align:right"><b>${mm2(tv)}</b></td></tr></tfoot></table></div><div class="res">Total: ${mm2(tv)} tk</div><div class="sub" style="margin-top:10px">${LAB(R,mdate())}</div><button class="big" id="spdf">PDF download</button><div id="spm" class="sub" style="margin-top:12px;text-align:center"></div></div>`;$("spdf").onclick=pdfSheet}
 function rsell(){opts2();if($("mbr").value==="")rmb();rlist();rferot();rsheet();hyRender()}
 $("mb").onchange=rmb;$("mf").onchange=rferot;
 $("mbv").onclick=()=>stp("mb",-1,rmb);$("mbx").onclick=()=>stp("mb",1,rmb);
@@ -826,12 +870,12 @@ function openDayView(){
       <td style="text-align:right"><b>${r.amt?mm2(r.amt):'—'}</b></td>
       <td><button class="x" data-ddel="${e.id}">✕</button></td>
     </tr>`;
-  }).join(""):'<tr><td colspan="5"><div class="empty"><div class="etxt">EI TARIKHE KONO ENTRY NEI</div></div></td></tr>';
+  }).join(""):'<tr><td colspan="5"><div class="empty"><div class="etxt">Ei tarikhe kono entry nei</div></div></td></tr>';
   $("ddayR").innerHTML = entries.length
     ? `<div class="dsum" style="grid-template-columns:1fr;margin-top:0">
-         <div class="box" style="border:2px solid var(--bd);background:var(--ac-light)">
-           <div class="lbl" style="color:var(--tx);font-weight:bold">EI TARIKHE MOT KROY</div>
-           <div class="val" style="font-size:26px">${mm2(totalAmt)} tk</div>
+         <div class="box" style="border:1.5px solid var(--ac);background:var(--ac-light)">
+           <div class="lbl" style="color:var(--ac);font-weight:700">EI TARIKHE MOT KROY</div>
+           <div class="val" style="font-size:26px;color:var(--ac);">${mm2(totalAmt)} tk</div>
          </div>
        </div>`
     : "";
@@ -929,7 +973,7 @@ else{
 }
 save();$("c1").value="";$("c2").value="";prev();if($("nx").checked)go(1,1);
 $("ms").textContent="Save hoyeche ✓";
-const sb=$("sv");sb.classList.add("success");sb.textContent="✓ SAVE HOYECHE";setTimeout(()=>{sb.classList.remove("success");sb.textContent="SAVE KORO"},1200);
+const sb=$("sv");sb.classList.add("success");sb.textContent="✓ Save hoyeche";setTimeout(()=>{sb.classList.remove("success");sb.textContent="Save koro"},1200);
 toast("Entry save hoyeche");
 $("gb").style.display=T==="mk"?"block":"none";setTimeout(()=>$("ms").textContent="",2000)};
 
@@ -1037,12 +1081,12 @@ const pj=p=>p.t.filter(e=>e.ty==="j").reduce((s,e)=>s+e.a,0),pk=p=>p.t.filter(e=
 const gp=()=>S.hp.find(x=>x.id===HP);
 
 function hrender(){let tj=0,tk=0;
-$("hb").innerHTML=S.hp.map(p=>{const j=pj(p),k=pk(p),b=j-k;tj+=j;tk+=k;return`<tr><td data-hp="${p.id}" style="cursor:pointer">${esc(p.n)||"(nam nai)"}<br><span class="sub">${p.t.length} ta entry · tap koro</span></td><td style="text-align:right">${j?mm2(j):""}</td><td>${k?mm2(k):""}</td><td style="color:${sc(b)};font-weight:700">${sg(b)}</td><td><button class="x" data-hd="${p.id}">✕</button></td></tr>`}).join("")||'<tr><td colspan="5"><div class="empty"><div class="etxt">KONO BEKTI NEI. + ADD CHAPO.</div></div></td></tr>';
+$("hb").innerHTML=S.hp.map(p=>{const j=pj(p),k=pk(p),b=j-k;tj+=j;tk+=k;return`<tr><td data-hp="${p.id}" style="cursor:pointer">${esc(p.n)||"(nam nai)"}<br><span class="sub">${p.t.length} ta entry · tap koro</span></td><td style="text-align:right">${j?mm2(j):""}</td><td>${k?mm2(k):""}</td><td style="color:${sc(b)};font-weight:700">${sg(b)}</td><td><button class="x" data-hd="${p.id}">✕</button></td></tr>`}).join("")||'<tr><td colspan="5"><div class="empty"><div class="etxt">Kono bekti nai. + Add chapo.</div></div></td></tr>';
 const n=tj-tk;$("ht").innerHTML=S.hp.length?`Total joma: <b>${mm2(tj)}</b><br>Total khoroch: <b>${mm2(tk)}</b><br><span style="font-size:22px;font-weight:800;color:${sc(n)}">Baki: ${sg(n)} tk</span>`:""}
 
 function hdrender(){const p=gp();if(!p)return;const j=pj(p),k=pk(p),b=j-k;
 $("hds").innerHTML=`Joma: <b>${mm2(j)}</b> · Khoroch: <b>${mm2(k)}</b><br><span style="font-size:22px;font-weight:800;color:${sc(b)}">Baki: ${sg(b)} tk</span>`;
-$("hdl").innerHTML=p.t.slice().sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(e=>`<tr><td>${e.d}<br><span class="sub">${esc(e.nt||"")}</span></td><td style="color:${e.ty==="j"?"var(--ac)":"var(--bad)"};font-weight:600">${e.ty==="j"?"Joma +":"Khoroch −"}</td><td style="text-align:right">${mm2(e.a)}</td><td><button class="x" data-ed="${e.id}">✕</button></td></tr>`).join("")||'<tr><td colspan="4"><div class="empty"><div class="etxt">KONO ENTRY NEI</div></div></td></tr>';hdprev()}
+$("hdl").innerHTML=p.t.slice().sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(e=>`<tr><td>${e.d}<br><span class="sub">${esc(e.nt||"")}</span></td><td style="color:${e.ty==="j"?"var(--ac)":"var(--bad)"};font-weight:600">${e.ty==="j"?"Joma +":"Khoroch −"}</td><td style="text-align:right">${mm2(e.a)}</td><td><button class="x" data-ed="${e.id}">✕</button></td></tr>`).join("")||'<tr><td colspan="4"><div class="empty"><div class="etxt">Kono entry nei</div></div></td></tr>';hdprev()}
 
 function hdprev(){const p=gp();if(!p)return;const a=am($("hda").value),b=pj(p)-pk(p);$("hdp").innerHTML=a?"Save korle Baki hobe: <b style='color:"+sc(b+(HT==="j"?a:-a))+"'>"+sg(b+(HT==="j"?a:-a))+" tk</b>":""}
 function hdopen(id){HP=id;const p=gp();$("hdn").value=p.n;$("hda").value=$("hdt").value="";$("hdd").value=today();$("hdpmsg").textContent="";hdrender();openModal("hd");
@@ -1204,7 +1248,7 @@ const g=M.reduce((s,r)=>s+gq(r),0),f=M.reduce((s,r)=>s+fq(r),0),sv=M.reduce((s,r
 $("dh").textContent=P()[i][0];$("dr").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  1 ctn dam: "+mm2(PR(i))+" tk  |  1 pcs dam: "+mm2(PR(i)/k)+" tk":"");
 $("ds").innerHTML="Stock jog (prothom): <b>"+fmt(o,k)+"</b><br>Market e gelo: <b>"+dq(g,k)+"</b><br>Ferot: <b>"+dq(f,k)+"</b><br>Sell (gelo − ferot): <b>"+dq(g-f,k)+"</b>"+(sv?" = <b>"+mm2(sv)+" tk</b>":"")+"<br>Ekhon ache: <b>"+fmt(o-(g-f),k)+"</b> ("+rd(o-(g-f))+" pcs)";
 const A=L.map(e=>({d:e.d,id:e.id,h:`<td>${e.d}<br><span class="sub">${LB[e.t]}</span></td><td>${e.c} ctn ${e.p} pcs<br><span class="sub">${qty(e)} pcs</span></td><td><button class="x" data-id="${e.id}">✕</button></td>`})).concat(M.map(r=>({d:r.d,id:r.id,h:`<td>${r.d}<br><span class="sub">Market e gelo</span></td><td>Gelo ${dq(gq(r),k)}<br><span class="sub">Ferot ${dq(fq(r),k)}${r.r?" · dor "+mm2(r.r):""}</span></td><td><button class="x" data-mk="${r.id}">✕</button></td>`})));
-$("dl").innerHTML=A.sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(a=>"<tr>"+a.h+"</tr>").join("")||'<tr><td colspan="3"><div class="empty"><div class="etxt">KONO ENTRY NEI</div></div></td></tr>';
+$("dl").innerHTML=A.sort((x,y)=>y.d.localeCompare(x.d)||y.id-x.id).map(a=>"<tr>"+a.h+"</tr>").join("")||'<tr><td colspan="3"><div class="empty"><div class="etxt">Kono entry nei</div></div></td></tr>';
 openModal("dm");}
 $("de").onclick=()=>det(+$("pe").value);
 $("tb").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.i!==undefined)det(+b.dataset.i);else if(b.dataset.s!==undefined)setm(+b.dataset.s)};
@@ -1233,15 +1277,15 @@ const G={sell:0,cost:0,lab:0,j:0,k:0,b:0,ln:0};L.forEach(o=>{G.sell+=o.sell;G.co
 const zlab=o=>o.ln?`Kroy dam ${mm2(o.cost)} · <b style="color:${sc(o.lab)}">Lab ${sg(o.lab)} tk</b>`:"";
 function zrender(){const{L,G}=zdays(),bc=v=>v<0?"var(--bad)":"var(--ac)";
 $("zg").innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:8px 0">`+zc("Total Sell",G.sell,"var(--ac)",104)+zc("Total Joma",G.j,"var(--jm)",104)+zc("Total Khoroch",G.k,"var(--bad)",104)+zc("Baki",G.b,bc(G.b),104)+`</div><div class="sub" style="margin-top:14px;text-align:center;font-weight:500">${L.length} din${zlab(G)?" · "+zlab(G):""}</div>`;
-$("zl").innerHTML=L.slice().reverse().map(o=>`<div class="card"><div style="font-weight:700;margin-bottom:10px;font-size:15px">${o.d}</div><div style="display:flex;justify-content:space-between;gap:6px">${zc("Sell",o.sell,"var(--ac)",68)}${zc("Joma",o.j,"var(--jm)",68)}${zc("Khoroch",o.k,"var(--bad)",68)}${zc("Baki",o.b,bc(o.b),68)}</div>${zlab(o)?`<div class="sub" style="margin-top:10px">${zlab(o)}</div>`:""}</div>`).join("")||'<div class="empty"><div class="etxt">EI SOMOYE KONO DIN ER DATA NAI</div></div>';
+$("zl").innerHTML=L.slice().reverse().map(o=>`<div class="card"><div style="font-weight:700;margin-bottom:10px;font-size:15px">${o.d}</div><div style="display:flex;justify-content:space-between;gap:6px">${zc("Sell",o.sell,"var(--ac)",68)}${zc("Joma",o.j,"var(--jm)",68)}${zc("Khoroch",o.k,"var(--bad)",68)}${zc("Baki",o.b,bc(o.b),68)}</div>${zlab(o)?`<div class="sub" style="margin-top:10px">${zlab(o)}</div>`:""}</div>`).join("")||'<div class="empty"><div class="etxt">Ei somoye kono din er data nai</div></div>';
 document.querySelectorAll(".zcirc").forEach(el=>{const v=parseFloat(el.dataset.v)||0;countUp(el,v,700)});}
 $("zs1").oninput=$("zs2").oninput=zrender;
 
 function updateNetStatus(){
   const d=$("netDot"),t=$("netTx"),ob=$("offbar");
   if(!d||!t)return;
-  if(navigator.onLine){d.className="dot";t.textContent="ONLINE";if(ob)ob.classList.remove("show")}
-  else{d.className="dot off";t.textContent="OFFLINE";if(ob)ob.classList.add("show")}
+  if(navigator.onLine){d.className="dot";t.textContent="Online";if(ob)ob.classList.remove("show")}
+  else{d.className="dot off";t.textContent="Offline";if(ob)ob.classList.add("show")}
 }
 window.addEventListener("online",updateNetStatus);
 window.addEventListener("offline",updateNetStatus);
@@ -1258,12 +1302,12 @@ function renderProductPicker(){
   $("ppl").innerHTML=filtered.map(x=>`
     <div class="prod-pick-item" data-idx="${x.i}">
       <div>
-        <div style="font-weight:bold;font-size:16px">${x.i+1}. ${esc(x.p[0])}</div>
-        <div class="sub" style="font-size:13px">1 ctn = ${K(x.i)} pcs ${PR(x.i)?'· '+mm2(PR(x.i))+' tk':''}</div>
+        <div style="font-weight:600;font-size:15px">${x.i+1}. ${esc(x.p[0])}</div>
+        <div class="sub" style="font-size:12px">1 ctn = ${K(x.i)} pcs ${PR(x.i)?'· '+mm2(PR(x.i))+' tk':''}</div>
       </div>
-      <span style="color:var(--tx);font-size:13px;font-weight:bold">SELECT</span>
+      <span style="color:var(--ac);font-size:12px;font-weight:600">Select ➜</span>
     </div>
-  `).join("")||'<div class="empty"><div class="etxt">KONO PRODUCT PAWA JAYNI</div></div>';
+  `).join("")||'<div class="empty"><div class="etxt">Kono product pawa jayni</div></div>';
 
   document.querySelectorAll(".prod-pick-item").forEach(el=>{
     const i=+el.dataset.idx;
@@ -1345,12 +1389,12 @@ rrt();
     if(pop)return;
     const l=last(),d=l?Math.floor((Date.now()-l)/DAY):null;
     pop=document.createElement("div");pop.className="modal-wrap";pop.style.zIndex=99;
-    pop.innerHTML='<div class="card" style="border-radius:4px;padding:24px;max-width:340px;width:100%;box-shadow:8px 8px 0 var(--c-dark);text-align:center;border:2px solid var(--bd)">'+
+    pop.innerHTML='<div class="card" style="border-radius:16px;padding:24px;max-width:340px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.2);text-align:center;border:1px solid var(--bd)">'+
       '<div style="font-size:34px; font-weight: bold; font-family: Georgia, serif;">!</div>'+
-      '<div style="font-size:20px;font-weight:bold;margin:8px 0;color:var(--tx); font-family: Georgia, serif;">BACKUP NIBAR SOMOY HOYECHE</div>'+
-      '<div style="font-size:14px;color:var(--mut);margin-bottom:20px; font-weight: bold;">'+(l?"Shesh backup "+(d>0?d+" din age":"aj")+" neya hoyechilo.":"Ekhono kono backup neya hoy ni.")+' Data harale ferot ana jabe na.</div>'+
-      '<button id="bkp_now" class="big" style="margin-top:0">EKHONI BACKUP NAO</button>'+
-      '<button id="bkp_later" style="width:100%;margin-top:12px;padding:12px;border-radius:4px;border:2px solid var(--bd);background:var(--card);color:var(--tx);font-size:15px; font-weight:bold;">EKTU PORE JANAO</button></div>';
+      '<div style="font-size:18px;font-weight:700;margin:8px 0;color:var(--tx);">Backup nibar somoy hoyeche</div>'+
+      '<div style="font-size:14px;color:var(--mut);margin-bottom:20px; font-weight: 500;">'+(l?"Shesh backup "+(d>0?d+" din age":"aj")+" neya hoyechilo.":"Ekhono kono backup neya hoy ni.")+' Data harale ferot ana jabe na.</div>'+
+      '<button id="bkp_now" class="big" style="margin-top:0">Ekhoni Backup nao</button>'+
+      '<button id="bkp_later" style="width:100%;margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--bd);background:var(--card-sub);color:var(--tx);font-size:15px; font-weight:600;">Ektu pore janao</button></div>';
     document.body.appendChild(pop);
     const close=()=>{pop&&pop.remove();pop=null};
     pop.querySelector("#bkp_now").onclick=async()=>{try{await doBackup();$("bm").textContent="Backup hoyeche ✓";toast("Backup download hoyeche")}catch(e){}close()};
@@ -1370,7 +1414,7 @@ window.addEventListener("load",()=>{
 });
 setTimeout(()=>{const sp=$("splash");if(sp&&!sp.classList.contains("hide"))sp.classList.add("hide")},2500);
 
-/* ===== Background Animation (Golden particles falling heavily) ===== */
+/* ===== Background Animation (Golden particles falling) ===== */
 (function(){
   const cvs = document.getElementById('bg-anim');
   const ctx = cvs.getContext('2d');
@@ -1410,11 +1454,9 @@ setTimeout(()=>{const sp=$("splash");if(sp&&!sp.classList.contains("hide"))sp.cl
     }
     draw() {
       const dark = isDark();
-      // High contrast gold
       ctx.fillStyle = `rgba(216, 154, 43, ${this.opacity})`;
       
       if (dark) {
-        // Brighter gold in dark mode
         ctx.fillStyle = `rgba(230, 168, 51, ${this.opacity + 0.2})`;
       }
 
