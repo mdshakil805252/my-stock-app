@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -5,452 +9,342 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Stock Register</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#070812">
+<meta name="theme-color" content="#060913">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{
-  /* Apple Liquid Glass Palette - Dark Mode (Default) */
-  --c-purple: #8B5CF6;
-  --c-cyan: #0A84FF;
+  /* Apple Duo-Tone Palette: Ocean Blue + Sunset Coral */
+  --c-duo1: #0A84FF;
+  --c-duo2: #FF5E3A;
 
-  --bg: #070812;
-  --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 55%, rgba(255, 255, 255, 0.08) 100%);
-  --card: rgba(24, 24, 42, 0.44);
-  --modal-card: rgba(22, 22, 38, 0.72);
+  /* Dark Theme (Default) - Apple Midnight Liquid Glass */
+  --bg: #060913;
+  --card: rgba(22, 30, 48, 0.48);
   --card-sub: rgba(255, 255, 255, 0.08);
-  --card-hover: rgba(255, 255, 255, 0.14);
-  --tx: #F8FAFC;
-  --mut: rgba(226, 232, 240, 0.65);
-  --ac: #8B5CF6;
-  --ac-blue: #0A84FF;
-  --ac-light: rgba(139, 92, 246, 0.24);
+  --modal-bg: rgba(18, 25, 42, 0.78);
+  --tx: #F5F7FA;
+  --mut: #9BA5B8;
+  --ac: #0A84FF;
+  --ac-2: #FF5E3A;
+  --ac-light: rgba(10, 132, 255, 0.18);
   --bd: rgba(255, 255, 255, 0.18);
-  --bd-hi: rgba(255, 255, 255, 0.36);
+  --bd-top: rgba(255, 255, 255, 0.34);
   --bad: #FF453A;
-  --bad-light: rgba(255, 69, 58, 0.22);
-  --jm: #0A84FF;
-  --jm-light: rgba(10, 132, 255, 0.22);
+  --bad-light: rgba(255, 69, 58, 0.18);
+  --jm: #30D158;
+  --jm-light: rgba(48, 209, 88, 0.18);
 
-  /* Apple Specular Glass Shadows */
-  --glass-blur: blur(28px) saturate(190%);
-  --sh: inset 0 1px 0 0 rgba(255, 255, 255, 0.30), inset 0 -1px 0 0 rgba(255, 255, 255, 0.06), 0 18px 40px -10px rgba(0, 0, 0, 0.60);
-  --sh-sm: inset 0 1px 0 0 rgba(255, 255, 255, 0.24), 0 6px 18px -4px rgba(0, 0, 0, 0.35);
-  --sh-well: inset 0 1.5px 4px rgba(0, 0, 0, 0.28), inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+  /* Apple Liquid Glass Shadows & Highlights */
+  --sh: 0 16px 40px -8px rgba(0, 0, 0, 0.52), inset 0 1px 0 0 var(--bd-top);
+  --sh-sm: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
   --radius: 24px;
-  --grad: linear-gradient(135deg, #7C3AED 0%, #0A84FF 100%);
+  --grad: linear-gradient(135deg, #0A84FF 0%, #FF5E3A 100%);
+  --glass-blur: blur(28px) saturate(190%);
+  --spring: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Light Theme (Apple iOS Frosted Milky Glass) */
+/* Light Theme - Apple Frosted Daylight Glass */
 @media (prefers-color-scheme:light){
   :root:not([data-theme="dark"]){
-    --bg: #EBF0FA;
-    --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.80) 0%, rgba(255, 255, 255, 0.46) 55%, rgba(255, 255, 255, 0.68) 100%);
-    --card: rgba(255, 255, 255, 0.56);
-    --modal-card: rgba(250, 252, 255, 0.80);
-    --card-sub: rgba(255, 255, 255, 0.52);
-    --card-hover: rgba(255, 255, 255, 0.82);
+    --bg: #EDF2F8;
+    --card: rgba(255, 255, 255, 0.60);
+    --card-sub: rgba(255, 255, 255, 0.58);
+    --modal-bg: rgba(248, 250, 254, 0.84);
     --tx: #0F172A;
-    --mut: rgba(30, 41, 59, 0.65);
-    --ac: #6D28D9;
-    --ac-blue: #007AFF;
-    --ac-light: rgba(109, 40, 217, 0.14);
-    --bd: rgba(255, 255, 255, 0.72);
-    --bd-hi: rgba(255, 255, 255, 0.98);
+    --mut: #5A657A;
+    --ac: #007AFF;
+    --ac-2: #FF4F28;
+    --ac-light: rgba(0, 122, 255, 0.14);
+    --bd: rgba(15, 23, 42, 0.09);
+    --bd-top: rgba(255, 255, 255, 0.92);
     --bad: #FF3B30;
     --bad-light: rgba(255, 59, 48, 0.14);
-    --jm: #007AFF;
-    --jm-light: rgba(0, 122, 255, 0.14);
-    --sh: inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 0 rgba(15, 23, 42, 0.05), 0 16px 38px -10px rgba(31, 38, 135, 0.16);
-    --sh-sm: inset 0 1px 0 0 rgba(255, 255, 255, 0.90), 0 4px 14px -2px rgba(31, 38, 135, 0.10);
-    --sh-well: inset 0 1.5px 4px rgba(15, 23, 42, 0.07), 0 1px 0 rgba(255, 255, 255, 0.8);
+    --jm: #16A34A;
+    --jm-light: rgba(22, 163, 74, 0.14);
+    --sh: 0 14px 36px -8px rgba(15, 23, 42, 0.10), inset 0 1.5px 0 0 var(--bd-top);
+    --sh-sm: 0 4px 12px rgba(15, 23, 42, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.85);
+    --grad: linear-gradient(135deg, #007AFF 0%, #FF4F28 100%);
   }
 }
 :root[data-theme="light"]{
-  --bg: #EBF0FA;
-  --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.80) 0%, rgba(255, 255, 255, 0.46) 55%, rgba(255, 255, 255, 0.68) 100%);
-  --card: rgba(255, 255, 255, 0.56);
-  --modal-card: rgba(250, 252, 255, 0.80);
-  --card-sub: rgba(255, 255, 255, 0.52);
-  --card-hover: rgba(255, 255, 255, 0.82);
+  --bg: #EDF2F8;
+  --card: rgba(255, 255, 255, 0.60);
+  --card-sub: rgba(255, 255, 255, 0.58);
+  --modal-bg: rgba(248, 250, 254, 0.84);
   --tx: #0F172A;
-  --mut: rgba(30, 41, 59, 0.65);
-  --ac: #6D28D9;
-  --ac-blue: #007AFF;
-  --ac-light: rgba(109, 40, 217, 0.14);
-  --bd: rgba(255, 255, 255, 0.72);
-  --bd-hi: rgba(255, 255, 255, 0.98);
+  --mut: #5A657A;
+  --ac: #007AFF;
+  --ac-2: #FF4F28;
+  --ac-light: rgba(0, 122, 255, 0.14);
+  --bd: rgba(15, 23, 42, 0.09);
+  --bd-top: rgba(255, 255, 255, 0.92);
   --bad: #FF3B30;
   --bad-light: rgba(255, 59, 48, 0.14);
-  --jm: #007AFF;
-  --jm-light: rgba(0, 122, 255, 0.14);
-  --sh: inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 0 rgba(15, 23, 42, 0.05), 0 16px 38px -10px rgba(31, 38, 135, 0.16);
-  --sh-sm: inset 0 1px 0 0 rgba(255, 255, 255, 0.90), 0 4px 14px -2px rgba(31, 38, 135, 0.10);
-  --sh-well: inset 0 1.5px 4px rgba(15, 23, 42, 0.07), 0 1px 0 rgba(255, 255, 255, 0.8);
+  --jm: #16A34A;
+  --jm-light: rgba(22, 163, 74, 0.14);
+  --sh: 0 14px 36px -8px rgba(15, 23, 42, 0.10), inset 0 1.5px 0 0 var(--bd-top);
+  --sh-sm: 0 4px 12px rgba(15, 23, 42, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.85);
+  --grad: linear-gradient(135deg, #007AFF 0%, #FF4F28 100%);
 }
 
 *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
 
-/* Apple Ambient Mesh Backdrop */
-.apple-bg{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  background:var(--bg);
-  overflow:hidden;
-  pointer-events:none;
-  transition:background .35s ease;
-}
-.orb{
-  position:absolute;
-  border-radius:50%;
-  filter:blur(75px);
-  opacity:0.55;
-  will-change:transform;
-  animation:orbFloat 18s ease-in-out infinite alternate;
-}
-.orb-1{width:340px;height:340px;top:-90px;left:-80px;background:radial-gradient(circle, rgba(139,92,246,0.75), rgba(99,102,241,0));animation-duration:16s;}
-.orb-2{width:380px;height:380px;top:25%;right:-120px;background:radial-gradient(circle, rgba(10,132,255,0.68), rgba(6,182,212,0));animation-duration:21s;animation-delay:-5s;}
-.orb-3{width:320px;height:320px;bottom:-80px;left:10%;background:radial-gradient(circle, rgba(236,72,153,0.50), rgba(139,92,246,0));animation-duration:24s;animation-delay:-9s;}
-@media (prefers-color-scheme:light){
-  :root:not([data-theme="dark"]) .orb{opacity:0.65;filter:blur(80px);}
-}
-:root[data-theme="light"] .orb{opacity:0.65;filter:blur(80px);}
-@keyframes orbFloat{
-  0%{transform:translate3d(0,0,0) scale(1);}
-  50%{transform:translate3d(28px,36px,0) scale(1.08);}
-  100%{transform:translate3d(-22px,18px,0) scale(0.95);}
-}
-
-/* Soft Canvas Motes */
+/* Apple Duo Fluid Background Canvas */
 #bg-anim {
   position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
-  display: block;
+  background: var(--bg);
+  transition: background .4s ease;
 }
 
 body{
   margin:0 auto;
   background:transparent;
   color:var(--tx);
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Hind Siliguri', system-ui, sans-serif;
-  padding:14px 14px 40px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Hind Siliguri', system-ui, sans-serif;
+  padding:14px;
   max-width:620px;
   -webkit-font-smoothing:antialiased;
   position: relative;
   z-index: 1;
 }
 
-/* Splash Screen - Apple Glass */
-#splash{position:fixed;inset:0;z-index:9999;background:var(--bg);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--tx);transition:opacity .5s,visibility .5s}
+/* Apple Style Splash Screen */
+#splash{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--tx);transition:opacity .5s var(--spring),visibility .5s
+}
 #splash.hide{opacity:0;visibility:hidden}
 #splash .logo{
-  width:88px;height:88px;border-radius:26px;
+  width:84px;height:84px;border-radius:24px;
+  background:var(--grad);
   display:flex;align-items:center;justify-content:center;
-  font-size:36px;font-weight:800;letter-spacing:-1px;
-  background:var(--glass-bg), var(--card);
-  border:1px solid var(--bd-hi);
-  box-shadow:var(--sh);
-  color:var(--tx);
-  animation:bounce 1.4s ease-in-out infinite;
+  font-size:34px;font-weight:800;color:#fff;letter-spacing:-1px;
+  box-shadow:0 16px 40px rgba(10, 132, 255, 0.35), inset 0 1.5px 0 rgba(255,255,255,0.45);
+  animation:appleFloat 1.6s ease-in-out infinite;
 }
 #splash h1{margin:16px 0 4px;font-size:26px;font-weight:700;letter-spacing:-0.6px;}
 #splash p{margin:0;opacity:.75;font-size:14px}
-#splash .bar{margin-top:24px;width:160px;height:5px;border-radius:99px;background:var(--card-sub);border:1px solid var(--bd);overflow:hidden;}
+#splash .bar{margin-top:24px;width:160px;height:5px;border-radius:99px;background:var(--card-sub);overflow:hidden;border:1px solid var(--bd);}
 #splash .bar i{display:block;height:100%;width:45%;background:var(--grad);border-radius:99px;animation:load 1.2s ease-in-out infinite}
-@keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
-@keyframes bounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.03)}}
+@keyframes load{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}
+@keyframes appleFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.03)}}
 
-#offbar{position:fixed;top:0;left:0;right:0;background:rgba(255,69,58,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:#fff;text-align:center;font-size:12.5px;font-weight:600;padding:5px;z-index:1000;transform:translateY(-100%);transition:transform .3s}
+#offbar{
+  position:fixed;top:0;left:0;right:0;
+  background:var(--bad);color:#fff;text-align:center;
+  font-size:12.5px;font-weight:600;padding:5px;z-index:1000;
+  transform:translateY(-100%);transition:transform .3s var(--spring);
+}
 #offbar.show{transform:translateY(0)}
 
-/* Apple Floating Glass Header */
+/* Apple Floating Liquid Glass Top Bar */
 .top-bar{
-  position:sticky;
-  top:10px;
-  z-index:20;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px 14px;
-  margin:0 0 18px;
-  background:var(--glass-bg), var(--card);
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
-  color:var(--tx);
-  border:1px solid var(--bd);
-  border-top-color:var(--bd-hi);
-  border-radius:20px;
+  position:sticky;top:8px;z-index:20;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 12px;margin:0 0 16px;
+  background:var(--card);
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+  color:var(--tx);transition:all .3s var(--spring);
+  gap:8px;border:1px solid var(--bd);border-radius:999px;
   box-shadow:var(--sh);
-  transition:transform .25s ease, padding .25s ease;
-  gap:8px;
 }
-.top-bar.shrink{padding:8px 12px;}
-.brand-pill{
-  display:flex;align-items:center;gap:8px;
-  font-weight:700;font-size:15px;letter-spacing:-0.3px;padding-left:4px;
+.top-bar::before{
+  content:'Stock Register';
+  font-size:14px;font-weight:700;letter-spacing:-0.3px;
+  padding-left:8px;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
 }
-.brand-dot{
-  width:10px;height:10px;border-radius:50%;
-  background:var(--grad);
-  box-shadow:0 0 10px rgba(139,92,246,0.7);
-}
+.top-bar.shrink{top:4px;padding:6px 10px;}
 .top-bar .right{display:flex;align-items:center;gap:8px}
+
 .theme-btn{
-  background:var(--card-sub);
-  border:1px solid var(--bd);
-  border-top-color:var(--bd-hi);
-  color:var(--tx);
-  font-weight:600;font-size:16px;
-  padding:8px 12px;
-  border-radius:999px;
-  cursor:pointer;line-height:1;
-  box-shadow:var(--sh-sm);
-  transition:transform .15s cubic-bezier(.32,.72,0,1), background .2s;
-  backdrop-filter:blur(12px);
+  background:var(--card-sub);border:1px solid var(--bd);color:var(--tx);
+  font-weight:600;font-size:15px;padding:7px 11px;border-radius:999px;
+  cursor:pointer;line-height:1;box-shadow:var(--sh-sm);
+  transition:transform .2s var(--spring), background .2s;
 }
-.theme-btn:active{transform: scale(0.92);}
+.theme-btn:active{transform:scale(0.92);}
+
 .net-status{
   display:inline-flex;align-items:center;gap:6px;
-  padding:8px 13px;border-radius:999px;
-  background:var(--card-sub);
-  border:1px solid var(--bd);
-  border-top-color:var(--bd-hi);
-  font-size:12px;font-weight:600;
-  box-shadow: var(--sh-sm);
-  backdrop-filter:blur(12px);
+  padding:7px 12px;border-radius:999px;
+  background:var(--card-sub);border:1px solid var(--bd);
+  font-size:12px;font-weight:600;box-shadow:var(--sh-sm);
 }
-.dot{width:8px;height:8px;border-radius:50%;background:#30D158; animation:pulse 2s infinite}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--jm);animation:pulse 2s infinite}
 .dot.off{background:#FF9F0A;animation:none;}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(48,209,88,.45)}70%{box-shadow:0 0 0 6px rgba(48,209,88,0)}100%{box-shadow:0 0 0 0 rgba(48,209,88,0)}}
 
-/* Apple Liquid Glass Cards */
+/* Liquid Glass Cards */
 .card{
-  background:var(--glass-bg), var(--card);
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
+  background:var(--card);
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
   border:1px solid var(--bd);
-  border-top-color:var(--bd-hi);
-  border-left-color:var(--bd-hi);
   border-radius:var(--radius);
-  padding:20px;
-  margin-bottom:16px;
+  padding:20px;margin-bottom:16px;
   box-shadow:var(--sh);
-  animation:fadeUp .4s cubic-bezier(.2,.8,.2,1) both;
-  position:relative;
-  overflow:hidden;
+  animation:fadeUp .42s var(--spring) both;
+  position:relative;overflow:hidden;
 }
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px) scale(0.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px) scale(0.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 
-label{font-size:13px;font-weight:600;color:var(--mut);display:block;margin:14px 0 6px;letter-spacing:0.1px;}
+label{font-size:13px;font-weight:600;color:var(--mut);display:block;margin:14px 0 6px}
 select,input{
-  width:100%;
-  font-size:15px;font-family:inherit;
-  padding:13px 14px;
-  border:1px solid var(--bd);
-  border-radius:14px;
-  background:var(--card-sub);
-  color:var(--tx);
-  outline:none;
-  box-shadow:var(--sh-well);
-  transition:border-color .2s, box-shadow .2s, background .2s;
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  width:100%;font-size:15px;font-family:inherit;padding:13px 14px;
+  border:1px solid var(--bd);border-radius:14px;
+  background:var(--card-sub);color:var(--tx);outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,0.06);
 }
 select:focus,input:focus{
-  border-color:var(--ac-blue);
-  background:var(--card-hover);
-  box-shadow:0 0 0 3.5px rgba(10, 132, 255, 0.25), var(--sh-well);
+  border-color:var(--ac);
+  background:var(--card);
+  box-shadow:0 0 0 3.5px var(--ac-light);
 }
-.row{display:flex;gap:10px}.row>*{flex:1}
+.row{display:flex;gap:12px}.row>*{flex:1}
 
-/* HOME GRID - Apple Liquid Glass Tiles */
-.home-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;margin-top:2px}
+/* HOME GRID - Apple Glass Tiles */
+.home-grid{display:flex;flex-direction:column;gap:13px;margin-bottom:20px;margin-top:4px}
 .tile{
-  background:var(--glass-bg), var(--card);
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
+  background:var(--card);
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
   border:1px solid var(--bd);
-  border-top-color:var(--bd-hi);
-  border-left-color:var(--bd-hi);
-  border-radius:22px;
-  padding:18px 20px;
+  border-radius:24px;
+  padding:20px 20px;
   display:flex;flex-direction:row;align-items:center;justify-content:space-between;
-  cursor:pointer;
-  box-shadow:var(--sh);
-  transition:transform .22s cubic-bezier(.32,.72,0,1), box-shadow .22s, background .22s;
+  cursor:pointer;box-shadow:var(--sh);
+  transition:transform .25s var(--spring), box-shadow .25s var(--spring), border-color .25s;
   position:relative;overflow:hidden;user-select:none;
 }
-/* Subtle Apple Liquid Glow Accent */
 .tile::before{
-  content:'';
-  position:absolute;left:12px;top:50%;transform:translateY(-50%);
-  width:5px;height:52%;border-radius:99px;
+  content:'';position:absolute;left:10px;top:16px;bottom:16px;width:5px;border-radius:99px;
   background:var(--tileColor,var(--ac));
-  box-shadow:0 0 18px var(--tileColor,var(--ac));
+  box-shadow:0 0 16px var(--tileColor,var(--ac));
 }
 .tile::after{
-  content:'';
-  position:absolute;top:-50%;left:-20%;width:70%;height:140%;
-  background:radial-gradient(circle, var(--tileGlow, rgba(139,92,246,0.12)) 0%, transparent 70%);
-  pointer-events:none;
+  content:'';position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle, var(--tileColor,var(--ac)) 0%, transparent 70%);
+  opacity:0.14;pointer-events:none;transition:transform .3s var(--spring), opacity .3s;
 }
-.tile:active{transform:scale(0.965); box-shadow:var(--sh-sm);}
-@media(hover:hover){
-  .tile:hover{background:var(--glass-bg), var(--card-hover); transform:translateY(-2px); border-color:var(--bd-hi);}
-}
-.tile .t-content { display: flex; flex-direction: column; gap:4px; padding-left: 16px; position:relative; z-index:1; }
-.tile .tname{font-size:18.5px;font-weight:700;color:var(--tx); letter-spacing: -0.35px;}
+.tile:active{transform:scale(0.975);box-shadow:var(--sh-sm);}
+.tile:hover{transform:translateY(-2px);border-color:var(--bd-top);}
+.tile:hover::after{transform:scale(1.25);opacity:0.22;}
+.tile .t-content{display:flex;flex-direction:column;gap:4px;padding-left:16px;}
+.tile .tname{font-size:18.5px;font-weight:700;color:var(--tx);letter-spacing:-0.35px;}
 .tile .tsub{font-size:13px;color:var(--mut);font-weight:500;}
-.tile .arrow {
-  width:32px;height:32px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
+.tile .arrow{
+  width:34px;height:34px;border-radius:50%;
   background:var(--card-sub);border:1px solid var(--bd);
-  color:var(--tx);font-size:18px;font-weight:600;opacity:0.85;
-  box-shadow:var(--sh-sm);position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--tx);font-size:18px;font-weight:600;
+  box-shadow:var(--sh-sm);transition:transform .25s var(--spring);
 }
+.tile:hover .arrow{transform:translateX(3px);}
 
-/* Tiles iOS Vibrant Colors */
-.tile[data-color="1"]{--tileColor:#8B5CF6; --tileGlow:rgba(139,92,246,0.16);}
-.tile[data-color="2"]{--tileColor:#06B6D4; --tileGlow:rgba(6,182,212,0.16);}
-.tile[data-color="3"]{--tileColor:#0A84FF; --tileGlow:rgba(10,132,255,0.16);}
-.tile[data-color="4"]{--tileColor:#FF375F; --tileGlow:rgba(255,55,95,0.16);}
-.tile[data-color="5"]{--tileColor:#FF9F0A; --tileGlow:rgba(255,159,10,0.16);}
-.tile[data-color="6"]{--tileColor:#30D158; --tileGlow:rgba(48,209,88,0.16);}
-.tile[data-color="7"]{--tileColor:#FF453A; --tileGlow:rgba(255,69,58,0.16);}
-.tile[data-color="8"]{--tileColor:#5E5CE6; --tileGlow:rgba(94,92,230,0.16);}
+/* Fresh Apple Duo-Harmonized Tile Colors */
+.tile[data-color="1"]{--tileColor:#0A84FF}
+.tile[data-color="2"]{--tileColor:#FF5E3A}
+.tile[data-color="3"]{--tileColor:#30D158}
+.tile[data-color="4"]{--tileColor:#FF9F0A}
+.tile[data-color="5"]{--tileColor:#00C7BE}
+.tile[data-color="6"]{--tileColor:#FF375F}
+.tile[data-color="7"]{--tileColor:#32ADE6}
+.tile[data-color="8"]{--tileColor:#FF6B4A}
 
 .page-wrap{display:none}
-.page-wrap.on{display:block;animation:fadeUp .35s cubic-bezier(.2,.8,.2,1)}
+.page-wrap.on{display:block;animation:fadeUp .35s var(--spring)}
 .page-back{
   display:inline-flex;align-items:center;gap:8px;
-  padding:9px 18px;
-  background:var(--glass-bg), var(--card);
+  padding:9px 18px;background:var(--card);
   backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
-  border:1px solid var(--bd);border-top-color:var(--bd-hi);
-  border-radius:999px;
-  font-size:14px;font-weight:600;color:var(--tx);
-  cursor:pointer;margin-bottom:14px;
-  box-shadow:var(--sh-sm);
-  transition:transform .15s cubic-bezier(.32,.72,0,1);
+  border:1px solid var(--bd);border-radius:999px;
+  font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;
+  margin-bottom:14px;box-shadow:var(--sh-sm);transition:transform .2s var(--spring);
 }
 .page-back:active{transform:scale(0.94);}
-.page-title{display:flex;align-items:center;gap:10px;font-size:26px;font-weight:700;margin:0 0 14px;color:var(--tx); letter-spacing: -0.6px;padding-left:2px;}
+.page-title{display:flex;align-items:center;gap:10px;font-size:26px;font-weight:800;margin:0 0 16px;color:var(--tx);letter-spacing:-0.7px;}
 
-/* Apple Glass Buttons */
+/* Liquid Glass Buttons */
 button{
-  font-family:inherit;font-size:15px;font-weight:600;
-  padding:13px 16px;
-  border:1px solid var(--bd);border-top-color:var(--bd-hi);
-  border-radius:14px;
+  font-family:inherit;font-size:15px;font-weight:600;padding:13px 16px;
+  border:1px solid var(--bd);border-radius:14px;
   background:var(--card-sub);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  color:var(--tx);
-  cursor:pointer;
-  display:inline-flex;align-items:center;justify-content:center;
-  user-select:none;
-  transition:transform .15s cubic-bezier(.32,.72,0,1), background .2s, box-shadow .2s;
+  color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  user-select:none;transition:transform .2s var(--spring), background .2s, box-shadow .2s;
   box-shadow:var(--sh-sm);
 }
 button:active{transform:scale(0.95);}
 button.on{
-  background:var(--grad);
-  color:#fff !important;
-  border:1px solid rgba(255,255,255,0.35);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.4), 0 6px 20px rgba(10, 132, 255, 0.35);
+  background:var(--ac);color:#fff;border-color:transparent;
+  box-shadow:0 6px 18px rgba(10, 132, 255, 0.35), inset 0 1px 0 rgba(255,255,255,0.35);
   font-weight:700;
 }
 
-/* Segmented Control Look */
-#sm3{
-  background:var(--card-sub) !important;
-  border:1px solid var(--bd);
-  border-radius:16px !important;
-  padding:4px !important;
-  box-shadow:var(--sh-well);
-}
-#sm3 button{border-radius:12px; box-shadow:none; background:transparent; border:1px solid transparent;}
-#sm3 button.on{
-  background:var(--glass-bg), var(--card-hover) !important;
-  color:var(--tx) !important;
-  border:1px solid var(--bd-hi) !important;
-  box-shadow:var(--sh-sm) !important;
-}
-
 .big{
-  width:100%;
-  background:var(--grad);
-  color:#fff!important;
-  border:1px solid rgba(255,255,255,0.35);
-  font-size:16px;font-weight:700;
-  padding:15px;border-radius:16px;
-  box-shadow:inset 0 1px 1px rgba(255,255,255,0.45), 0 10px 24px -4px rgba(10, 132, 255, 0.42);
-  margin-top:18px;
+  width:100%;background:var(--grad);color:#fff!important;border:none;
+  font-size:16px;font-weight:700;padding:15px;border-radius:16px;
+  box-shadow:0 10px 26px -4px rgba(10, 132, 255, 0.35), inset 0 1.5px 0 rgba(255,255,255,0.38);
+  margin-top:18px;letter-spacing:-0.2px;
 }
-.big:active{transform:scale(0.97); box-shadow: 0 4px 12px rgba(10, 132, 255, 0.25);}
-.big.success{background:linear-gradient(135deg,#30D158,#059669)!important; box-shadow:inset 0 1px 1px rgba(255,255,255,0.45), 0 10px 24px -4px rgba(48, 209, 88, 0.40);}
+.big:active{transform:scale(0.975);box-shadow:0 4px 12px rgba(10, 132, 255, 0.25);}
+.big.success{background:linear-gradient(135deg,#30D158,#059669)!important;box-shadow:0 8px 22px rgba(48, 209, 88, 0.35), inset 0 1px 0 rgba(255,255,255,0.35);}
 
 .sub{color:var(--mut);font-size:13.5px;line-height:1.5;}
-.res{color:var(--tx);font-weight:700;font-size:22px;margin-top:12px;letter-spacing:-0.3px;}
-h2{font-size:18px;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:8px; letter-spacing: -0.3px;}
+.res{color:var(--tx);font-weight:700;font-size:22px;margin-top:12px;letter-spacing:-0.4px;}
+h2{font-size:18px;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:8px;letter-spacing:-0.35px;}
 
-/* Glass Tables */
 .wrap{
-  overflow-x:auto;
-  border-radius:16px;
-  border:1px solid var(--bd);
+  overflow-x:auto;border-radius:16px;border:1px solid var(--bd);
   background:var(--card-sub);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  box-shadow:var(--sh-sm);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 }
 table{width:100%;border-collapse:collapse;font-size:14.5px;}
-th{background:rgba(255,255,255,0.06);color:var(--mut);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:0.3px;padding:13px 12px;border-bottom:1px solid var(--bd);text-align:left;}
+th{background:rgba(128,128,128,0.08);color:var(--mut);font-weight:600;font-size:12.5px;padding:13px 12px;border-bottom:1px solid var(--bd);text-align:left;}
 th:nth-child(n+3){text-align:right;}
-td{padding:12px;border-bottom:1px solid var(--bd);vertical-align:middle;font-variant-numeric:tabular-nums; font-weight:500;}
+td{padding:12px;border-bottom:1px solid var(--bd);vertical-align:middle;font-variant-numeric:tabular-nums;font-weight:500;}
 td:nth-child(n+3){text-align:right;white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
-tbody tr:hover{background:var(--card-sub)}
+tbody tr:hover{background:rgba(128,128,128,0.06)}
 
-.x{color:var(--bad);background:var(--bad-light);border:1px solid rgba(255,69,58,0.35);border-radius:10px;padding:6px 11px;font-weight:700;font-size:13px; box-shadow:none;}
-.dt{font-size:12.5px;padding:7px 12px;margin-top:8px;border-radius:10px;background:var(--card-sub);border:1px solid var(--bd);border-top-color:var(--bd-hi); font-weight:600;}
-#ms{color:var(--ac-blue);font-weight:600;font-size:14px;min-height:20px;margin-top:12px;text-align:center;}
+.x{color:var(--bad);background:var(--bad-light);border:1px solid rgba(255,69,58,0.28);border-radius:10px;padding:6px 12px;font-weight:600;font-size:13px;}
+.dt{font-size:12.5px;padding:7px 13px;margin-top:8px;border-radius:10px;background:var(--card-sub);border:1px solid var(--bd);font-weight:600;}
+#ms{color:var(--ac);font-weight:600;font-size:14px;min-height:20px;margin-top:12px;text-align:center;}
 
 details{
-  border:1px solid var(--bd);border-top-color:var(--bd-hi);
-  border-radius:22px;padding:18px;
-  background:var(--glass-bg), var(--card);
-  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
-  box-shadow:var(--sh); margin-bottom: 16px;
+  border:1px solid var(--bd);border-radius:var(--radius);padding:18px;
+  background:var(--card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+  box-shadow:var(--sh);margin-bottom:16px;
 }
 details summary{font-size:16px;font-weight:600;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;}
-details summary::after{content:'+';font-size:22px;font-weight:500;color:var(--ac-blue)}
+details summary::after{content:'+';font-size:22px;font-weight:500;color:var(--ac)}
 details[open] summary::after{content:'−'}
 
-/* Apple Frosted Sheet Modals (Works in Both Light & Dark) */
+/* Glass Modals */
 .modal-wrap{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.48);
+  position:fixed;inset:0;background:rgba(0,0,0,0.48);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  z-index:40;
-  padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));
-  overflow-y:auto;
-  display:flex;align-items:center;justify-content:center;
+  z-index:40;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));
+  overflow-y:auto;display:flex;align-items:center;justify-content:center;
   animation:backdropIn .22s ease;
 }
 @keyframes backdropIn{from{opacity:0}to{opacity:1}}
 .modal-wrap>.card{
   width:100%;
-  animation:modalIn .32s cubic-bezier(.2,.8,.2,1);
-  background:var(--glass-bg), var(--modal-card);
-  backdrop-filter:blur(36px) saturate(210%);
-  -webkit-backdrop-filter:blur(36px) saturate(210%);
-  border:1px solid var(--bd-hi);
-  border-radius:28px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.4), 0 24px 60px rgba(0,0,0,0.45);
+  animation:modalIn .32s var(--spring);
+  background:var(--modal-bg);
+  backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);
 }
 @keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(14px)}to{opacity:1;transform:scale(1) translateY(0)}}
 
@@ -476,41 +370,35 @@ details[open] summary::after{content:'−'}
 #dday .dfoot{flex:0 0 auto;margin-top:16px}
 
 .prod-pick-item{
-  padding:15px 16px;
-  border:1px solid var(--bd);border-top-color:var(--bd-hi);
-  border-radius:16px;
-  background:var(--card-sub);
-  backdrop-filter:blur(12px);
-  cursor:pointer;display:flex;justify-content:space-between;align-items:center;
-  user-select:none;transition:transform .15s, background .15s; margin-bottom: 8px;
-  box-shadow:var(--sh-sm);
+  padding:15px 16px;border:1px solid var(--bd);border-radius:16px;
+  background:var(--card-sub);cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  user-select:none;transition:transform .15s var(--spring), background .15s;
+  margin-bottom:4px;box-shadow:var(--sh-sm);
 }
-.prod-pick-item:active{background:var(--ac-light);transform:scale(0.97);}
+.prod-pick-item:active{background:var(--ac-light);transform:scale(0.98);}
 
 .empty{display:flex;flex-direction:column;align-items:center;padding:32px 16px;gap:12px;color:var(--mut)}
-.empty .etxt{font-size:15px;font-weight:500; text-align: center;}
+.empty .etxt{font-size:15px;font-weight:500;text-align:center;}
 
-/* iOS Dynamic Island Toast */
 #toast{
   position:fixed;bottom:24px;left:50%;
   transform:translateX(-50%) translateY(30px);
-  background:var(--glass-bg), var(--modal-card);
-  backdrop-filter:blur(26px) saturate(200%);
-  -webkit-backdrop-filter:blur(26px) saturate(200%);
-  border:1px solid var(--bd-hi);
-  color:var(--tx);
-  padding:12px 22px;border-radius:999px;
+  background:var(--modal-bg);color:var(--tx);
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+  border:1px solid var(--bd-top);
+  padding:13px 22px;border-radius:999px;
   font-size:14px;font-weight:700;
-  box-shadow:0 12px 32px rgba(0, 0, 0, 0.35);
+  box-shadow:0 14px 34px rgba(0,0,0,0.32);
   z-index:9998;opacity:0;pointer-events:none;
-  transition:opacity .3s,transform .3s cubic-bezier(.2,.8,.2,1);
+  transition:opacity .3s,transform .35s var(--spring);
   display:flex;align-items:center;gap:8px;max-width:90%;
 }
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#toast.bad{background:rgba(255, 59, 48, 0.85); border-color:rgba(255,255,255,0.4); color:#fff; box-shadow:0 12px 30px rgba(255, 59, 48, 0.4);}
+#toast.bad{background:var(--bad);color:#fff;border-color:rgba(255,255,255,0.25);box-shadow:0 10px 26px rgba(255, 69, 58, 0.4);}
 
 .dsum{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.dsum .box{background:var(--card-sub);border:1px solid var(--bd);border-top-color:var(--bd-hi);border-radius:16px;padding:14px;text-align:center;box-shadow:var(--sh-sm);}
+.dsum .box{background:var(--card-sub);border:1px solid var(--bd);border-radius:16px;padding:14px;text-align:center;box-shadow:var(--sh-sm);}
 .dsum .box .lbl{font-size:12px;color:var(--mut);font-weight:600;}
 .dsum .box .val{font-size:20px;color:var(--tx);font-weight:700;margin-top:6px;}
 .dsum .box .val.bad{color:var(--bad)}
@@ -522,11 +410,6 @@ details[open] summary::after{content:'−'}
 </head>
 <body>
 
-<div class="apple-bg" aria-hidden="true">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-</div>
 <canvas id="bg-anim"></canvas>
 
 <div id="splash">
@@ -540,7 +423,6 @@ details[open] summary::after{content:'−'}
 <div id="toast"></div>
 
 <div class="top-bar" id="topBar">
-  <div class="brand-pill"><span class="brand-dot"></span><span>Stock Register</span></div>
   <div class="right">
     <div class="net-status"><span id="netDot" class="dot"></span><span id="netTx">Online</span></div>
     <button class="theme-btn" id="themeBtn" title="Theme">🌙</button>
@@ -563,167 +445,4 @@ details[open] summary::after{content:'−'}
         <div class="tsub">Stock dekho & PDF</div>
       </div>
       <div class="arrow">›</div>
-    </div>
-    <div class="tile" data-color="3" data-page="4">
-      <div class="t-content">
-        <div class="tname">Market</div>
-        <div class="tsub">Mal ber & ferot</div>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-    <div class="tile" data-color="4" data-page="5">
-      <div class="t-content">
-        <div class="tname">Calc</div>
-        <div class="tsub">Quick hisab</div>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-    <div class="tile" data-color="5" data-page="2">
-      <div class="t-content">
-        <div class="tname">Khata</div>
-        <div class="tsub">Shesh entry gulo</div>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-    <div class="tile" data-color="6" data-page="3">
-      <div class="t-content">
-        <div class="tname">Product</div>
-        <div class="tsub">Pcs/ctn & dam</div>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-    <div class="tile" data-color="7" data-page="6">
-      <div class="t-content">
-        <div class="tname">Hisab</div>
-        <div class="tsub">Bekti wise hisab</div>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-    <div class="tile" data-color="8" data-page="7">
-      <div class="t-content">
-        <div class="tname">Summary</div>
-        <div class="tsub">Total sell/baki</div>
-      </div>
-      <div class="arrow">›</div>
-    </div>
-  </div>
-</div>
-
-<!-- ================= PAGE 0: Entry ================= -->
-<div class="page-wrap" id="pg0">
-  <div class="page-back" data-home>← Back to Home</div>
-  <div class="page-title">Entry</div>
-  <div class="card">
-    <div style="display:none"><button data-t="open" class="on">Prothom stock +</button><button data-t="mk">Market e gelo −</button></div>
-    <div class="sub" style="margin-top:2px">Ekhane shudhu stock jog hoy (Prothom stock), jekono tarikhe. Market er mal ber/ferot Market tab e.</div>
-    <label>Tarikh</label><input id="dt" type="date">
-    <button id="viewDay" style="width:100%;margin-top:12px;font-weight:600">Ei tarikher entry dekho</button>
-    <label>Product</label>
-    <div style="display:flex;gap:8px">
-      <button id="pv0" style="flex:0 0 48px;padding:0;font-size:18px;">‹</button>
-      <select id="pe" style="display:none"></select>
-      <button id="pe_btn" type="button" style="flex:1;min-width:0;text-align:left;font-size:15px;font-weight:600;padding:13px 14px;display:flex;justify-content:space-between;align-items:center;">
-        <span id="pe_name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Product baachun</span>
-        <span style="font-size:12px;color:var(--mut);flex:0 0 auto;margin-left:6px;">▼</span>
-      </button>
-      <button id="nx0" style="flex:0 0 48px;padding:0;font-size:18px;">›</button>
-    </div>
-    <div class="row" style="margin-top:12px"><button id="de">Details</button><button id="se">Pcs/Ctn</button></div>
-    <div class="row"><div><label>CTN</label><input id="c1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="c2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div></div>
-    <label>Kroy dor (dealer price), 1 ctn = ___ tk</label><input id="ec" type="number" inputmode="decimal" step="any" min="0">
-    <div id="rtw" style="display:none"><label>Ctn dor (tk), product er dam theke ashe</label><input id="rt" type="number" inputmode="decimal" step="any" min="0"></div>
-    <div class="sub" id="pv" style="margin-top:14px;font-weight:500; border-top: 1px solid var(--bd); padding-top: 12px;"></div>
-    <label style="display:flex;gap:10px;align-items:center;margin-top:16px;color:var(--tx);cursor:pointer"><input type="checkbox" id="nx" style="width:20px;height:20px;accent-color:var(--ac-blue); margin:0; box-shadow:none;"> Save korle porer product e jabe</label>
-    <button class="big" id="sv">Save koro</button><div id="ms"></div>
-    <button id="gb" style="display:none;width:100%;margin-top:12px">Ferot dao / Bikri hishab dekho →</button>
-  </div>
-  <details class="card" id="ad"><summary>Notun product add</summary>
-    <div style="margin-top:16px">
-      <label>Nam</label><input id="nn" type="text" placeholder="Product er nam">
-      <div class="row"><div><label>1 ctn e pcs</label><input id="nk" type="number" inputmode="numeric" min="1" placeholder="1"></div><div><label>1 ctn dam (tk)</label><input id="np" type="number" inputmode="decimal" min="0" placeholder="0"></div></div>
-      <button class="big" id="na">+ Add koro</button>
-    </div>
-  </details>
-</div>
-
-<!-- ================= PAGE 1: Stock ================= -->
-<div class="page-wrap" id="pg1">
-  <div class="page-back" data-home>← Back to Home</div>
-  <div class="page-title">Stock</div>
-  <div class="card">
-    <div class="row" id="sm3"><button data-m="0" class="on" style="padding:10px;">Ekhon</button><button data-m="1" style="padding:10px;">Tarikh obdhi</button><button data-m="2" style="padding:10px;">Lenden</button></div>
-    <div class="row" id="rg" style="display:none;margin-top:16px"><div id="d1w"><label>Theke</label><input id="d1" type="date"></div><div><label id="d2l">Tarikh porjonto</label><input id="d2" type="date"></div></div>
-    <input id="q" placeholder="🔍 Product khujo..." style="margin-top:16px">
-    <div class="wrap" style="margin-top:16px"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
-    <div class="res" id="tv"></div>
-    <button class="big" id="pdf">PDF download</button><div id="pm" class="sub" style="margin-top:12px;text-align:center"></div>
-  </div>
-</div>
-
-<!-- ================= PAGE 4: Market ================= -->
-<div class="page-wrap" id="pg4">
-  <div class="page-back" data-home>← Back to Home</div>
-  <div class="page-title">Market</div>
-  <div class="card"><label>Market er tarikh</label><input id="mdt" type="date"></div>
-  <div class="card"><h2>1. Bahir (mal gelo)</h2>
-    <div style="display:flex;gap:8px"><button id="mbv" style="flex:0 0 48px;padding:0;font-size:18px;">‹</button><select id="mb" style="flex:1;min-width:0"></select><button id="mbx" style="flex:0 0 48px;padding:0;font-size:18px;">›</button></div>
-    <div class="row" style="margin-top:16px;"><div><label>CTN</label><input id="mb1" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>PCS</label><input id="mb2" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div><div><label>Dor / ctn</label><input id="mbr" type="number" inputmode="decimal" step="any" min="0"></div></div>
-    <label style="display:flex;gap:10px;align-items:center;margin-top:16px;color:var(--tx);cursor:pointer"><input type="checkbox" id="mbc" checked style="width:20px;height:20px;accent-color:var(--ac-blue); margin:0; box-shadow:none;"> Add korle porer product e jabe</label>
-    <button class="big" id="mba">+ Bahir e jog koro</button><div id="mbm" class="sub" style="min-height:20px;margin-top:10px;text-align:center"></div>
-    <div id="mbl"></div>
-  </div>
-  <div class="card"><h2>2. Ferot</h2>
-    <div style="display:flex;gap:8px"><button id="mfv" style="flex:0 0 48px;padding:0;font-size:18px;">‹</button><select id="mf" style="flex:1;min-width:0"></select><button id="mfx" style="flex:0 0 48px;padding:0;font-size:18px;">›</button></div>
-    <div id="mfb" style="margin-top:16px;"><div class="row"><div><label>Ferot CTN</label><input id="mf1" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Ferot PCS</label><input id="mf2" type="number" inputmode="decimal" step="any" min="0"></div><div><label>Dor / ctn</label><input id="mfr" type="number" inputmode="decimal" step="any" min="0"></div></div></div>
-    <div id="mfi" style="margin-top:14px;line-height:1.7; font-weight:500;"></div>
-  </div>
-  <button class="big" id="mfin" style="margin-bottom:16px">Finish: pura Market Sheet dekho</button>
-  <div id="msheet"></div>
-  <div class="card"><h2>History (tarikh onujayi)</h2><div class="row"><div><label>Theke</label><input id="hy1" type="date"></div><div><label>Porjonto</label><input id="hy2" type="date"></div></div>
-    <div class="sub" style="margin-top:8px">Tarikh na dile shob market ashbe.</div><div id="hys" style="margin-top:14px;line-height:1.8"></div>
-    <button class="big" id="hypdf">History PDF</button><div id="hym" class="sub" style="margin-top:12px;text-align:center"></div>
-  </div>
-</div>
-
-<!-- ================= PAGE 5: Calc ================= -->
-<div class="page-wrap" id="pg5">
-  <div class="page-back" data-home>← Back to Home</div>
-  <div class="page-title">Calc</div>
-  <div class="card"><label>Product</label><div style="display:flex;gap:8px"><button id="cpv" style="flex:0 0 48px;padding:0;font-size:18px;">‹</button><select id="cp" style="flex:1;min-width:0"></select><button id="cnx" style="flex:0 0 48px;padding:0;font-size:18px;">›</button></div>
-    <div class="sub" id="ci" style="margin-top:12px; font-weight:500;"></div>
-    <h2 style="margin-top:20px; border-top: 1px solid var(--bd); padding-top: 16px;">Prothom</h2>
-    <div class="row"><div><label>CTN</label><input id="ca1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="ca2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
-    <div class="row" style="margin-top:16px; background:var(--card-sub); padding:5px; border-radius:16px; border:1px solid var(--bd); box-shadow:var(--sh-well);"><button id="cm0" class="on" style="box-shadow:none; padding:10px;">− Biyog</button><button id="cp0" style="box-shadow:none; background:transparent; border-color:transparent; padding:10px;">+ Jog</button></div>
-    <div class="row"><div><label>CTN</label><input id="cb1" type="number" inputmode="numeric" min="0" placeholder="0"></div><div><label>PCS</label><input id="cb2" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
-    <div class="res" id="cr">0 ctn 0 pcs</div><div class="sub" id="ct" style="font-weight: 500;"></div><div class="res" id="cd" style="font-size:22px"></div>
-  </div>
-</div>
-
-<!-- ================= PAGE 2: Khata ================= -->
-<div class="page-wrap" id="pg2">
-  <div class="page-back" data-home>← Back to Home</div>
-  <div class="page-title">Khata</div>
-  <div class="card"><h2>Shesh 150 ta entry</h2><div class="wrap"><table><tbody id="kh"></tbody></table></div></div>
-</div>
-
-<!-- ================= PAGE 3: Product ================= -->
-<div class="page-wrap" id="pg3">
-  <div class="page-back" data-home>← Back to Home</div>
-  <div class="page-title">Product</div>
-  <div class="card"><h2>Product er pcs/ctn ar dam</h2>
-    <div style="display:flex;gap:8px"><button id="ppv" style="flex:0 0 48px;padding:0;font-size:18px;">‹</button><select id="pp" style="flex:1;min-width:0"></select><button id="pnx" style="flex:0 0 48px;padding:0;font-size:18px;">›</button></div>
-    <div class="row" style="margin-top:16px;"><div><label>1 ctn = ___ pcs</label><input id="pk" type="number" inputmode="numeric" min="1"></div><div><label>1 ctn dam (tk)</label><input id="pd" type="number" inputmode="decimal" min="0"></div></div>
-    <label>Lav % (bikri dam theke koto % lav pao)</label><input id="plv" type="number" inputmode="decimal" step="any" min="0"><label>Kroy dor (dealer price): 1 ctn = ___ tk</label><input id="pcr" type="number" inputmode="decimal" min="0">
-  </div>
-  <details class="card" id="bkd"><summary>Backup (data nirapod rakhte)</summary>
-    <div style="margin-top:16px"><div class="row"><button id="bk">Backup download</button><button id="rs0">Restore</button></div><input id="rf" type="file" accept=".json" style="display:none"><div class="sub" id="bm" style="margin-top:12px"></div>
-    <div id="bkset" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd)">
-    <div class="sub" id="bklast" style="margin-bottom:12px"></div>
-    <div class="row" style="align-items:center;gap:10px"><span class="sub" style="flex:0 0 auto;">Remainder:</span>
-    <select id="bkfreq"><option value="1">Protidin</option><option value="3">3 din por por</option><option value="7">7 din por por</option><option value="0">Bondho</option></select></div>
-    <label class="sub" style="display:flex;align-items:center;gap:10px;margin-top:16px; cursor:pointer;"><input type="checkbox" id="bkauto" style="width:20px;height:20px;accent-color:var(--ac-blue); margin:0; box-shadow:none;"> Auto backup (app khulle nijei download hobe)</label>
-    </div></div>
-  </details>
-  <details class="card" id="rsd"><summary>Reset</summary>
-    <div style="margin-top:16px">
-      <div class="sub" style="margin:12px 0">Reset korar age Backup nao. Protita button 2 bar chapte hobe.
+ 
