@@ -12,21 +12,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{
-  /* Color Palette from User's 2nd Image */
-  --c-dark: #1A332A;   /* 60% Deep Green */
-  --c-gold: #D89A2B;   /* 30% Mustard Gold */
-  --c-light: #F4F3EF;  /* 10% Off-White */
+  /* Color Palette - High Contrast */
+  --c-dark: #12221B;   /* Deep Dark Green for text/borders */
+  --c-gold: #D89A2B;   /* Mustard Gold for accents */
+  --c-light: #F8F9FA;  /* Very Light Off-White for background */
   
-  /* Light Theme (Retro Paper Look) */
-  --bg: #F4F3EF;
-  --card: #FFFDFA;
-  --card-sub: #F0EBE1;
-  --tx: #1A332A;
-  --mut: #5f7a6e;
-  --ac: #D89A2B;
-  --ac-light: rgba(216, 154, 43, 0.2);
+  /* Light Theme */
+  --bg: #F8F9FA;
+  --card: #FFFFFF;
+  --card-sub: #F0F2F5;
+  --tx: #12221B;       /* Dark text */
+  --mut: #4A6356;      /* Muted green-grey */
+  --ac: #D89A2B;       /* Gold accent */
+  --ac-light: rgba(216, 154, 43, 0.15);
   --ac-hover: #c28722;
-  --bd: #1A332A;
+  --bd: #12221B;       /* Strong dark borders */
   --bad: #d32f2f;
   --bad-light: rgba(211, 47, 47, 0.15);
   --jm: #1976d2;
@@ -35,9 +35,8 @@
   /* Retro Shadows */
   --sh: 4px 4px 0px var(--c-dark);
   --sh-sm: 2px 2px 0px var(--c-dark);
-  --radius: 4px; /* Sharp corners for retro look */
-  
-  --grad: linear-gradient(135deg, #D89A2B, #1A332A);
+  --radius: 4px;
+  --grad: linear-gradient(135deg, #D89A2B, #12221B);
   
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -47,41 +46,41 @@
 /* Dark Theme */
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg: #0d1714;
+    --bg: #0a110e;     /* Almost black-green */
     --card: #14231d;
     --card-sub: #1a2c24;
-    --tx: #F4F3EF;
-    --mut: #8da89b;
-    --ac: #E6A833;
+    --tx: #F8F9FA;     /* Light text */
+    --mut: #9bb3a7;
+    --ac: #E6A833;     /* Bright Gold */
     --ac-light: rgba(230, 168, 51, 0.2);
     --ac-hover: #d19529;
-    --bd: #F4F3EF; /* Light border for dark mode retro */
-    --bad: #ef4444;
-    --bad-light: rgba(239, 68, 68, 0.2);
+    --bd: #E6A833;     /* Gold borders for dark mode */
+    --bad: #f87171;
+    --bad-light: rgba(248, 113, 113, 0.2);
     --jm: #60a5fa;
     --jm-light: rgba(96, 165, 250, 0.15);
     --grad: linear-gradient(135deg, #E6A833, #2d5a49);
-    --sh: 4px 4px 0px #F4F3EF;
-    --sh-sm: 2px 2px 0px #F4F3EF;
+    --sh: 4px 4px 0px var(--c-gold);
+    --sh-sm: 2px 2px 0px var(--c-gold);
   }
 }
 :root[data-theme="dark"]{
-  --bg: #0d1714;
+  --bg: #0a110e;
   --card: #14231d;
   --card-sub: #1a2c24;
-  --tx: #F4F3EF;
-  --mut: #8da89b;
+  --tx: #F8F9FA;
+  --mut: #9bb3a7;
   --ac: #E6A833;
   --ac-light: rgba(230, 168, 51, 0.2);
   --ac-hover: #d19529;
-  --bd: #F4F3EF;
-  --bad: #ef4444;
-  --bad-light: rgba(239, 68, 68, 0.2);
+  --bd: #E6A833;
+  --bad: #f87171;
+  --bad-light: rgba(248, 113, 113, 0.2);
   --jm: #60a5fa;
   --jm-light: rgba(96, 165, 250, 0.15);
   --grad: linear-gradient(135deg, #E6A833, #2d5a49);
-  --sh: 4px 4px 0px #F4F3EF;
-  --sh-sm: 2px 2px 0px #F4F3EF;
+  --sh: 4px 4px 0px var(--c-gold);
+  --sh-sm: 2px 2px 0px var(--c-gold);
 }
 
 *{box-sizing:border-box}
@@ -106,7 +105,7 @@ body{
   margin:0;
   background:transparent;
   color:var(--tx);
-  font-family: 'Courier Prime', 'Hind Siliguri', monospace, sans-serif; /* Retro typewriter font */
+  font-family: 'Courier Prime', 'Hind Siliguri', monospace, sans-serif;
   padding:12px;
   max-width:620px;
   margin:0 auto;
@@ -144,7 +143,7 @@ body{
 details.card::before{display:none}
 
 label{font-size:13.5px;font-weight:bold;color:var(--tx);display:block;margin:12px 0 6px}
-select,input{width:100%;font-size:16px;font-family:inherit;padding:12px 14px;border:2px solid var(--bd);border-radius:var(--radius);background:var(--card-sub);color:var(--tx);outline:none;transition:border-color .2s,box-shadow .2s; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.05);}
+select,input{width:100%;font-size:16px;font-family:inherit;padding:12px 14px;border:2px solid var(--bd);border-radius:var(--radius);background:var(--card-sub);color:var(--tx);outline:none;transition:border-color .2s,box-shadow .2s; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.05); font-weight: bold;}
 select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shadow: 3px 3px 0 var(--ac-light);}
 .row{display:flex;gap:10px}.row>*{flex:1}
 
@@ -155,7 +154,7 @@ select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shado
 .tile:active{transform:translate(4px, 4px); box-shadow: none;}
 .tile .tname{font-size:16px;font-weight:800;color:var(--tx);text-align:center; font-family: Georgia, serif; text-transform: uppercase; letter-spacing: 1px;}
 .tile .tsub{font-size:11.5px;color:var(--mut);font-weight:bold;text-align:center;line-height:1.3}
-.tile[data-color="1"]{--tileColor:#1A332A}
+.tile[data-color="1"]{--tileColor:#12221B}
 .tile[data-color="2"]{--tileColor:#D89A2B}
 .tile[data-color="3"]{--tileColor:#2563eb}
 .tile[data-color="4"]{--tileColor:#8b5cf6}
@@ -172,7 +171,7 @@ select:focus,input:focus{border-color:var(--ac);background:var(--card);box-shado
 
 button{font-family:inherit;font-size:15px;font-weight:700;padding:12px 16px;border:2px solid var(--bd);border-radius:var(--radius);background:var(--card);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .1s,box-shadow .1s;position:relative; box-shadow: var(--sh-sm);}
 button:active{transform:translate(2px, 2px); box-shadow: none;}
-button.on{background:var(--ac);color:#fff;border-color:var(--bd); box-shadow: var(--sh-sm);}
+button.on{background:var(--ac);color:var(--tx);border-color:var(--bd); box-shadow: var(--sh-sm);}
 
 .big{width:100%;background:var(--ac);color:var(--tx)!important;border:2px solid var(--bd);font-size:18px;font-weight:800;padding:14px;border-radius:var(--radius);box-shadow:var(--sh);margin-top:16px; font-family: Georgia, serif; text-transform: uppercase; letter-spacing: 1px;}
 .big:active{transform:translate(4px, 4px); box-shadow: none;}
@@ -202,7 +201,7 @@ details summary{font-size:16px;font-weight:bold;cursor:pointer;list-style:none;d
 details summary::after{content:'+';font-size:24px;font-weight:bold;color:var(--tx)}
 details[open] summary::after{content:'−'}
 
-.modal-wrap{position:fixed;inset:0;background:rgba(26,51,42,.85);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:40;padding:14px;padding-top:calc(14px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center;animation:backdropIn .2s}
+.modal-wrap{position:fixed;inset:0;background:rgba(18,34,27,.85);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:40;padding:14px;padding-top:calc(14px + env(safe-area-inset-top,0px));overflow-y:auto;display:flex;align-items:center;justify-content:center;animation:backdropIn .2s}
 @keyframes backdropIn{from{opacity:0}to{opacity:1}}
 .modal-wrap>.card{width:100%;animation:modalIn .3s cubic-bezier(.34,1.56,.64,1)}
 @keyframes modalIn{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
@@ -1396,12 +1395,12 @@ setTimeout(()=>{const sp=$("splash");if(sp&&!sp.classList.contains("hide"))sp.cl
     constructor() { this.reset(true); }
     reset(init = false) {
       this.x = Math.random() * W;
-      this.y = init ? Math.random() * H : -20; // Start above screen
+      this.y = init ? Math.random() * H : -20;
       this.size = Math.random() * 3 + 1.5;
-      this.speedY = Math.random() * 1.5 + 0.8; // Faster falling
+      this.speedY = Math.random() * 1.5 + 0.8;
       this.speedX = (Math.random() - 0.5) * 0.5;
       this.opacity = Math.random() * 0.6 + 0.2;
-      this.type = Math.random() > 0.3 ? 'cross' : 'dot'; // More crosses like the image
+      this.type = Math.random() > 0.3 ? 'cross' : 'dot';
       this.rot = Math.random() * Math.PI;
     }
     update() {
@@ -1411,7 +1410,7 @@ setTimeout(()=>{const sp=$("splash");if(sp&&!sp.classList.contains("hide"))sp.cl
     }
     draw() {
       const dark = isDark();
-      // Golden color (Mustard Gold)
+      // High contrast gold
       ctx.fillStyle = `rgba(216, 154, 43, ${this.opacity})`;
       
       if (dark) {
@@ -1439,7 +1438,6 @@ setTimeout(()=>{const sp=$("splash");if(sp&&!sp.classList.contains("hide"))sp.cl
     }
   }
 
-  // More particles for a dense effect
   for (let i = 0; i < 180; i++) particles.push(new Particle());
 
   function animate() {
