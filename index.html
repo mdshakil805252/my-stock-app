@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="utf-8">
@@ -540,6 +540,8 @@ details[open] summary::after{content:'−'}
     <div class="row" style="align-items:center;gap:10px"><span class="sub" style="flex:0 0 auto;">Remainder:</span>
     <select id="bkfreq"><option value="1">Protidin</option><option value="3">3 din por por</option><option value="7">7 din por por</option><option value="0">Bondho</option></select></div>
     <label class="sub" style="display:flex;align-items:center;gap:10px;margin-top:16px;cursor:pointer;"><input type="checkbox" id="bkauto" style="width:20px;height:20px;accent-color:var(--ac);margin:0;"> Auto backup (app khulle nijei download hobe)</label>
+    <label class="sub" style="display:flex;align-items:center;gap:10px;margin-top:14px;cursor:pointer;"><input type="checkbox" id="bkexit" style="width:20px;height:20px;accent-color:var(--ac);margin:0;"> Ber hobar age backup (notun tottho thakle backup chara ber hote dibe na)</label>
+    <div class="sub" id="bkdirty" style="margin-top:10px;font-weight:600;"></div>
     </div></div>
   </details>
   <details class="card" id="rsd"><summary>Reset</summary>
@@ -638,11 +640,58 @@ details[open] summary::after{content:'−'}
   </div>
 </div>
 
+<div id="exitBkM" class="modal-wrap" style="display:none;z-index:95">
+  <div class="card" style="max-width:420px;margin:0 auto;text-align:center;padding:24px;">
+    <div style="width:64px;height:64px;border-radius:20px;background:var(--grad);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 10px 26px rgba(10,132,255,0.35);">💾</div>
+    <h2 style="justify-content:center;margin:0 0 10px;font-size:20px;">Notun tottho songrokkhon hoyeche!</h2>
+    <div class="sub" style="font-size:14.5px;line-height:1.6;margin-bottom:18px;color:var(--tx);opacity:0.9;">
+      Apni notun tottho songrokkhon korechen. App theke ber hobar age backup niye nin—backup na neya porjonto app theke ber hote parben na.
+    </div>
+    <div id="exitBkMsg" class="sub" style="min-height:18px;margin-bottom:10px;color:var(--bad);font-weight:600;"></div>
+    <button id="exitBkGo" class="big" style="margin-top:0">Backup niye ber hou</button>
+    <button id="exitBkStay" style="width:100%;margin-top:12px;background:var(--card-sub);border:1px solid var(--bd);">Na, app e thakbo</button>
+  </div>
+</div>
+
 <script>
 const BASE=[["মিল্ক কেক",72],["মাফিন কেক",48],["ডপস ১০",24],["লুপস ৫",48],["লেক্সাস ৫",48],["লেক্সাস ১০",24],["লেক্সাস ফ্যামিলি",1],["মেরি ফ্যামিলি",12],["মিল্ক ৫",48],["ঘি ৫",48],["ঘি ১০",24],["ঘি ফ্যামিলি",8],["চকোলেট ১০",48],["এনার্জি ৫",48],["এনার্জি ১০",24],["এনার্জি ফ্যামিলি",8],["৪ পিসের নুডলস",1],["৮ পিসের নুডলস",1],["পাতা নুডলস",12],["১৫ গ্রাম মরিচ গুড়া",1],["৫০ গ্রাম মরিচ গুড়া",1],["১৫ গ্রাম হলুদ গুড়া",1],["৫০ গ্রাম হলুদ গুড়া",1],["হলুদ গুড়া ৫ কেজি",1],["মরিচ গুড়া ৫ কেজি",1],["মাংসের মশলা",1],["মুরগির মশলা",1],["গরু মাংসের মশলা",1],["মাছের মশলা",1],["১৫ গ্রাম জিরার গুরা",1],["৫০ গ্রাম জিরার গুরা",1],["বিরিয়ানি মশলা ৪০ গ্রাম",1],["সরিষ তেল ৮০ গ্রাম",1],["সরিষ তেল ২০০ গ্রাম",1],["ঘি টোস্ট মিনি",96],["ড্রাই কেক মিনি",48],["কোকোনাট ২০ টাকা",8],["কোকোনাট ফ্যামিলি",24],["৫ টাকা চানাচুর",1],["৩০ টাকা চানাচুর",1],["৫০ টাকা চানাচুর",1],["লাচ্ছা সেমাই",1],["ভার্মিচিলি সেমাই",1],["বালিশ সেমাই",1],["এগ নুডলস্",24],["তেঁতুল চাটনী",1],["১৫ গ্রাম চা",1],["৫০০ গ্রাম চা",1],["রোস্টের মশলা",1]];
 const $=i=>document.getElementById(i);
 const safePushState=st=>{try{history.pushState(st,"")}catch(e){}};
 const safeReplaceState=st=>{try{history.replaceState(st,"")}catch(e){}};
+
+const K_EXIT="stk1_bkexit", K_DIRTY="stk1_dirty";
+const isExitBackupEnabled=()=>{try{const v=localStorage.getItem(K_EXIT);return v===null?true:v==="1"}catch(e){return true}};
+const isDirty=()=>{try{return localStorage.getItem(K_DIRTY)==="1"}catch(e){return false}};
+function updateDirtyUi(){
+  const el=$("bkdirty");
+  if(!el)return;
+  if(isDirty()){
+    el.style.color="var(--ac-2)";
+    el.textContent="⚠️ Notun tottho ache — ekhono backup neya hoyni";
+  }else{
+    el.style.color="var(--jm)";
+    el.textContent="✓ Shob tottho backup kora ache";
+  }
+}
+function armExitGuardOnHome(){
+  if(isExitBackupEnabled()&&isDirty()){
+    if(!history.state||!history.state.guarded){
+      safeReplaceState({type:"exit-base"});
+      safePushState({type:"page",v:"home",guarded:true});
+    }
+  }
+}
+function markDirty(){
+  try{localStorage.setItem(K_DIRTY,"1")}catch(e){}
+  updateDirtyUi();
+  if(typeof currentPage!=="undefined"&&currentPage==="home"){
+    armExitGuardOnHome();
+  }
+}
+function markClean(){
+  try{localStorage.setItem(K_DIRTY,"0")}catch(e){}
+  updateDirtyUi();
+}
 
 let S={custom:[],per:{},pr:{},log:[],mk:[],del:{}},T="open",SM=0;
 try{const x=JSON.parse(localStorage.getItem("stk1")||"null");if(x&&typeof x==="object")S=Object.assign(S,x)}catch(e){}
@@ -682,7 +731,7 @@ function mig(){
 }
 try{mig()}catch(e){console.error(e)}
 
-const save=()=>{try{localStorage.setItem("stk1",JSON.stringify(S))}catch(e){toast("Save hocche na! Backup download koro","bad")}};
+const save=(skipDirty)=>{try{localStorage.setItem("stk1",JSON.stringify(S));if(!skipDirty)markDirty();}catch(e){toast("Save hocche na! Backup download koro","bad")}};
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 async function dlFile(fn,blob){const dl=window.claude&&claude.use?await claude.use("downloads").catch(()=>null):null;if(dl)await dl.save({filename:fn,data:blob});else{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}}
 
@@ -789,7 +838,7 @@ $("kh").innerHTML=A.map(({k,e})=>{const nm=esc(PNAME(e.i));
 return k==="l"?`<tr><td>${e.d}<br><span class="sub">${LB[e.t]||e.t}</span></td><td>${nm}</td><td>${e.c} ctn ${e.p} pcs</td><td><button class="x" data-id="${e.id}">✕</button></td></tr>`
 :`<tr><td>${e.d}<br><span class="sub">Market e gelo</span></td><td>${nm}</td><td>Gelo ${e.gc} ctn ${e.gp} pcs<br><span class="sub">Ferot ${e.fc} ctn ${e.fp} pcs</span></td><td><button class="x" data-mk="${e.id}">✕</button></td></tr>`}).join("")||'<tr><td><div class="empty"><div class="etxt">Kono entry nei</div></div></td></tr>'}
 
-function rp(){const i=+$("pp").value||0;$("pk").value=K(i);$("pd").value=PR(i)||"";$("pcr").value=CP(i)||"";$("plv").value=S.lv[i]||""}
+function rp(){const i=+$("pp").value||0;$("pk").value=K(i);$("pd").value=PR(i)||"";$("pcr").value=CP(i)||"";$("plv").value=S.lv[i]||"";updateDirtyUi()}
 const mdate=()=>$("mdt").value||today();
 function sellData(){const d=mdate();const R=S.mk.filter(r=>r.d===d&&!isDel(r.i)&&P()[r.i]).sort((a,b)=>a.i-b.i).map(r=>{const k=K(r.i),g=gq(r),f=fq(r),net=rd(g-f);return{r,i:r.i,k,g,f,net,v:net/k*r.r}});return{R,tv:R.reduce((s,x)=>s+x.v,0)}}
 const stp=(id,d,fn)=>{const e=$(id);if(!e.options.length)return;e.selectedIndex=Math.max(0,Math.min(e.options.length-1,e.selectedIndex+d));fn()};
@@ -829,7 +878,7 @@ function rcalc(){const i=+$("cp").value||0,k=K(i),a=(+$("ca1").value||0)*k+(+$("
 $("ci").textContent="1 ctn = "+k+" pcs"+(PR(i)?"  |  ctn dam "+mm2(PR(i))+" tk  |  pcs dam "+mm2(PR(i)/k)+" tk":"");
 $("cr").textContent=fmt(t,k);$("cr").style.color=t<0?"var(--bad)":"";$("ct").textContent="Total "+t+" pcs";$("cd").textContent=PR(i)?"Dam: "+mm2(t/k*PR(i))+" tk":""}
 
-const MODAL_IDS = ["ppm", "dm", "hm", "hd", "cm", "sm", "dday"];
+const MODAL_IDS = ["ppm", "dm", "hm", "hd", "cm", "sm", "dday", "exitBkM"];
 let currentPage = "home";
 
 function getOpenModal() {
@@ -846,6 +895,7 @@ function closeModal(id) {
   if (id === "dm") DI = -1;
   if (id === "hd") { HP = null; hrender(); }
   if (id === "cm") CF = null;
+  if (id === "exitBkM" && $("exitBkMsg")) $("exitBkMsg").textContent = "";
 }
 
 function openModal(id) {
@@ -857,6 +907,11 @@ function openModal(id) {
     el.scrollTop = 0;
     safePushState({ type: "modal", id });
   }
+}
+
+function openExitBackupModal() {
+  if ($("exitBkMsg")) $("exitBkMsg").textContent = "";
+  openModal("exitBkM");
 }
 
 function closeCurrentModalOrBack(id) {
@@ -881,12 +936,19 @@ function renderActivePage(v) {
 
 function showPage(v, pushHistory = true) {
   if (currentPage === v && !pushHistory) return;
+  if (pushHistory && currentPage === "home" && v !== "home") {
+    armExitGuardOnHome();
+  }
   currentPage = v;
   document.querySelectorAll(".page-wrap").forEach(el => el.classList.remove("on"));
   const target = v === "home" ? $("pgHome") : $("pg" + v);
   if (target) target.classList.add("on");
   try{window.scrollTo({ top: 0, behavior: "smooth" })}catch(e){window.scrollTo(0,0)}
-  if (pushHistory) safePushState({ type: "page", v });
+  if (pushHistory) {
+    safePushState(v === "home" && isExitBackupEnabled() && isDirty()
+      ? { type: "page", v: "home", guarded: true }
+      : { type: "page", v });
+  }
   try{renderActivePage(v)}catch(e){}
   try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}
 }
@@ -894,8 +956,21 @@ function showPage(v, pushHistory = true) {
 window.addEventListener("popstate", e => {
   const openM = getOpenModal();
   if (openM) { closeModal(openM); return; }
+  if (e.state && e.state.type === "exit-base") {
+    if (isExitBackupEnabled() && isDirty()) {
+      safePushState({ type: "page", v: "home", guarded: true });
+      openExitBackupModal();
+    } else {
+      try { history.back(); } catch(err) {}
+    }
+    return;
+  }
   if (e.state && e.state.type === "page") {
     showPage(e.state.v, false);
+    if (e.state.v === "home" && isExitBackupEnabled() && isDirty() && !e.state.guarded) {
+      safeReplaceState({ type: "exit-base" });
+      safePushState({ type: "page", v: "home", guarded: true });
+    }
   } else if (e.state && e.state.type === "modal") {
     if (e.state.v) showPage(e.state.v, false);
     else showPage("home", false);
@@ -904,7 +979,50 @@ window.addEventListener("popstate", e => {
   }
 });
 
-safeReplaceState({ type: "page", v: "home" });
+if (isExitBackupEnabled() && isDirty()) {
+  safeReplaceState({ type: "exit-base" });
+  safePushState({ type: "page", v: "home", guarded: true });
+} else {
+  safeReplaceState({ type: "page", v: "home" });
+}
+
+window.addEventListener("beforeunload", e => {
+  if (isExitBackupEnabled() && isDirty()) {
+    e.preventDefault();
+    e.returnValue = "Apni notun tottho songrokkhon korechen. Backup na niye ber hoben na!";
+    return e.returnValue;
+  }
+});
+
+$("exitBkGo").onclick = async () => {
+  $("exitBkMsg").textContent = "";
+  $("exitBkGo").disabled = true;
+  $("exitBkGo").textContent = "Backup hocche...";
+  try {
+    await dlFile("stock-backup-" + today() + ".json", new Blob([JSON.stringify(S)], { type: "application/json" }));
+    try { localStorage.setItem("stk1_lastbk", String(Date.now())); } catch (e) {}
+    markClean();
+    if (window._updateBkLast) window._updateBkLast();
+    if ($("bm")) $("bm").textContent = "Backup hoyeche ✓";
+    toast("Backup hoyeche ✓ Ekhon ber hote parben");
+    closeModal("exitBkM");
+    setTimeout(() => {
+      try { window.close(); } catch (e) {}
+      try {
+        if (history.state && history.state.type === "modal") history.go(-2);
+        else history.back();
+      } catch (e) {}
+    }, 850);
+  } catch (e) {
+    $("exitBkMsg").textContent = e && e.code === "declined"
+      ? "Backup cancel hoyeche! Backup chara ber howa jabe na."
+      : "Backup hoyni, abar chesta koro.";
+  } finally {
+    $("exitBkGo").disabled = false;
+    $("exitBkGo").textContent = "Backup niye ber hou";
+  }
+};
+$("exitBkStay").onclick = () => closeCurrentModalOrBack("exitBkM");
 
 document.querySelectorAll(".tile").forEach(t => {
   t.onclick = () => {
@@ -915,7 +1033,10 @@ document.querySelectorAll(".tile").forEach(t => {
 
 document.querySelectorAll("[data-home]").forEach(b => {
   b.onclick = () => {
-    if (history.state && history.state.type === "page" && history.state.v !== "home") {
+    if (isExitBackupEnabled() && isDirty()) {
+      safeReplaceState({ type: "exit-base" });
+      showPage("home", true);
+    } else if (history.state && history.state.type === "page" && history.state.v !== "home") {
       try{history.back()}catch(e){showPage("home",false)}
     } else {
       showPage("home", true);
@@ -941,7 +1062,10 @@ window.addEventListener("touchend", e => {
   const isLongSwipe = Math.abs(dx) > 55;
   if (isHorizontal && (isFastSwipe || isLongSwipe)) {
     if (dx > 0) {
-      if (history.state && history.state.type === "page" && history.state.v !== "home") {
+      if (isExitBackupEnabled() && isDirty()) {
+        safeReplaceState({ type: "exit-base" });
+        showPage("home", true);
+      } else if (history.state && history.state.type === "page" && history.state.v !== "home") {
         try{history.back()}catch(err){showPage("home",false)}
       } else showPage("home", true);
     }
@@ -1139,9 +1263,9 @@ if(p===pg-1){x.font="bold 32px sans-serif";x.textAlign="right";x.fillText((SM===
 if(p)doc.addPage();doc.addImage(c.toDataURL("image/jpeg",0.92),"JPEG",0,0,595,842)}
 try{await dlFile((SM===2?"lenden-":"stock-")+today()+".pdf",doc.output("blob"));$("pm").textContent="PDF hoyeche ✓";toast("PDF download hoyeche")}catch(e){$("pm").textContent=e&&e.code==="declined"?"":"PDF save hoyni, abar chesta koro"}};
 
-$("bk").onclick=async()=>{try{await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));$("bm").textContent="Backup hoyeche ✓";toast("Backup download hoyeche")}catch(e){}};
+$("bk").onclick=async()=>{try{await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));try{localStorage.setItem("stk1_lastbk",String(Date.now()))}catch(e){}markClean();if(window._updateBkLast)window._updateBkLast();$("bm").textContent="Backup hoyeche ✓";toast("Backup download hoyeche")}catch(e){}};
 $("rs0").onclick=()=>$("rf").click();
-$("rf").onchange=async()=>{const f=$("rf").files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.log)||!Array.isArray(x.custom))throw 0;try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}S=Object.assign({custom:[],per:{},pr:{},log:[],del:{}},x);mig();save();all();$("bm").textContent="Restore hoyeche ✓";toast("Restore hoyeche")}catch(e){$("bm").textContent="File ta thik na";toast("File ta thik na","bad")}$("rf").value=""};
+$("rf").onchange=async()=>{const f=$("rf").files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.log)||!Array.isArray(x.custom))throw 0;try{localStorage.setItem("stk1_prev",JSON.stringify(S))}catch(e){}S=Object.assign({custom:[],per:{},pr:{},log:[],del:{}},x);mig();save(true);markClean();all();$("bm").textContent="Restore hoyeche ✓";toast("Restore hoyeche")}catch(e){$("bm").textContent="File ta thik na";toast("File ta thik na","bad")}$("rf").value=""};
 $("dt").value=$("d1").value=$("d2").value=today();$("mdt").value=today();
 ["cp","ca1","ca2","cb1","cb2"].forEach(i=>$(i).oninput=rcalc);$("cp").onchange=rcalc;
 $("cm0").onclick=()=>{CM=-1;$("cm0").className="on";$("cp0").className="";rcalc()};
@@ -1363,7 +1487,7 @@ function go(d,f){
 function rrt(){$("ec").value=CP(+$("pe").value)||"";$("rtw").style.display=T==="mk"?"block":"none";if(T==="mk")$("rt").value=PR(+$("pe").value)||""}
 document.querySelectorAll("[data-t]").forEach(b=>b.addEventListener("click",rrt));
 $("pv0").onclick=()=>go(-1);$("nx0").onclick=()=>go(1);
-$("nx").checked=S.nx!==false;$("nx").onchange=()=>{S.nx=$("nx").checked;save()};
+$("nx").checked=S.nx!==false;$("nx").onchange=()=>{S.nx=$("nx").checked;save(true)};
 
 function ask(b,fn){if(b.dataset.arm){fn();return}b.dataset.arm="1";b.textContent="Delete?";b.style.fontWeight="700";setTimeout(()=>{if(b.isConnected){delete b.dataset.arm;b.textContent="✕";b.style.fontWeight=""}},3500)}
 
@@ -1512,12 +1636,15 @@ try{all();rrt();}catch(err){console.error("Init error:",err);}
     const isDue=()=>{const f=freq();if(!f)return false;if(Date.now()<parseInt(g(K_SNZ,"0"),10))return false;return Date.now()-last()>=f*DAY-3600000};
     function lastTxt(){const l=last();if(!l){$("bklast").textContent="Ekhono kono backup neya hoy ni";return}
       const d=Math.floor((Date.now()-l)/DAY);$("bklast").textContent="Shesh backup: "+new Date(l).toLocaleString()+(d>0?" ("+d+" din age)":" (aj)")}
+    window._updateBkLast=lastTxt;
     const mark=()=>{s(K_LAST,String(Date.now()));lastTxt()};
-    async function doBackup(){await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));mark()}
-    $("bk").addEventListener("click",()=>setTimeout(mark,400));
+    async function doBackup(){await dlFile("stock-backup-"+today()+".json",new Blob([JSON.stringify(S)],{type:"application/json"}));mark();markClean()}
     $("bkfreq").value=String(freq());$("bkauto").checked=g(K_AUTO,"1")==="1";lastTxt();
+    $("bkexit").checked=isExitBackupEnabled();
+    updateDirtyUi();
     $("bkfreq").onchange=()=>{s(K_FREQ,$("bkfreq").value);s(K_SNZ,"0")};
     $("bkauto").onchange=()=>{s(K_AUTO,$("bkauto").checked?"1":"0");if($("bkauto").checked&&!freq()){$("bkfreq").value="1";s(K_FREQ,"1")}};
+    $("bkexit").onchange=()=>{s(K_EXIT,$("bkexit").checked?"1":"0");if($("bkexit").checked&&isDirty()&&currentPage==="home")armExitGuardOnHome()};
     let pop=null;
     function showPop(){
       if(pop)return;
@@ -1637,4 +1764,3 @@ try{all();rrt();}catch(err){console.error("Init error:",err);}
 </script>
 </body>
 </html>
-```
