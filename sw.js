@@ -1,4 +1,4 @@
-const CACHE_NAME = "stock-register-v2";
+const CACHE_NAME = "stock-register-v3";
 
 const CORE_ASSETS = [
   "./",
@@ -65,7 +65,7 @@ self.addEventListener("fetch", (event) => {
       (async () => {
         const cache = await caches.open(CACHE_NAME);
         try {
-          const networkRes = await fetch(req);
+          const networkRes = await fetch(req, { cache: "no-cache" });
           if (networkRes && networkRes.ok) {
             cache.put(req, networkRes.clone()).catch(() => {});
           }
